@@ -1,4 +1,4 @@
-# Full local stack: Postgres + Django API + Vue SPA (served by nginx).
+# Full local stack: Postgres + Django API + React SPA (served by nginx).
 #   docker compose up -d db        -> only the database, for native dev
 #   docker compose up --build      -> everything, http://localhost:8080
 

@@ -1,6 +1,6 @@
 # Frontend
 
-Vue 3 + TypeScript SPA built with Vite. State management with Pinia, routing with Vue Router, unit tests with Vitest.
+React 19 + TypeScript SPA built with Vite. Routing with React Router, authentication via Amazon Cognito (`react-oidc-context`), unit tests with Vitest + React Testing Library.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ Vue 3 + TypeScript SPA built with Vite. State management with Pinia, routing wit
 
 ```sh
 npm ci
-cp .env.example .env.local   # optional, override the API proxy target
+cp .env.example .env.local   # API proxy target + Cognito (OIDC) settings
 npm run dev                  # http://localhost:5173, proxies /api -> backend
 ```
 
@@ -32,8 +32,9 @@ npm run dev                  # http://localhost:5173, proxies /api -> backend
 ```
 src/
 ├── api/        # HTTP client and typed endpoint wrappers
-├── router/     # Vue Router configuration
-├── stores/     # Pinia stores
+├── auth/       # Cognito OIDC configuration for <AuthProvider>
+├── hooks/      # Data-fetching / state hooks
+├── router/     # React Router configuration
 ├── views/      # Route-level components
 └── __tests__/  # Unit tests
 ```

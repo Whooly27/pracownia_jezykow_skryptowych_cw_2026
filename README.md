@@ -1,6 +1,6 @@
 # Pracownia Języków Skryptowych — 2026
 
-Monorepo for the course project: a **Django + PostgreSQL** API and a **Vue 3 + TypeScript** SPA, each with its own CI/CD pipeline.
+Monorepo for the course project: a **Django + PostgreSQL** API and a **React 19 + TypeScript** SPA, each with its own CI/CD pipeline.
 
 [![backend](https://github.com/Whooly27/pracownia_jezykow_skryptowych_cw_2026/actions/workflows/backend.yml/badge.svg)](https://github.com/Whooly27/pracownia_jezykow_skryptowych_cw_2026/actions/workflows/backend.yml)
 [![frontend](https://github.com/Whooly27/pracownia_jezykow_skryptowych_cw_2026/actions/workflows/frontend.yml/badge.svg)](https://github.com/Whooly27/pracownia_jezykow_skryptowych_cw_2026/actions/workflows/frontend.yml)
@@ -11,7 +11,7 @@ Monorepo for the course project: a **Django + PostgreSQL** API and a **Vue 3 + T
 .
 ├── apps/
 │   ├── backend/          # Django 5.2 LTS · Python 3.13 · uv · PostgreSQL 17
-│   └── frontend/         # Vue 3 · TypeScript · Vite · Pinia · Vue Router · Vitest
+│   └── frontend/         # React 19 · TypeScript · Vite · React Router · Vitest
 ├── docs/
 │   └── adr/              # Architecture Decision Records
 ├── .github/
