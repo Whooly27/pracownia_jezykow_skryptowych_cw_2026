@@ -59,3 +59,46 @@ jobs:
     with:
       app: frontend
       push: ${{ github.event_name != 'pull_request' }}
+
+  deploy:
+    name: Deploy to Vercel
+    needs: [verify]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.FRONTEND_URL }}
+    concurrency:
+      group: deploy-frontend
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: dist
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_FRONTEND_PROJECT_ID }}
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: frontend-dist
+          path: dist
+      # Same-origin `/api`, mirroring the nginx reverse proxy in the container image.
+      - name: Write Vercel routing config
+        run: |
+          jq -n --arg backend "$BACKEND_URL" '{
+            git: { deploymentEnabled: false },
+            rewrites: [
+              { source: "/api/(.*)", destination: "\($backend)/api/$1" },
+              { source: "/(.*)", destination: "/index.html" }
+            ]
+          }' > vercel.json
+        env:
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
+      - name: Deploy
+        run: npx --yes vercel@63.1.2 deploy --prod --yes --token "$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Smoke test
+        run: curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors "$FRONTEND_URL/api/health/"
+        env:
+          FRONTEND_URL: ${{ vars.FRONTEND_URL }}
