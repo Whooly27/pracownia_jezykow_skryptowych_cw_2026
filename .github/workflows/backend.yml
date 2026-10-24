@@ -77,7 +77,7 @@ jobs:
           DJANGO_ALLOWED_HOSTS: example.com
           DJANGO_SECRET_KEY: ${{ github.run_id }}-ci-only-deploy-check-${{ github.sha }}
       - run: uv run pytest --cov --cov-report=term-missing --cov-report=xml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: backend-coverage
