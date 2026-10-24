@@ -1,0 +1,96 @@
+name: backend
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths:
+      - "apps/backend/**"
+      - ".github/workflows/backend.yml"
+      - ".github/workflows/_docker-image.yml"
+  pull_request:
+    paths:
+      - "apps/backend/**"
+      - ".github/workflows/backend.yml"
+      - ".github/workflows/_docker-image.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    working-directory: apps/backend
+
+jobs:
+  lint:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: apps/backend/uv.lock
+      - run: uv sync --frozen
+      - run: uv run ruff check --output-format=github .
+      - run: uv run ruff format --check .
+      - run: uv run mypy .
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: psj
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/psj
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: apps/backend/uv.lock
+      - run: uv sync --frozen
+      - name: Check for missing migrations
+        run: uv run python manage.py makemigrations --check --dry-run
+      - name: Production settings sanity check
+        run: uv run python manage.py check --deploy --fail-level WARNING
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.production
+          DJANGO_ALLOWED_HOSTS: example.com
+          DJANGO_SECRET_KEY: ${{ github.run_id }}-ci-only-deploy-check-${{ github.sha }}
+      - run: uv run pytest --cov --cov-report=term-missing --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage
+          path: apps/backend/coverage.xml
+          if-no-files-found: ignore
+
+  image:
+    name: Docker image
+    needs: [lint, test]
+    uses: ./.github/workflows/_docker-image.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      app: backend
+      push: ${{ github.event_name != 'pull_request' }}

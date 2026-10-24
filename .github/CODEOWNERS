@@ -1,0 +1,5 @@
+# Default owner for everything. Split per app as the team grows.
+*                @Whooly27
+/apps/backend/   @Whooly27
+/apps/frontend/  @Whooly27
+/.github/        @Whooly27

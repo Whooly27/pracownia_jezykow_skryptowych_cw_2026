@@ -1,0 +1,61 @@
+name: frontend
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths:
+      - "apps/frontend/**"
+      - ".github/workflows/frontend.yml"
+      - ".github/workflows/_docker-image.yml"
+  pull_request:
+    paths:
+      - "apps/frontend/**"
+      - ".github/workflows/frontend.yml"
+      - ".github/workflows/_docker-image.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    working-directory: apps/frontend
+
+jobs:
+  verify:
+    name: Lint, type-check, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: apps/frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint:check
+      - run: npm run format:check
+      - run: npm run type-check
+      - run: npm run test:ci
+      - run: npm run build-only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: apps/frontend/dist
+          retention-days: 7
+
+  image:
+    name: Docker image
+    needs: [verify]
+    uses: ./.github/workflows/_docker-image.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      app: frontend
+      push: ${{ github.event_name != 'pull_request' }}

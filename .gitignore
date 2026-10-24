@@ -1,0 +1,53 @@
+# ---------------------------------------------------------------------------
+# Monorepo-wide ignores. App-specific rules live next to each app.
+# ---------------------------------------------------------------------------
+
+# Secrets & local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors / IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+staticfiles/
+media/
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+coverage/
+*.tsbuildinfo
+.eslintcache
+
+# Docker
+docker-compose.override.yml

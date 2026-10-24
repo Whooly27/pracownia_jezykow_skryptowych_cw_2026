@@ -1,0 +1,60 @@
+[project]
+name = "psj-backend"
+version = "0.1.0"
+description = "Django backend for Pracownia Języków Skryptowych"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2,<6",
+    "django-environ>=0.12",
+    "gunicorn>=23",
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs[compatible-mypy]>=5.2,<6",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.2",
+]
+
+# Deployed as an application, not distributed as a package.
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = ["**/migrations/*"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F", "I", "B", "UP", "SIM", "C4", "DJ", "S", "RUF", "PT",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["mypy_django_plugin.main"]
+exclude = ["migrations/"]
+
+[[tool.mypy.overrides]]
+module = ["environ.*"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+addopts = "--strict-markers --reuse-db"
+python_files = ["test_*.py"]
+
+[tool.coverage.run]
+source = ["apps", "config"]
+omit = ["**/migrations/*", "**/tests/*"]
