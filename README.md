@@ -57,12 +57,42 @@ Run `make help` for lint, type-check and test targets.
 | Trigger                      | What runs                                                                 |
 | ---------------------------- | ------------------------------------------------------------------------- |
 | Pull request                 | Lint, type-check, tests, Docker build (no push), for the changed app only |
-| Push to `main`               | Same as above, then push image to GHCR tagged `sha-…`, `main`, `latest`   |
-| Tag `v*`                     | Same as above, plus semver image tag                                      |
+| Push to `main`               | Same as above, then push image to GHCR and deploy to Vercel               |
+| Tag `v*`                     | Same as above (minus deploy), plus semver image tag                       |
 
 Images: `ghcr.io/whooly27/pracownia_jezykow_skryptowych_cw_2026/{backend,frontend}`.
 
-Deploying those images to a runtime environment is intentionally left out until a target platform is chosen.
+### Deployment (Vercel + Neon Postgres)
+
+Both apps deploy from GitHub Actions; all runtime configuration lives in GitHub, not in the Vercel dashboard.
+
+- **backend:** runs `migrate` against the production database, then deploys Django as a Vercel Python function with env vars passed via `vercel deploy --env`.
+- **frontend:** deploys the built `dist/` as static files; `/api/*` is rewritten to the backend, so the SPA keeps using same-origin `/api` like it does behind nginx.
+
+One-time setup:
+
+1. Create a Postgres database on [Neon](https://neon.tech) and copy the **pooled** connection string (host contains `-pooler`, ends with `?sslmode=require`).
+2. Create two Vercel projects without connecting Git (Git deploys are disabled anyway), e.g. `vercel link` in `apps/backend` and `apps/frontend`. Leave **Root Directory** empty. Note the `orgId`/`projectId` from each `.vercel/project.json`.
+3. Create a Vercel access token (Account Settings → Tokens).
+4. In GitHub → Settings → Environments, create `production` and add:
+
+   | Secret                       | Value                                       |
+   | ---------------------------- | ------------------------------------------- |
+   | `VERCEL_TOKEN`               | token from step 3                           |
+   | `VERCEL_ORG_ID`              | `orgId`                                     |
+   | `VERCEL_BACKEND_PROJECT_ID`  | backend `projectId`                         |
+   | `VERCEL_FRONTEND_PROJECT_ID` | frontend `projectId`                        |
+   | `DJANGO_SECRET_KEY`          | long random string                          |
+   | `DATABASE_URL`               | Neon connection string from step 1          |
+
+   | Variable                      | Example                                |
+   | ----------------------------- | -------------------------------------- |
+   | `BACKEND_URL`                 | `https://psj-backend.vercel.app`       |
+   | `FRONTEND_URL`                | `https://psj-frontend.vercel.app`      |
+   | `DJANGO_ALLOWED_HOSTS`        | `psj-backend.vercel.app`               |
+   | `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://psj-backend.vercel.app`       |
+
+Changing a secret or variable takes effect on the next deploy (re-run the workflow via **Run workflow**).
 
 ## Conventions
 
