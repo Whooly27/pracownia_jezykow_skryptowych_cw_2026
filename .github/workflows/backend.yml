@@ -31,7 +31,7 @@ jobs:
     name: Lint & type-check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
@@ -62,7 +62,7 @@ jobs:
       DJANGO_SETTINGS_MODULE: config.settings.test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/psj
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
