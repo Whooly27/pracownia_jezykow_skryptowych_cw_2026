@@ -23,8 +23,13 @@ DJANGO_APPS = [
 ]
 LOCAL_APPS = [
     "apps.core",
+    "apps.accounts",
+    "apps.files",
+    "apps.sharing",
 ]
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
