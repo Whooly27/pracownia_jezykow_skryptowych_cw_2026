@@ -1,0 +1,294 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750&display=swap');
+
+:root {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  color: #202a3a;
+  background: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.openbox-page {
+  min-height: 100vh;
+  padding: 28px 32px;
+  background: #fff;
+}
+
+.openbox-browser {
+  width: min(100%, 1600px);
+  min-height: min(760px, calc(100vh - 56px));
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.openbox-header {
+  min-height: 84px;
+  padding: 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.openbox-brand {
+  color: #0865ed;
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+  text-decoration: none;
+}
+
+.openbox-header__actions,
+.openbox-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.openbox-button {
+  min-height: 42px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d9e0e9;
+  border-radius: 5px;
+  background: #fff;
+  color: #273346;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease;
+}
+
+.openbox-button:hover {
+  transform: translateY(-1px);
+}
+
+.openbox-button:focus-visible,
+.openbox-brand:focus-visible {
+  outline: 3px solid #9cc4ff;
+  outline-offset: 3px;
+}
+
+.openbox-button--primary {
+  color: #fff;
+  background: #0865ed;
+  border-color: #0865ed;
+  box-shadow: 0 2px 5px rgb(8 101 237 / 12%);
+}
+
+.openbox-button--primary:hover {
+  background: #0758d2;
+  border-color: #0758d2;
+}
+
+.openbox-button--quiet:hover {
+  background: #f6f8fb;
+  border-color: #c7d2e1;
+}
+
+.openbox-hero {
+  min-height: 590px;
+  padding: 72px 54px 90px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  align-items: center;
+  gap: 36px;
+}
+
+.openbox-hero__copy {
+  max-width: 550px;
+}
+
+.openbox-hero h1 {
+  max-width: 550px;
+  margin: 0 0 20px;
+  color: #202a3a;
+  font-size: clamp(34px, 3.3vw, 42px);
+  font-weight: 750;
+  line-height: 1.19;
+  letter-spacing: -1.8px;
+}
+
+.openbox-hero p {
+  max-width: 470px;
+  margin: 0;
+  color: #66748a;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.openbox-hero__actions {
+  margin-top: 30px;
+}
+
+.openbox-hero__actions .openbox-button {
+  min-width: 116px;
+}
+
+.openbox-illustration {
+  width: 100%;
+  max-width: 470px;
+  justify-self: center;
+}
+
+.openbox-illustration__art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.openbox-mobile-actions {
+  display: none;
+}
+
+.openbox-status {
+  min-height: 100vh;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #253247;
+  text-align: center;
+}
+
+.openbox-status > span {
+  color: #66748a;
+}
+
+.openbox-status--error strong {
+  color: #b42318;
+}
+
+.openbox-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #dce8fb;
+  border-top-color: #0865ed;
+  border-radius: 50%;
+  animation: openbox-spin 0.8s linear infinite;
+}
+
+@keyframes openbox-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .openbox-page {
+    min-height: 100svh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .openbox-browser {
+    width: 100%;
+    min-height: 0;
+    flex: 1;
+    border: 0;
+    border-radius: 0;
+    padding-bottom: 112px;
+  }
+
+  .openbox-header {
+    min-height: 76px;
+    padding: 0 25px;
+  }
+
+  .openbox-header__actions {
+    display: none;
+  }
+
+  .openbox-brand {
+    font-size: 20px;
+  }
+
+  .openbox-hero {
+    min-height: 0;
+    padding: 35px 25px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .openbox-hero h1 {
+    max-width: 440px;
+    margin-bottom: 16px;
+    font-size: clamp(30px, 8vw, 37px);
+    line-height: 1.16;
+    letter-spacing: -1.15px;
+  }
+
+  .openbox-hero p {
+    max-width: 430px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .openbox-hero__actions {
+    display: none;
+  }
+
+  .openbox-illustration {
+    width: min(100%, 390px);
+    margin: 0 auto;
+  }
+
+  .openbox-mobile-actions {
+    position: fixed;
+    z-index: 5;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 82px;
+    padding: 12px 20px max(12px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    border-top: 1px solid #e5eaf1;
+    background: rgb(255 255 255 / 96%);
+    backdrop-filter: blur(12px);
+  }
+
+  .openbox-mobile-actions .openbox-button {
+    min-height: 44px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
