@@ -1,4 +1,4 @@
-"""The six file permissions from the spec's access model."""
+"""The three file permissions from the spec's access model."""
 
 from collections.abc import Iterable
 from enum import StrEnum
@@ -7,19 +7,12 @@ from django.core.exceptions import ValidationError
 
 
 class Permission(StrEnum):
-    VIEW = "view"
-    EDIT = "edit"
-    RENAME = "rename"
-    DELETE = "delete"
-    SHARE = "share"
-    LINK = "link"   # owner tworzenie linkow
+    VIEW = "view"  # see and download
+    EDIT = "edit"  # replace the contents
+    DELETE = "delete"  # delete permanently, for everyone
 
 
 ALL_PERMISSIONS: tuple[str, ...] = tuple(p.value for p in Permission)
-
-FOLDER_OWNER_PERMISSIONS: frozenset[str] = frozenset(
-    {Permission.VIEW, Permission.RENAME, Permission.DELETE}
-)
 
 
 def validate_permissions(permissions: Iterable[str]) -> None:

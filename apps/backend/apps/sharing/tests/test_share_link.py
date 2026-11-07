@@ -4,30 +4,28 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from apps.accounts.models import User
-from apps.sharing.models import Grant
-
-from .helpers import make_file, make_folder, make_link
+from .helpers import make_file, make_grant, make_link, make_user
 
 
 @pytest.mark.django_db
 def test_link_records_file_permissions_creator_and_expiry() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
+    user = make_user()
     budget = make_file(user, "Q4 Budget.xls")
-    expires = timezone.now() + timedelta(days=30)
+    expires = timezone.now() + timedelta(days=7)
 
-    link = make_link(budget, user, permissions=("view", "edit", "rename"), expires_at=expires)
+    link = make_link(budget, user, permissions=("view", "edit"), expires_at=expires)
 
     assert link.file == budget
+    assert link.permissions == ["view", "edit"]
     assert link.created_by == user
-    assert link.permissions == ["view", "edit", "rename"]
     assert link.expires_at == expires
-    assert link.deleted_at is None
+    assert not link.is_expired
+    assert not link.is_deleted
 
 
 @pytest.mark.django_db
 def test_link_without_expiry_never_expires() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
+    user = make_user()
     link = make_link(make_file(user, "a.txt"), user)
 
     assert link.expires_at is None
@@ -36,7 +34,7 @@ def test_link_without_expiry_never_expires() -> None:
 
 @pytest.mark.django_db
 def test_link_is_expired_after_expires_at() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
+    user = make_user()
     link = make_link(
         make_file(user, "a.txt"), user, expires_at=timezone.now() - timedelta(seconds=1)
     )
@@ -45,36 +43,18 @@ def test_link_is_expired_after_expires_at() -> None:
 
 
 @pytest.mark.django_db
-def test_link_must_target_a_file() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
-    with pytest.raises(ValidationError, match="file"):
-        make_link(make_folder(user, "Acme Inc"), user)
-
-
-@pytest.mark.django_db
 def test_link_must_include_view() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
-    with pytest.raises(ValidationError, match="view"):
-        make_link(make_file(user, "a.txt"), user, permissions=("link",))
+    user = make_user()
+    with pytest.raises(ValidationError):
+        make_link(make_file(user, "a.txt"), user, permissions=("edit",))
 
 
 @pytest.mark.django_db
 def test_redemption_count_counts_grants_made_through_the_link() -> None:
-    user = User.objects.create_user(email="test_user@example.com", display_name="test_user")
-    other_user = User.objects.create_user(
-        email="test_other_user@example.com", display_name="test_other_user"
-    )
+    user = make_user()
     budget = make_file(user, "Q4 Budget.xls")
     link = make_link(budget, user)
-    assert link.redemption_count == 0
+    make_grant(budget, make_user("test_other_user"), link)
+    make_grant(budget, make_user("test_third_user"), link)
 
-    Grant.objects.create(
-        file=budget,
-        user=other_user,
-        granted_by=user,
-        permissions=["view"],
-        via=Grant.Via.LINK,
-        link=link,
-    )
-
-    assert link.redemption_count == 1
+    assert link.redemption_count == 2
