@@ -94,3 +94,53 @@ jobs:
     with:
       app: backend
       push: ${{ github.event_name != 'pull_request' }}
+
+  deploy:
+    name: Deploy to Vercel
+    needs: [lint, test]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.BACKEND_URL }}
+    concurrency:
+      group: deploy-backend
+      cancel-in-progress: false
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_BACKEND_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: apps/backend/uv.lock
+      - run: uv sync --frozen --no-dev
+      - name: Apply database migrations
+        run: uv run --no-dev python manage.py migrate --noinput
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.production
+          DJANGO_ALLOWED_HOSTS: localhost
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Export requirements for the Vercel Python runtime
+        run: uv export --frozen --no-dev --no-hashes --no-emit-project -o requirements.txt
+      - name: Deploy
+        run: |
+          npx --yes vercel@63.1.2 deploy --prod --yes --token "$VERCEL_TOKEN" \
+            --env DJANGO_SETTINGS_MODULE=config.settings.production \
+            --env DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" \
+            --env DJANGO_ALLOWED_HOSTS="$DJANGO_ALLOWED_HOSTS" \
+            --env DJANGO_CSRF_TRUSTED_ORIGINS="$DJANGO_CSRF_TRUSTED_ORIGINS" \
+            --env DATABASE_URL="$DATABASE_URL" \
+            --env DATABASE_CONN_MAX_AGE=0
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DJANGO_ALLOWED_HOSTS: ${{ vars.DJANGO_ALLOWED_HOSTS }}
+          DJANGO_CSRF_TRUSTED_ORIGINS: ${{ vars.DJANGO_CSRF_TRUSTED_ORIGINS }}
+      - name: Smoke test
+        run: curl --fail --silent --show-error --retry 5 --retry-delay 5 --retry-all-errors "$BACKEND_URL/api/health/"
+        env:
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
