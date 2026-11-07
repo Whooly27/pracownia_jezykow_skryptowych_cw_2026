@@ -52,6 +52,9 @@ coverage/
 # Docker
 docker-compose.override.yml
 
-# Docs build output (`make docs`)
 docs/openbox-technical-specification.pdf
 docs/openbox-technical-specification.html
+out/
+
+# Local blob storage (stand-in for Vercel Blob)
+apps/backend/blobdata/
