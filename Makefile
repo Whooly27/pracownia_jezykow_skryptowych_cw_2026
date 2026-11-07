@@ -4,7 +4,7 @@ BACKEND  := apps/backend
 FRONTEND := apps/frontend
 
 .DEFAULT_GOAL := help
-.PHONY: help install db up down lint test typecheck build \
+.PHONY: help install db up down lint test typecheck build docs \
         backend-install backend-lint backend-test backend-typecheck backend-dev \
         frontend-install frontend-lint frontend-test frontend-typecheck frontend-build frontend-dev
 
@@ -16,6 +16,10 @@ lint: backend-lint frontend-lint ## Lint everything
 typecheck: backend-typecheck frontend-typecheck ## Type-check everything
 test: backend-test frontend-test ## Run all tests
 build: frontend-build ## Build production artifacts
+docs: ## Build docs/openbox-technical-specification.pdf (needs Google Chrome)
+	cd docs/openbox-diagrams && python3 diagrams.py
+	cd docs/openbox-wireframes && python3 wireframes.py
+	cd docs && python3 build_spec_pdf.py
 
 db: ## Start only Postgres in the background
 	docker compose up -d db

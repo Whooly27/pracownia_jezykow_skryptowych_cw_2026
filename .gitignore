@@ -52,7 +52,8 @@ coverage/
 # Docker
 docker-compose.override.yml
 
-# IntelliJ build output
+docs/openbox-technical-specification.pdf
+docs/openbox-technical-specification.html
 out/
 
 # Local blob storage (stand-in for Vercel Blob)

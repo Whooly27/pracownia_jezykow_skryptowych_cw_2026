@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1056" height="716" viewBox="0 0 1056 716" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"><rect width="1056" height="716" rx="14" fill="#ffffff"/><svg x="28" y="28" width="1000" height="660" viewBox="0 0 1000 660"><rect width="1000" height="660" fill="#ffffff"/><rect x="0" y="0" width="1000" height="30" rx="0" fill="#f6f8fb" stroke="none" stroke-width="1"/>
+<circle cx="16" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<circle cx="30" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<circle cx="44" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<rect x="70" y="6" width="420" height="18" rx="9" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="82" y="19" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">auth.openbox.app/login</text>
+<text x="500.0" y="120" font-size="26" font-weight="800" fill="#0061fe" text-anchor="middle">OpenBox</text>
+<text x="500.0" y="156" font-size="15" font-weight="500" fill="#6b7489" text-anchor="middle">Sign in</text>
+<text x="340" y="203" font-size="12" font-weight="600" fill="#1e2533" text-anchor="start">Email</text>
+<rect x="340" y="210" width="320" height="40" rx="6" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="350" y="235.0" font-size="13" font-weight="400" fill="#1e2533" text-anchor="start">alex@acme.com</text>
+<text x="340" y="281" font-size="12" font-weight="600" fill="#1e2533" text-anchor="start">Password</text>
+<rect x="340" y="288" width="320" height="40" rx="6" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="350" y="313.0" font-size="13" font-weight="400" fill="#1e2533" text-anchor="start">••••••••••</text>
+<text x="660" y="352" font-size="13" font-weight="600" fill="#0061fe" text-anchor="end">Forgot password?</text>
+<rect x="340" y="372" width="320" height="44" rx="4" fill="#0061fe" stroke="#0061fe" stroke-width="1"/>
+<text x="500.0" y="399.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Sign in</text>
+<text x="500.0" y="450" font-size="13" font-weight="400" fill="#6b7489" text-anchor="middle">New to OpenBox?</text>
+<text x="500.0" y="472" font-size="13" font-weight="600" fill="#0061fe" text-anchor="middle">Create an account</text></svg><rect x="28.5" y="28.5" width="999" height="659" rx="6" fill="none" stroke="#d4d9e2"/></svg>
