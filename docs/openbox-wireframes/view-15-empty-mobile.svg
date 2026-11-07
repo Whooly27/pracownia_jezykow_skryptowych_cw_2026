@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="446" height="856" viewBox="0 0 446 856" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"><rect width="446" height="856" rx="14" fill="#ffffff"/><svg x="28" y="28" width="390" height="800" viewBox="0 0 390 800"><rect width="390" height="800" fill="#ffffff"/><defs><clipPath id="frame"><rect width="390" height="800" rx="28"/></clipPath></defs><g clip-path="url(#frame)"><rect x="0.5" y="0.5" width="389" height="799" rx="28" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="28" y="30" font-size="13" font-weight="600" fill="#1e2533" text-anchor="start">9:41</text>
+<rect x="338" y="20" width="24" height="11" rx="3" fill="#ffffff" stroke="#1e2533" stroke-width="1"/>
+<rect x="340" y="22" width="16" height="7" rx="1" fill="#1e2533" stroke="none"/>
+<text x="20" y="82" font-size="20" font-weight="800" fill="#0061fe" text-anchor="start">OpenBox</text>
+<circle cx="318" cy="76" r="17" fill="#0061fe" stroke="#0061fe"/>
+<line x1="312" y1="76" x2="324" y2="76" stroke="#ffffff" stroke-width="2"/>
+<line x1="318" y1="70" x2="318" y2="82" stroke="#ffffff" stroke-width="2"/>
+<circle cx="356" cy="76" r="17" fill="#eef4ff" stroke="#7fb3f0"/>
+<text x="356" y="81" font-size="11" font-weight="700" fill="#0061fe" text-anchor="middle">AL</text>
+<text x="20" y="124" font-size="14" font-weight="600" fill="#1e2533" text-anchor="start">My files</text>
+<rect x="20" y="140" width="350" height="40" rx="18" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<circle cx="38" cy="159.0" r="5.5" fill="none" stroke="#6b7489" stroke-width="1.6"/>
+<line x1="42" y1="163.0" x2="46" y2="167.0" stroke="#6b7489" stroke-width="1.6"/>
+<text x="54" y="165.0" font-size="13" font-weight="400" fill="#9aa3b2" text-anchor="start">Search</text>
+<g transform="translate(195.0,356) scale(1.0)"><circle r="62" fill="#eef4ff"/><circle cx="-72" cy="-34.1" r="4" fill="#a9cdf7"/><circle cx="74" cy="21.7" r="3" fill="#a9cdf7"/><circle cx="-55.800000000000004" cy="46.5" r="2.5" fill="#c9dcfb"/><path d="M58.9,-56.6 L60.86,-51.56 L65.9,-49.6 L60.86,-47.64 L58.9,-42.6 L56.94,-47.64 L51.9,-49.6 L56.94,-51.56 Z" fill="#ffcf5c"/><path d="M-65.10000000000001,4.299999999999999 L-63.70000000000001,7.899999999999999 L-60.10000000000001,9.299999999999999 L-63.70000000000001,10.7 L-65.10000000000001,14.299999999999999 L-66.50000000000001,10.7 L-70.10000000000001,9.299999999999999 L-66.50000000000001,7.899999999999999 Z" fill="#c9dcfb"/><g transform="translate(0,8)"><path d="M-30,-40 h40 l20,20 v60 h-60 z" fill="#ffffff" stroke="#7fb3f0" stroke-width="2.5"/><path d="M10,-40 v20 h20" fill="none" stroke="#7fb3f0" stroke-width="2.5"/></g><path d="M0,30 V-14 M-12,-2 L0,-14 L12,-2" fill="none" stroke="#0061fe" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+<text x="195.0" y="466" font-size="18" font-weight="700" fill="#1e2533" text-anchor="middle">No files yet</text>
+<text x="195.0" y="492" font-size="14" font-weight="400" fill="#6b7489" text-anchor="middle">Tap + to upload files.</text>
+<line x1="0" y1="736" x2="390" y2="736" stroke="#d4d9e2" stroke-width="1"/>
+<path d="M89.5,747 h10 l6,6 v14 h-16 z" fill="#eef4ff" stroke="#0061fe" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="97.5" y="782" font-size="11" font-weight="600" fill="#0061fe" text-anchor="middle">Files</text>
+<path d="M288.5,758 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,752 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,763 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M291.1,756.6 L294.9,753.4 M291.1,759.4 L294.9,761.6" fill="none" stroke="#6b7489" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="292.5" y="782" font-size="11" font-weight="400" fill="#6b7489" text-anchor="middle">Sharing</text></g><rect x="0.5" y="0.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg><rect x="28.5" y="28.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg>
