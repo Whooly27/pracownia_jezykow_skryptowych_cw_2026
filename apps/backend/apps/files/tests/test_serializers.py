@@ -14,19 +14,19 @@ def test_owner_json_has_all_three_permissions_and_member_count_1() -> None:
     assert data == {
         "id": str(budget.id),
         "name": "Q4 Budget.xls",
-        "owner": {"id": str(user.id), "display_name": "test_user"},
+        "owner_id": str(user.id),
         "mime_type": "text/plain",
         "size_bytes": 12,
         "access": "owner",
         "permissions": ["view", "edit", "delete"],
-        "member_count": 1,
+        "is_shared": False,
         "modified_at": budget.modified_at.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "grants": [],
     }
 
 
 @pytest.mark.django_db
-def test_grantee_json_lists_their_grants_and_counts_members() -> None:
+def test_grantee_json_lists_their_grants_and_marks_the_file_shared() -> None:
     user = make_user()
     kate = make_user("test_kate")
     jo = make_user("test_jo")
@@ -41,7 +41,8 @@ def test_grantee_json_lists_their_grants_and_counts_members() -> None:
 
     assert data["access"] == "granted"
     assert data["permissions"] == ["view", "edit"]
-    assert data["member_count"] == 3
+    assert data["is_shared"] is True
+    assert file_to_json(budget, user)["is_shared"] is True
     assert [g["link_id"] for g in data["grants"]] == [str(view_link.id), str(edit_link.id)]
     assert data["grants"][1] == {
         "link_id": str(edit_link.id),

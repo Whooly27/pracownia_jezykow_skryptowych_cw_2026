@@ -47,14 +47,30 @@ curl -s -c jar -b jar -X POST http://localhost:8000/admin/login/ \
   -d "csrfmiddlewaretoken=$CSRF&username=you@example.com&password=secret" -o /dev/null
 
 curl -s -b jar -X POST http://localhost:8000/api/v1/uploads -H 'content-type: application/json' \
-  -d '{"files":[{"name":"hello.txt","size_bytes":6,"mime_type":"text/plain"}]}'
-# take put_url and id from the answer
+  -d '{"name":"hello.txt","size_bytes":6,"mime_type":"text/plain"}'
+# one file per request; take put_url and id from the answer
 curl -s -X PUT "http://localhost:8000<put_url>" -H 'content-type: text/plain' --data-binary 'hello!'
 curl -s -b jar -X POST http://localhost:8000/api/v1/uploads/<id>/complete
 ```
 
 Replace a file's contents the same way, starting with `POST /api/v1/files/{id}/replace`
 (`{"size_bytes": ..., "mime_type": ...}`) instead of `POST /api/v1/uploads`.
+
+## Files locally
+
+With the same cookie jar, list your files and fetch a download link. The link is a signed storage
+URL valid for 60 seconds; GET it without the session cookie, like a browser would:
+
+```sh
+curl -s -b jar 'http://localhost:8000/api/v1/files?sort=name&limit=20'
+curl -s -b jar -X POST http://localhost:8000/api/v1/files/<id>/download
+curl -s -o hello.txt "http://localhost:8000<url>"
+```
+
+The other file endpoints take a POST with the file id in the path: `rename` (`{"name": ...}`,
+owner only), `delete` (owner or a `delete` grant), `remove-access` (drops your own grants).
+`GET /api/v1/files` accepts `shared_with_me`, `shared_by_me` or `q` (at most one), `sort`,
+`order`, `limit` and `after` for keyset paging.
 
 ## Layout
 

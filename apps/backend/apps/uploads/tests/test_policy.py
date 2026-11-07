@@ -7,6 +7,7 @@ from apps.uploads.policy import (
     check_new_file,
     check_size,
     check_type,
+    name_problems,
     upload_policy,
 )
 
@@ -83,3 +84,12 @@ def test_check_new_file_reports_the_first_problem() -> None:
     assert check_new_file("b.exe", 0, "x").code == "unsupported_file_type"  # type: ignore[union-attr]
     assert check_new_file("b.pdf", 0, "application/pdf").code == "validation_failed"  # type: ignore[union-attr]
     assert check_new_file("b.pdf", 10, "application/pdf") is None
+
+
+def test_name_problems_lists_every_problem() -> None:
+    assert name_problems("x" * 256 + "/y") == [
+        "Name is over 255 characters.",
+        "Name can't contain /.",
+    ]
+    assert name_problems("") == ["Name can't be empty."]
+    assert name_problems("ok.pdf") == []

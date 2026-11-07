@@ -14,52 +14,36 @@ from apps.files.serializers import file_to_json
 from apps.sharing.access import access_for
 
 from .models import Upload, to_json
-from .policy import Rejection, check_new_file, check_size, check_type
+from .policy import check_size, check_type, name_problems, raise_for
 from .storage import StoredObject, get_storage
-
-MAX_FILES_PER_REQUEST = 100
 
 
 @api_view
 def start_upload(request: HttpRequest) -> HttpResponse:
-    files = json_body(request).get("files")
-    if not isinstance(files, list) or not 1 <= len(files) <= MAX_FILES_PER_REQUEST:
-        raise ApiError(422, "validation_failed", "files must hold 1 to 100 entries.")
-
     user = signed_in_user(request)
+    body = json_body(request)
+    name = str(body.get("name", "")).strip()
+    mime_type = str(body.get("mime_type", ""))
+    problems = name_problems(name)
+    if problems:
+        raise ApiError(422, "validation_failed", messages=problems)
+    rejection = check_type(name, mime_type) or check_size(body.get("size_bytes"))
+    if rejection is not None:
+        raise_for(rejection)
+    if File.objects.filter(owner=user, name=name).exists():
+        raise ApiError(409, "name_conflict", f"{name}: you already have a file with that name.")
+
     storage = get_storage()
-    accepted: list[dict[str, Any]] = []
-    rejected: list[dict[str, str]] = []
-    taken: set[str] = set()
-    for item in files:
-        name, rejection = _check_item(item, user.id, taken)
-        if rejection is not None:
-            rejected.append({"code": rejection.code, "message": rejection.message})
-            continue
-        taken.add(name)
-        # Starting the same name again replaces your own pending upload.
-        for old in Upload.objects.filter(owner=user, name=name, is_replace=False):
-            if not old.is_done:
-                storage.delete(old.storage_key)
-                old.delete()
-        upload = Upload.start(user, name, item["mime_type"], item["size_bytes"])
-        put_url = storage.put_url(
-            upload.storage_key, upload.mime_type, upload.size_bytes, upload.expires_at
-        )
-        accepted.append(to_json(upload, put_url))
-    return ok(accepted, 201, errors=rejected)
-
-
-def _check_item(item: Any, owner_id: Any, taken: set[str]) -> tuple[str, Rejection | None]:
-    if not isinstance(item, dict):
-        return "", Rejection("validation_failed", f"{item}: each entry must be an object.")
-    name = str(item.get("name", "")).strip()
-    rejection = check_new_file(name, item.get("size_bytes"), str(item.get("mime_type", "")))
-    if rejection is None and (
-        name in taken or File.objects.filter(owner_id=owner_id, name=name).exists()
-    ):
-        rejection = Rejection("name_conflict", f"{name}: you already have a file with that name.")
-    return name, rejection
+    # Starting the same name again replaces your own pending upload.
+    for old in Upload.objects.filter(owner=user, name=name, is_replace=False):
+        if not old.is_done:
+            storage.delete(old.storage_key)
+            old.delete()
+    upload = Upload.start(user, name, mime_type, body["size_bytes"])
+    put_url = storage.put_url(
+        upload.storage_key, upload.mime_type, upload.size_bytes, upload.expires_at
+    )
+    return ok(to_json(upload, put_url), 201)
 
 
 @api_view
@@ -70,13 +54,9 @@ def replace_file(request: HttpRequest, file_id: UUID) -> HttpResponse:
     assert file is not None  # noqa: S101  (narrowed by _require_edit)
     body = json_body(request)
     mime_type = str(body.get("mime_type", ""))
-    rejection = check_size(body.get("size_bytes"))
+    rejection = check_size(body.get("size_bytes")) or check_type(file.name, mime_type)
     if rejection is not None:
-        status = 413 if rejection.code == "file_too_large" else 422
-        raise ApiError(status, rejection.code, rejection.message)
-    rejection = check_type(file.name, mime_type)
-    if rejection is not None:
-        raise ApiError(415, rejection.code, rejection.message)
+        raise_for(rejection)
 
     upload = Upload.start(user, file.name, mime_type, body["size_bytes"], file=file)
     put_url = get_storage().put_url(

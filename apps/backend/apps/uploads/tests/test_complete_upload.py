@@ -28,7 +28,7 @@ def test_complete_creates_the_file(client: Client) -> None:
     assert data["id"] == str(file.id)
     assert data["access"] == "owner"
     assert data["permissions"] == ["view", "edit", "delete"]
-    assert data["member_count"] == 1
+    assert data["is_shared"] is False
     assert data["size_bytes"] == len(PDF_BYTES)
     assert data["mime_type"] == "application/pdf"
     assert get_storage().head(file.storage_key) == StoredObject(len(PDF_BYTES), "application/pdf")
@@ -40,7 +40,7 @@ def test_complete_before_bytes_arrive_is_409(client: Client) -> None:
     user = make_user()
     upload = start_upload(
         client, user, {"name": "a.pdf", "size_bytes": 3, "mime_type": "application/pdf"}
-    ).json()["data"][0]
+    ).json()["data"]
 
     response = complete(client, upload["id"])
 
@@ -54,7 +54,7 @@ def test_complete_with_different_size_is_409(client: Client) -> None:
     user = make_user()
     upload = start_upload(
         client, user, {"name": "a.pdf", "size_bytes": 10, "mime_type": "application/pdf"}
-    ).json()["data"][0]
+    ).json()["data"]
     client.put(upload["put_url"], data=b"short", content_type="application/pdf")
 
     response = complete(client, upload["id"])

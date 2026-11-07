@@ -18,12 +18,12 @@ def file_to_json(file: File, viewer: User) -> dict[str, Any]:
     return {
         "id": str(file.id),
         "name": file.name,
-        "owner": {"id": str(file.owner.id), "display_name": file.owner.display_name},
+        "owner_id": str(file.owner_id),
         "mime_type": file.mime_type,
         "size_bytes": file.size_bytes,
         "access": access.kind,
         "permissions": [p for p in ("view", "edit", "delete") if p in access.permissions],
-        "member_count": 1 + Grant.objects.filter(file=file).values("user").distinct().count(),
+        "is_shared": Grant.objects.filter(file=file).exists(),
         "modified_at": iso(file.modified_at),
         "grants": [
             {
