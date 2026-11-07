@@ -14,7 +14,7 @@ from apps.files.serializers import file_to_json
 from apps.sharing.access import access_for
 
 from .models import Upload, to_json
-from .policy import Rejection, check_new_file
+from .policy import Rejection, check_new_file, check_size, check_type
 from .storage import StoredObject, get_storage
 
 MAX_FILES_PER_REQUEST = 100
@@ -60,6 +60,29 @@ def _check_item(item: Any, owner_id: Any, taken: set[str]) -> tuple[str, Rejecti
     ):
         rejection = Rejection("name_conflict", f"{name}: you already have a file with that name.")
     return name, rejection
+
+
+@api_view
+def replace_file(request: HttpRequest, file_id: UUID) -> HttpResponse:
+    user = signed_in_user(request)
+    file = File.objects.filter(id=file_id).first()
+    _require_edit(user, file)
+    assert file is not None  # noqa: S101  (narrowed by _require_edit)
+    body = json_body(request)
+    mime_type = str(body.get("mime_type", ""))
+    rejection = check_size(body.get("size_bytes"))
+    if rejection is not None:
+        status = 413 if rejection.code == "file_too_large" else 422
+        raise ApiError(status, rejection.code, rejection.message)
+    rejection = check_type(file.name, mime_type)
+    if rejection is not None:
+        raise ApiError(415, rejection.code, rejection.message)
+
+    upload = Upload.start(user, file.name, mime_type, body["size_bytes"], file=file)
+    put_url = get_storage().put_url(
+        upload.storage_key, upload.mime_type, upload.size_bytes, upload.expires_at
+    )
+    return ok(to_json(upload, put_url), 201)
 
 
 @api_view
