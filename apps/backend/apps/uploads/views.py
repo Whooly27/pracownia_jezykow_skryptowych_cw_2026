@@ -1,15 +1,21 @@
 """Upload endpoints: reserve a name, then make the file visible once the bytes arrived."""
 
 from typing import Any
+from uuid import UUID
 
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.http import HttpRequest, HttpResponse
+from django.utils import timezone
 
 from apps.core.api import ApiError, api_view, json_body, ok, signed_in_user
 from apps.files.models import File
+from apps.files.serializers import file_to_json
+from apps.sharing.access import access_for
 
 from .models import Upload, to_json
 from .policy import Rejection, check_new_file
-from .storage import get_storage
+from .storage import StoredObject, get_storage
 
 MAX_FILES_PER_REQUEST = 100
 
@@ -54,3 +60,68 @@ def _check_item(item: Any, owner_id: Any, taken: set[str]) -> tuple[str, Rejecti
     ):
         rejection = Rejection("name_conflict", f"{name}: you already have a file with that name.")
     return name, rejection
+
+
+@api_view
+def complete_upload(request: HttpRequest, upload_id: UUID) -> HttpResponse:
+    user = signed_in_user(request)
+    upload = Upload.objects.select_related("file").filter(id=upload_id, owner=user).first()
+    if upload is None:
+        raise ApiError(404, "not_found", "No such upload.")
+    if upload.is_done and upload.file is not None:
+        return ok(file_to_json(upload.file, user))
+    if upload.is_replace:
+        _require_edit(user, upload.file)
+    if upload.is_expired:
+        raise ApiError(410, "upload_expired", "The upload wasn't finished within 15 minutes.")
+
+    storage = get_storage()
+    expected = StoredObject(upload.size_bytes, upload.mime_type)
+    if storage.head(upload.storage_key) != expected:
+        raise ApiError(409, "upload_incomplete", "The bytes haven't arrived yet.")
+
+    now = timezone.now()
+    with transaction.atomic():
+        if upload.file is None:
+            file = File(
+                owner=user,
+                name=upload.name,
+                mime_type=upload.mime_type,
+                size_bytes=upload.size_bytes,
+                modified_at=now,
+            )
+            _save_new_file(file)
+        else:
+            file = upload.file
+            file.mime_type = upload.mime_type
+            file.size_bytes = upload.size_bytes
+            file.modified_at = now
+            file.save(update_fields=["mime_type", "size_bytes", "modified_at"])
+        storage.copy(upload.storage_key, file.storage_key)
+        upload.file = file
+        upload.completed_at = now
+        upload.save(update_fields=["file", "completed_at"])
+    storage.delete(upload.storage_key)
+    return ok(file_to_json(file, user))
+
+
+def _require_edit(user: Any, file: File | None) -> None:
+    access = access_for(user, file) if file is not None else None
+    if access is None:
+        raise ApiError(404, "not_found", "The file doesn't exist or you can't see it.")
+    if "edit" not in access.permissions:
+        raise ApiError(403, "forbidden", "You don't have edit on this file.")
+
+
+def _save_new_file(file: File) -> None:
+    conflict = ApiError(
+        409, "name_conflict", f"{file.name}: you already have a file with that name."
+    )
+    try:
+        file.full_clean()
+    except ValidationError as e:
+        raise conflict from e
+    try:
+        file.save()
+    except IntegrityError as e:
+        raise conflict from e
