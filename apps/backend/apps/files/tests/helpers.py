@@ -1,3 +1,4 @@
+import json
 from typing import Any
 
 from django.test import Client
@@ -12,3 +13,7 @@ def list_files(client: Client, user: User, **params: Any) -> Any:
 
 def names(response: Any) -> list[str]:
     return [item["name"] for item in response.json()["data"]["items"]]
+
+
+def post_json(client: Client, url: str, body: Any) -> Any:
+    return client.post(url, data=json.dumps(body), content_type="application/json")
