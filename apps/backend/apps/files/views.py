@@ -7,9 +7,20 @@ from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse
 from django.utils import timezone
 
-from apps.core.api import ApiError, api_get, api_view, json_body, not_found, ok, signed_in_user
+from apps.core.api import (
+    ApiError,
+    api_get,
+    api_view,
+    json_body,
+    no_content,
+    not_found,
+    ok,
+    signed_in_user,
+)
 from apps.sharing.access import access_for
+from apps.sharing.models import Grant
 from apps.uploads.policy import check_type, name_problems, raise_for, upload_policy
+from apps.uploads.storage import get_storage
 
 from .listing import page, parse_query
 from .models import File
@@ -57,3 +68,28 @@ def rename_file(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
     except IntegrityError as error:
         raise conflict from error
     return ok(file_to_json(file, user))
+
+
+@api_view
+def delete_file(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
+    user = signed_in_user(request)
+    file = File.objects.filter(id=file_id).first()
+    access = access_for(user, file) if file is not None else None
+    if file is None or access is None:
+        raise not_found(file_id)
+    if "delete" not in access.permissions:
+        raise ApiError(403, "forbidden", "You don't have delete on this file.")
+    key = file.storage_key  # delete() clears the id, so read the key first
+    file.delete()
+    get_storage().delete(key)
+    return no_content()
+
+
+@api_view
+def remove_access(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
+    user = signed_in_user(request)
+    grants = Grant.objects.filter(file_id=file_id, user=user)
+    if not grants.exists():
+        raise ApiError(404, "not_found", "The file isn't shared with you.")
+    grants.delete()
+    return no_content()
