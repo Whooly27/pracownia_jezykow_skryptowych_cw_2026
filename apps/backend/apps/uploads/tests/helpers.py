@@ -12,9 +12,9 @@ def post_json(client: Client, url: str, body: Any) -> Any:
     return client.post(url, data=json.dumps(body), content_type="application/json")
 
 
-def start_upload(client: Client, user: User, *files: dict[str, Any]) -> Any:
+def start_upload(client: Client, user: User, file: dict[str, Any]) -> Any:
     client.force_login(user)
-    return post_json(client, "/api/v1/uploads", {"files": list(files)})
+    return post_json(client, "/api/v1/uploads", file)
 
 
 def start_and_put(client: Client, user: User, name: str, body: bytes, mime_type: str) -> str:
@@ -22,7 +22,7 @@ def start_and_put(client: Client, user: User, name: str, body: bytes, mime_type:
     response = start_upload(
         client, user, {"name": name, "size_bytes": len(body), "mime_type": mime_type}
     )
-    upload = response.json()["data"][0]
+    upload = response.json()["data"]
     assert client.put(upload["put_url"], data=body, content_type=mime_type).status_code == 200
     return str(upload["id"])
 

@@ -1,8 +1,9 @@
 """What may be uploaded: allowed types and the size limit, from the spec."""
 
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, NoReturn
 
+from apps.core.api import ApiError
 from apps.files.models import NAME_MAX_LENGTH
 
 MAX_FILE_BYTES = 25 * 1024 * 1024
@@ -36,6 +37,18 @@ class Rejection:
     message: str
 
 
+STATUS_BY_CODE = {
+    "validation_failed": 422,
+    "unsupported_file_type": 415,
+    "file_too_large": 413,
+    "name_conflict": 409,
+}
+
+
+def raise_for(rejection: Rejection) -> NoReturn:
+    raise ApiError(STATUS_BY_CODE[rejection.code], rejection.code, rejection.message)
+
+
 def upload_policy() -> dict[str, Any]:
     return {"max_file_bytes": MAX_FILE_BYTES, "allowed_extensions": list(MIME_BY_EXTENSION)}
 
@@ -45,14 +58,21 @@ def extension_of(name: str) -> str:
     return extension.lower() if dot else ""
 
 
-def check_name(name: str) -> Rejection | None:
+def name_problems(name: str) -> list[str]:
+    """Every rule the name breaks, so a 422 can list them all."""
+    problems: list[str] = []
     if not name.strip():
-        return Rejection("validation_failed", "Name can't be empty.")
+        problems.append("Name can't be empty.")
     if len(name) > NAME_MAX_LENGTH:
-        return Rejection("validation_failed", f"{name}: name is over 255 characters.")
+        problems.append("Name is over 255 characters.")
     if "/" in name:
-        return Rejection("validation_failed", f"{name}: name can't contain /.")
-    return None
+        problems.append("Name can't contain /.")
+    return problems
+
+
+def check_name(name: str) -> Rejection | None:
+    problems = name_problems(name)
+    return Rejection("validation_failed", problems[0]) if problems else None
 
 
 def check_type(name: str, mime_type: str) -> Rejection | None:

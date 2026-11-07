@@ -47,8 +47,8 @@ curl -s -c jar -b jar -X POST http://localhost:8000/admin/login/ \
   -d "csrfmiddlewaretoken=$CSRF&username=you@example.com&password=secret" -o /dev/null
 
 curl -s -b jar -X POST http://localhost:8000/api/v1/uploads -H 'content-type: application/json' \
-  -d '{"files":[{"name":"hello.txt","size_bytes":6,"mime_type":"text/plain"}]}'
-# take put_url and id from the answer
+  -d '{"name":"hello.txt","size_bytes":6,"mime_type":"text/plain"}'
+# one file per request; take put_url and id from the answer
 curl -s -X PUT "http://localhost:8000<put_url>" -H 'content-type: text/plain' --data-binary 'hello!'
 curl -s -b jar -X POST http://localhost:8000/api/v1/uploads/<id>/complete
 ```
