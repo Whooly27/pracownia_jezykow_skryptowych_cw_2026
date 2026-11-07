@@ -1,6 +1,7 @@
 """File endpoints: list, rename, delete, remove access, download."""
 
 import uuid
+from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
@@ -11,6 +12,7 @@ from apps.core.api import (
     ApiError,
     api_get,
     api_view,
+    iso,
     json_body,
     no_content,
     not_found,
@@ -25,6 +27,8 @@ from apps.uploads.storage import get_storage
 from .listing import page, parse_query
 from .models import File
 from .serializers import file_to_json
+
+DOWNLOAD_TTL = timedelta(seconds=60)
 
 
 @api_get
@@ -93,3 +97,14 @@ def remove_access(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
         raise ApiError(404, "not_found", "The file isn't shared with you.")
     grants.delete()
     return no_content()
+
+
+@api_view
+def download_file(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
+    user = signed_in_user(request)
+    file = File.objects.filter(id=file_id).first()
+    if file is None or access_for(user, file) is None:
+        raise not_found(file_id)
+    expires_at = timezone.now() + DOWNLOAD_TTL
+    url = get_storage().get_url(file.storage_key, file.name, expires_at)
+    return ok({"url": url, "expires_at": iso(expires_at)})

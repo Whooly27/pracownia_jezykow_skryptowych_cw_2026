@@ -19,6 +19,7 @@ from django.utils.module_loading import import_string
 from apps.core.api import iso
 
 PUT_TOKEN_SALT = "blob-put"  # noqa: S105  (a signing salt, not a secret)
+GET_TOKEN_SALT = "blob-get"  # noqa: S105
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,9 @@ class StoredObject:
 class Storage(Protocol):
     def put_url(self, key: str, mime_type: str, size_bytes: int, expires_at: datetime) -> str:
         """A URL the browser PUTs the bytes to; valid until expires_at."""
+
+    def get_url(self, key: str, filename: str, expires_at: datetime) -> str:
+        """A URL that serves the bytes as an attachment named filename; valid until expires_at."""
 
     def head(self, key: str) -> StoredObject | None:
         """Size and type of what is stored under key, or None if nothing is."""
@@ -58,6 +62,13 @@ class LocalBlobStorage:
                 "expires_at": iso(expires_at),
             },
             salt=PUT_TOKEN_SALT,
+        )
+        return f"{settings.BLOB_BASE_URL}/api/v1/_blob/{key}?token={token}"
+
+    def get_url(self, key: str, filename: str, expires_at: datetime) -> str:
+        token = signing.dumps(
+            {"key": key, "filename": filename, "expires_at": iso(expires_at)},
+            salt=GET_TOKEN_SALT,
         )
         return f"{settings.BLOB_BASE_URL}/api/v1/_blob/{key}?token={token}"
 

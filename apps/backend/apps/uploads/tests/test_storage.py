@@ -65,8 +65,43 @@ def test_put_after_expiry_is_403(client: Client) -> None:
     assert response.status_code == 403
 
 
-def test_get_is_405(client: Client) -> None:
-    assert client.get(put_url()).status_code == 405
+def get_url(key: str = "uploads/abc", filename: str = "report.pdf", seconds: int = 60) -> str:
+    return get_storage().get_url(key, filename, timezone.now() + timedelta(seconds=seconds))
+
+
+def test_get_url_streams_the_file_as_attachment(client: Client) -> None:
+    client.put(put_url(), data=PDF, content_type="application/pdf")
+
+    response = client.get(get_url())
+
+    assert response.status_code == 200
+    assert response["Content-Type"] == "application/pdf"
+    assert 'filename="report.pdf"' in response["Content-Disposition"]
+    assert b"".join(response.streaming_content) == PDF  # type: ignore[attr-defined]
+
+
+def test_get_with_put_token_is_403(client: Client) -> None:
+    client.put(put_url(), data=PDF, content_type="application/pdf")
+
+    assert client.get(put_url()).status_code == 403
+
+
+def test_get_after_expiry_is_403(client: Client) -> None:
+    client.put(put_url(), data=PDF, content_type="application/pdf")
+
+    assert client.get(get_url(seconds=-1)).status_code == 403
+
+
+def test_get_of_a_key_other_than_the_signed_one_is_403(client: Client) -> None:
+    client.put(put_url(), data=PDF, content_type="application/pdf")
+
+    response = client.get(get_url("uploads/abc").replace("uploads/abc", "uploads/other"))
+
+    assert response.status_code == 403
+
+
+def test_get_of_missing_key_is_404(client: Client) -> None:
+    assert client.get(get_url("uploads/nope")).status_code == 404
 
 
 def test_copy_and_delete(client: Client) -> None:
