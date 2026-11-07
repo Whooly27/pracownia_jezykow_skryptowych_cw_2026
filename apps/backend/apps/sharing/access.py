@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from apps.accounts.models import User
-from apps.files.models import Node
+from apps.files.models import File as Node
 
 from .models import Grant
 from .permissions import ALL_PERMISSIONS, FOLDER_OWNER_PERMISSIONS, Permission

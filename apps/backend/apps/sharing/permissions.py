@@ -12,7 +12,7 @@ class Permission(StrEnum):
     RENAME = "rename"
     DELETE = "delete"
     SHARE = "share"
-    LINK = "link"
+    LINK = "link"   # owner tworzenie linkow
 
 
 ALL_PERMISSIONS: tuple[str, ...] = tuple(p.value for p in Permission)

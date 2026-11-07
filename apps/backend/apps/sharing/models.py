@@ -14,7 +14,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
-from apps.files.models import Node
+from apps.files.models import File as Node
 
 from .permissions import validate_permissions
 
