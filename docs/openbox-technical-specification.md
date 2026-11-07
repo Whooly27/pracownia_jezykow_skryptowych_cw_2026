@@ -189,7 +189,7 @@ A failed action shows a toast naming the file, from its error message or the nam
 
 ## 4. API
 
-Base URL `https://<domain>/api/v1`. A single API instance serves every request, and there are no background jobs: all work happens inside the request that asks for it. Every request carries the session cookie set by sign-in. Every `POST` carries an `Idempotency-Key`; repeating a request with the same key returns the first response instead of doing the work twice. Keys are per user and kept for 24 hours. A `POST` without a key gets `400 missing_idempotency_key`; reusing a key for a different request gets `422 idempotency_key_reused`, and while the first request is still running, `409 request_in_progress`.
+Base URL `https://<domain>/api/v1`. A single API instance serves every request, and there are no background jobs: all work happens inside the request that asks for it. Every request carries the session cookie set by sign-in.
 
 ### 4.1 Files
 
@@ -274,7 +274,6 @@ Renames a file and updates its `modified_at`. Only the owner can rename.
 
 ```http
 POST /api/v1/files/f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68/rename
-Idempotency-Key: 5d2c8a71-3e4f-4b9a-8c6d-1a7e0f3b9d52
 
 { "name": "Staff review 2026.docx" }
 ```
@@ -314,7 +313,6 @@ Deletes a file permanently, for everyone, and removes its stored bytes. Needs `d
 
 ```http
 POST /api/v1/files/f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68/delete
-Idempotency-Key: 7f4e1b9c-0a3d-4e6b-8d2f-5c9a1e7b3f60
 ```
 
 ```http
@@ -333,7 +331,6 @@ Removes a file shared with you from your list by deleting all your grants on it,
 
 ```http
 POST /api/v1/files/8e3b1f6d-2a9c-4d7e-b5f0-6c1a9d4e2b78/remove-access
-Idempotency-Key: 2a8d5f3c-7b1e-4c9a-a6d0-3e5f8b2c7a14
 ```
 
 ```http
@@ -351,7 +348,6 @@ Returns a signed storage URL, valid for 60 seconds, that saves the file under it
 
 ```http
 POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/download
-Idempotency-Key: 9b3e6a1d-4c8f-4b2e-a7d5-1f0c3e9a6b82
 ```
 
 ```http
@@ -379,7 +375,6 @@ Reserves new files among your own files and returns where to send each one's byt
 
 ```http
 POST /api/v1/uploads
-Idempotency-Key: 4e7c1a9b-2d5f-4a3e-8b6c-0d9f2e5a7c31
 
 {
   "files": [
@@ -438,7 +433,6 @@ Starts an upload that replaces a file's contents. Finish it with `POST /uploads/
 
 ```http
 POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/replace
-Idempotency-Key: 6a2f9d4c-1e7b-4d3a-9c8e-5b0a7f2d4e16
 
 { "size_bytes": 190112, "mime_type": "application/vnd.ms-excel" }
 ```
@@ -473,7 +467,6 @@ Call after the `PUT` succeeds. Confirms the bytes arrived, then makes the file v
 
 ```http
 POST /api/v1/uploads/4c7b2e9f-8a3d-4b1c-a6e4-9f0d2c5b8e73/complete
-Idempotency-Key: 1d5b8e2a-9c3f-4e7d-b6a1-4f8c2d0e9a73
 ```
 
 ```http
@@ -559,7 +552,6 @@ Creates a share link. Anyone who opens it and signs in gets its permissions. For
 
 ```http
 POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/links
-Idempotency-Key: 8c3d6f1a-2e9b-4a7c-b5d4-0e3f6a9c2b57
 
 {
   "permissions": ["view", "edit"],
@@ -596,7 +588,6 @@ The URL stops working and everyone who joined through it loses that access.
 
 ```http
 POST /api/v1/links/d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31/delete
-Idempotency-Key: 0e7a4c2f-5d8b-4f1e-9a3c-6b2d8f0e4a95
 ```
 
 ```http
@@ -615,7 +606,6 @@ Called by the web app's link page, `https://<domain>/links/{token}` (the URL peo
 
 ```http
 POST /api/v1/links/redeem
-Idempotency-Key: 3b6e9a2d-7c1f-4d5b-8e0a-2f4c7d9b1e63
 
 { "token": "7Fq9xKpL2mZr" }
 ```
