@@ -54,3 +54,6 @@ docker-compose.override.yml
 
 # IntelliJ build output
 out/
+
+# Local blob storage (stand-in for Vercel Blob)
+apps/backend/blobdata/

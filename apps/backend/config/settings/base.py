@@ -80,6 +80,12 @@ TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
 USE_TZ = True
 
+# File bytes. The default is the local stand-in for Vercel Blob (see apps/uploads/storage.py).
+STORAGE_BACKEND = env("STORAGE_BACKEND", default="apps.uploads.storage.LocalBlobStorage")
+BLOB_ROOT = env("BLOB_ROOT", default=str(BASE_DIR / "blobdata"))
+# Origin put into signed blob URLs; empty means relative, which works behind the frontend proxy.
+BLOB_BASE_URL = env("BLOB_BASE_URL", default="")
+
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
