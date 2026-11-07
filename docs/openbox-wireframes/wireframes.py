@@ -6,10 +6,10 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 INK, MUTED, LINE, FILL, SEL = "#1e2533", "#6b7489", "#d4d9e2", "#f6f8fb", "#dbe8fd"
-BLUE, BLUE_SOFT, FOLDER, FOLDER_EDGE, DANGER = "#0061fe", "#eef4ff", "#a9cdf7", "#7fb3f0", "#d92d20"
+BLUE, BLUE_SOFT, TINT, TINT_EDGE, DANGER = "#0061fe", "#eef4ff", "#a9cdf7", "#7fb3f0", "#d92d20"
 FONT = "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 W, H = 1000, 660
-PERMS = ["view", "edit", "rename", "delete", "share", "link"]
+PERMS = ["view", "edit", "delete"]
 
 
 class C:
@@ -102,14 +102,6 @@ def checkbox_row(c, x, y, labels, checked=(), disabled=(), max_x=None):
         x += step
 
 
-def icon_folder(c, x, y, shared=False):
-    c.rect(x, y + 3, 9, 5, fill=FOLDER, stroke=FOLDER_EDGE, r=1)
-    c.rect(x, y + 6, 22, 15, fill=FOLDER, stroke=FOLDER_EDGE, r=2)
-    if shared:
-        c.circle(x + 8, y + 14, 2.5, fill=BLUE, stroke="none")
-        c.circle(x + 14, y + 14, 2.5, fill=BLUE, stroke="none")
-
-
 def icon_file(c, x, y, tag=""):
     c.o.append(f'<path d="M{x},{y} h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="{LINE}"/>')
     if tag:
@@ -151,7 +143,7 @@ def shell(c, nav, crumbs, url, crumb_root=None, me="AL", search=None):
             c.rect(tx, 83, tw(n, 14), 3, fill=BLUE, stroke=None, r=1.5)
         tx += tw(n, 14) + 32
     search_box(c, search, x=CX + CW - 52 - 280, y=40, w=280, h=36)
-    c.circle(CX + CW - 18, 58, 17, fill=BLUE_SOFT, stroke=FOLDER_EDGE)
+    c.circle(CX + CW - 18, 58, 17, fill=BLUE_SOFT, stroke=TINT_EDGE)
     c.text(CX + CW - 18, 63, me, 12, 700, BLUE, "middle")
     x = CX
     parts = ([crumb_root] if crumb_root else []) + crumbs
@@ -189,10 +181,7 @@ def table(c, x, y, rows, cols=COLS, header_checkbox="none"):
             c.rect(x, ry, sum(w for _, w in cols), 46, fill=SEL, stroke="none", r=0)
         checkbox(c, x + 6, ry + 16, checked=r.get("checked", False))
         nx = x + cols[0][1]
-        if r["kind"] == "folder":
-            icon_folder(c, nx, ry + 12, r.get("shared", False))
-        else:
-            icon_file(c, nx + 2, ry + 12, r.get("tag", ""))
+        icon_file(c, nx + 2, ry + 12, r.get("tag", ""))
         c.text(nx + 34, ry + 28, r["name"], 13, 500, INK)
         cx = nx + cols[1][1]
         for (label, w), cell in zip(cols[2:], r["cells"]):
@@ -249,17 +238,16 @@ def modal(c, w, h, title):
 
 
 OWNER_ROWS = [
-    {"kind": "folder", "name": "Assets", "shared": True, "cells": ["--", "6 members"]},
-    {"kind": "folder", "name": "Creative briefs", "shared": True, "cells": ["--", "6 members"]},
+    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "cells": [("3/24/2026 9:12AM", "by Alex"), "3 members"]},
+    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "cells": [("3/22/2026 4:40PM", "by Alex"), "1 member"]},
     {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "cells": [("3/20/2026 3:15PM", "by Alex"), "9 members"]},
     {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": [("3/17/2026 10:33AM", "by Jo"), "6 members"]},
     {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "cells": [("3/15/2026 1:28PM", "by Jo"), "6 members"]},
 ]
 
 
-def files_base(c, rows, url="openbox.app/files/7a1f3c9e-2b8d-4e6a-b5c1-9d0e4f2a6b83"):
-    shell(c, "Files", ["Acme Inc", "Design"], url)
-    button(c, CX + CW - 214, 106, 110, "New folder")
+def files_base(c, rows, url="openbox.app/files"):
+    shell(c, "Files", ["My files"], url)
     button(c, CX + CW - 96, 106, 96, "Upload", "primary")
     return table(c, CX, 160, rows)
 
@@ -303,9 +291,9 @@ def s_sign_in():
 def s_files():
     c = C()
     rows = [dict(r) for r in OWNER_ROWS]
-    rows[0]["checked"] = True
+    rows[0]["checked"] = rows[1]["checked"] = True
     files_base(c, rows)
-    action_bar(c, "1 selected", ["Download", "Rename", "Delete"])
+    action_bar(c, "2 selected", ["Delete"])
     return c
 
 
@@ -318,11 +306,11 @@ def s_files_file():
     return c
 
 
-SHARED_COLS = [("", 30), ("Name ▾", 470), ("Owner", 200), ("Location", 236)]
+SHARED_COLS = [("", 30), ("Name ▾", 470), ("Owner", 200), ("Modified", 236)]
 SHARED_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "cells": ["Robin", "Marketing"]},
-    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "cells": ["Robin", "Marketing / Logos"]},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["Alex", "Acme Inc / Design"]},
+    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "cells": ["Robin", ("10/28/2026 2:10PM", "by Robin")]},
+    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "cells": ["Robin", ("10/12/2026 11:05AM", "by Robin")]},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["Alex", ("3/17/2026 10:33AM", "by Jo")]},
 ]
 
 
@@ -337,10 +325,10 @@ def shared_base(c, checked):
     table(c, CX, 160, rows, SHARED_COLS)
 
 
-def s_shared_can_share():
+def s_shared_can_edit():
     c = C()
     shared_base(c, 2)
-    action_bar(c, "1 selected", ["Download", "Remove my access"], "Share")
+    action_bar(c, "1 selected", ["Download", "Replace", "Remove my access"])
     return c
 
 
@@ -376,16 +364,15 @@ def chevron(c, x, y, w, h, value):
 
 
 OWNER_PEOPLE = [("AL", "Alex (you)", "alex@acme.com", ("text", "Owner")),
-                ("KA", "Kate", "kate@acme.com · invited by you", ("edit", "Can share")),
-                ("RO", "Robin", "robin@acme.com · invited by Kate", ("edit", "Can view")),
-                ("JO", "Jo", "jo@acme.com · invited by you", ("edit", "Full access")),
-                ("DA", "Dana", "dana@acme.com · via link", ("edit", "Can view")),
-                ("SA", "Sam", "sam@acme.com · invited by you", ("edit", "Can view"))]
-OWNER_LINKS = [("Can view", "Expires Dec 5, 2026", "Created by you · Used by 1 person"),
-               ("Can edit", "Never expires", "Created by you · Not used yet"),
-               ("Can view", "Expires Nov 12, 2026", "Created by you · Not used yet")]
-PERM_TEXT = {"view": "See and download it", "edit": "Replace the contents", "rename": "Rename the file", "delete": "Delete it for everyone",
-             "share": "Invite other people", "link": "Create share links"}
+                ("KA", "Kate", "kate@acme.com · joined Mar 3", ("remove", "Can edit")),
+                ("JO", "Jo", "jo@acme.com · joined Mar 3", ("remove", "Can edit")),
+                ("RO", "Robin", "robin@acme.com · joined Mar 4", ("remove", "Can view")),
+                ("DA", "Dana", "dana@acme.com · joined Mar 5", ("remove", "Can view")),
+                ("SA", "Sam", "sam@acme.com · joined Mar 9", ("remove", "Can view"))]
+OWNER_LINKS = [("Can view", "Expires Dec 5, 2026", "Used by 3 people"),
+               ("Can edit", "Never expires", "Used by 2 people"),
+               ("Can view", "Expires Nov 12, 2026", "Not used yet")]
+PERM_TEXT = {"view": "See and download it", "edit": "Replace the contents", "delete": "Delete it for everyone"}
 
 
 def segmented(c, x, y, w, options, active, h=36):
@@ -411,13 +398,12 @@ def people_list(c, x, y, w, people, visible, mobile=False):
         ry = y + i * row_h
         if i:
             c.line(x + 48, ry, x + w, ry, SEL)
-        c.circle(x + 16, ry + 28, 16, fill=BLUE_SOFT, stroke=FOLDER_EDGE)
+        c.circle(x + 16, ry + 28, 16, fill=BLUE_SOFT, stroke=TINT_EDGE)
         c.text(x + 16, ry + 32, ini, 10, 700, BLUE, "middle")
-        if right[0] == "edit":
-            dw = 112 if mobile else 140
-            chevron(c, inner_r - 30 - dw, ry + 13, dw, 30, right[1])
+        if right[0] == "remove":
+            c.text(inner_r - 30, ry + 32, right[1], 12, 500, MUTED, "end")
             x_icon(c, inner_r - 10, ry + 28)
-            text_w = inner_r - 30 - dw - (x + 44) - 10
+            text_w = inner_r - 30 - tw(right[1], 12) - (x + 44) - 14
         else:
             c.text(inner_r, ry + 32, right[1], 12, 500, MUTED, "end")
             text_w = inner_r - tw(right[1], 12) - (x + 44) - 14
@@ -503,7 +489,7 @@ def s_share_people():
     owner_bg(c)
     x, y, w = share_modal_base(c, 600, 412, "Share “Q4 Budget.xls”")
     segmented(c, x, y - 8, 260, ["People · 6", "Links · 3"], 0)
-    button(c, x + w - 136, y - 8, 136, "+  Invite people", "primary", 36)
+    button(c, x + w - 124, y - 8, 124, "+  Create link", "primary", 36)
     people_list(c, x, y + 44, w, OWNER_PEOPLE, 5)
     return c
 
@@ -519,27 +505,13 @@ def s_share_links():
     return c
 
 
-def s_add_people():
-    c = C()
-    shared_base(c, 2)
-    x, y, w = share_modal_base(c, 520, 556, "Invite people to “Q4 Budget.xls”")
-    y += 18
-    c.text(x, y + 2, "Email", 12, 600, INK)
-    field(c, x, y + 12, w, value="ana@acme.com")
-    c.text(x, y + 74, "What they can do", 12, 600, INK)
-    c.text(x + w, y + 74, "You can only give what you hold", 11, 400, MUTED, "end")
-    end = perm_rows(c, x, y + 84, w, ["share"], ["view", "share"])
-    footer(c, x, end + 16, w, "Invite")
-    return c
-
-
 def s_create_link():
     c = C()
     owner_bg(c)
-    x, y, w = share_modal_base(c, 560, 590, "Create a link to “Q4 Budget.xls”")
+    x, y, w = share_modal_base(c, 560, 434, "Create a link to “Q4 Budget.xls”")
     y += 18
     c.text(x, y + 2, "What people who open it can do", 12, 600, INK)
-    end = perm_rows(c, x, y + 12, w, PERMS, ["view", "edit", "rename"])
+    end = perm_rows(c, x, y + 12, w, PERMS, ["view", "edit"])
     c.text(x, end + 26, "Expires", 12, 600, INK)
     segmented(c, x, end + 36, w, EXPIRY, 4, h=34)
     calendar_field(c, x, end + 82, 200, "Dec 24, 2026")
@@ -560,7 +532,7 @@ def s_link_created():
     return c
 
 
-SEARCH_COLS = [("", 30), ("Name ▾", 470), ("Location", 286), ("Modified", 150)]
+SEARCH_COLS = [("", 30), ("Name ▾", 470), ("Owner", 286), ("Modified", 150)]
 
 
 def s_search():
@@ -568,9 +540,9 @@ def s_search():
     shell(c, "Files", ["Search"], "openbox.app/search?q=budget", search="budget")
     c.text(CX + 92, 128, "for “budget”", 16, 400, MUTED)
     rows = [
-        {"kind": "folder", "name": "Budgets", "cells": ["Finance", "--"]},
-        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "cells": ["Finance", ("10/2/2026 4:12PM", "by Robin")]},
-        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["Acme Inc / Design", ("3/17/2026 10:33AM", "by Jo")], "checked": True},
+        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "cells": ["Robin", ("10/2/2026 4:12PM", "by Robin")]},
+        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["You", ("3/17/2026 10:33AM", "by Jo")], "checked": True},
+        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "cells": ["You", ("2/9/2026 8:20AM", "by Alex")]},
     ]
     table(c, CX, 160, rows, SEARCH_COLS)
     action_bar(c, "1 selected", ["Download", "Replace", "Rename", "Delete"], "Share")
@@ -598,7 +570,7 @@ def m_header(c, title=None, me="AL", plus=True):
         c.circle(MW - 72, 76, 17, fill=BLUE, stroke=BLUE)
         c.line(MW - 78, 76, MW - 66, 76, "#ffffff", 2)
         c.line(MW - 72, 70, MW - 72, 82, "#ffffff", 2)
-    c.circle(MW - 34, 76, 17, fill=BLUE_SOFT, stroke=FOLDER_EDGE)
+    c.circle(MW - 34, 76, 17, fill=BLUE_SOFT, stroke=TINT_EDGE)
     c.text(MW - 34, 81, me, 11, 700, BLUE, "middle")
 
 
@@ -609,7 +581,7 @@ def m_tabbar(c, active):
         on = t == active
         color = BLUE if on else MUTED
         if t == "Files":
-            c.o.append(f'<path d="M{cx-10},{MH-50} h7 l2,2.5 h11 v12.5 h-20 z" fill="{BLUE_SOFT if on else "#ffffff"}" stroke="{color}" '
+            c.o.append(f'<path d="M{cx-8},{MH-53} h10 l6,6 v14 h-16 z" fill="{BLUE_SOFT if on else "#ffffff"}" stroke="{color}" '
                        f'stroke-width="1.7" stroke-linejoin="round"/>')
         else:
             icon(c, "share", cx - 10, MH - 53, color)
@@ -623,12 +595,9 @@ def m_search(c, y, value=None, w=None):
 def m_rows(c, y, rows, selected=None):
     for i, r in enumerate(rows):
         ry = y + i * 64
-        if i == selected:
+        if i == selected or (isinstance(selected, tuple) and i in selected):
             c.rect(0, ry, MW, 64, fill=SEL, stroke=None, r=0)
-        if r["kind"] == "folder":
-            icon_folder(c, 20, ry + 18, r.get("shared", False))
-        else:
-            icon_file(c, 22, ry + 19, r.get("tag", ""))
+        icon_file(c, 22, ry + 19, r.get("tag", ""))
         c.text(56, ry + 28, r["name"], 14, 500, INK)
         c.text(56, ry + 46, r["sub"], 12, 400, MUTED)
         c.text(MW - 24, ry + 36, "⋯", 18, 700, MUTED, "middle")
@@ -645,19 +614,17 @@ def icon(c, name, x, y, color):
         "replace": f"M{x+16},{y+8} A6,6 0 0,0 {x+5},{y+6} M{x+5},{y+2.5} V{y+6} H{x+8.5} "
                    f"M{x+4},{y+12} A6,6 0 0,0 {x+15},{y+14} M{x+15},{y+17.5} V{y+14} H{x+11.5}",
         "rename": f"M{x+4},{y+16} L{x+4.6},{y+12.6} L{x+13},{y+4.2} L{x+15.8},{y+7} L{x+7.4},{y+15.4} Z M{x+11.4},{y+5.8} L{x+14.2},{y+8.6}",
-        "move": f"M{x+3},{y+6} H{x+8} L{x+9.5},{y+7.5} H{x+17} V{y+16} H{x+3} Z M{x+8},{y+11.5} H{x+13} M{x+11},{y+9.5} L{x+13},{y+11.5} L{x+11},{y+13.5}",
-        "copy": f"M{x+7},{y+7} H{x+16} V{y+16} H{x+7} Z M{x+4},{y+13} V{y+4} H{x+13}",
         "delete": f"M{x+4},{y+6} H{x+16} M{x+8},{y+6} V{y+4} H{x+12} V{y+6} M{x+5.5},{y+6} L{x+6.5},{y+17} H{x+13.5} L{x+14.5},{y+6} M{x+9},{y+9} V{y+14} M{x+11},{y+9} V{y+14}",
         "leave": f"M{x+8},{y+8} m-3.2,0 a3.2,3.2 0 1,0 6.4,0 a3.2,3.2 0 1,0 -6.4,0 M{x+2.5},{y+17} C{x+3},{y+13} {x+13},{y+13} {x+13.5},{y+17} M{x+13},{y+9} H{x+18}",
     }
     c.o.append(f'<path d="{paths[name]}" {st}/>')
 
 
-ACTION_ICONS = {"Share": "share", "Download": "download", "Download (zip)": "download", "Replace": "replace",
-                "Rename": "rename", "Move": "move", "Copy": "copy", "Delete": "delete", "Remove my access": "leave"}
+ACTION_ICONS = {"Share": "share", "Download": "download", "Replace": "replace",
+                "Rename": "rename", "Delete": "delete", "Remove my access": "leave"}
 
 
-def m_sheet(c, item, sub, actions, kind="file", tag=""):
+def m_sheet(c, item, sub, actions, tag=""):
     """App action sheet: item header, icon rows, destructive action set apart in red."""
     c.rect(0, 0, MW, MH - 64, fill=INK, stroke=None, r=0, opacity=0.35)
     danger = [a for a in actions if a in ("Delete", "Remove my access")]
@@ -669,10 +636,7 @@ def m_sheet(c, item, sub, actions, kind="file", tag=""):
     c.line(0, MH - 64, MW, MH - 64, LINE)
     c.rect(MW / 2 - 20, y + 10, 40, 4, fill=LINE, stroke=None, r=2)
     hy = y + 30
-    if kind == "folder":
-        icon_folder(c, 20, hy + 6)
-    else:
-        icon_file(c, 22, hy + 6, tag)
+    icon_file(c, 22, hy + 6, tag)
     c.text(56, hy + 18, item, 15, 700, INK)
     c.text(56, hy + 36, sub, 12, 400, MUTED)
     c.line(0, hy + 56, MW, hy + 56, SEL)
@@ -696,23 +660,23 @@ def m_sheet(c, item, sub, actions, kind="file", tag=""):
 
 
 M_OWNER_ROWS = [
-    {"kind": "folder", "name": "Assets", "shared": True, "sub": "6 members"},
-    {"kind": "folder", "name": "Creative briefs", "shared": True, "sub": "6 members"},
+    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "sub": "3/24/2026 · Alex · 3 members"},
+    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "sub": "3/22/2026 · Alex · 1 member"},
     {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "sub": "3/20/2026 · Alex · 9 members"},
     {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "3/17/2026 · Jo · 6 members"},
     {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "sub": "3/15/2026 · Jo · 6 members"},
 ]
 M_SHARED_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "sub": "Robin · Marketing"},
-    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "sub": "Robin · Marketing / Logos"},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "Alex · Acme Inc / Design"},
+    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "sub": "Robin · 10/28/2026"},
+    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "sub": "Robin · 10/12/2026"},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "Alex · 3/17/2026"},
 ]
 
 
 def m_files_base(c, selected=None, rows=None):
     phone(c)
     m_header(c)
-    c.o.append(f'<text x="20" y="124" font-size="14" fill="{MUTED}">Acme Inc  ›  <tspan font-weight="600" fill="{INK}">Design</tspan></text>')
+    c.text(20, 124, "My files", 14, 600, INK)
     m_search(c, 140)
     m_rows(c, 196, rows or M_OWNER_ROWS, selected)
     m_tabbar(c, "Files")
@@ -753,10 +717,10 @@ def m_sign_in():
     return c
 
 
-def m_files_folder():
+def m_files_several():
     c = C(MW, MH, clip_r=28)
-    m_files_base(c, 0)
-    m_sheet(c, "Assets", "Folder · 6 members", ["Download", "Rename", "Delete"], kind="folder")
+    m_files_base(c, (0, 1))
+    m_sheet(c, "2 files", "Campaign plan.pdf, Logo draft.png", ["Delete"])
     return c
 
 
@@ -767,10 +731,10 @@ def m_files_file():
     return c
 
 
-def m_shared_can_share():
+def m_shared_can_edit():
     c = C(MW, MH, clip_r=28)
     m_shared_base(c, 2)
-    m_sheet(c, "Q4 Budget.xls", "Owner Alex · Can share", ["Share", "Download", "Remove my access"], tag="XLS")
+    m_sheet(c, "Q4 Budget.xls", "Owner Alex · Can edit", ["Download", "Replace", "Remove my access"], tag="XLS")
     return c
 
 
@@ -803,7 +767,7 @@ def m_share_people():
     m_page(c, "Share “Q4 Budget.xls”")
     segmented(c, 20, 116, MW - 40, ["People · 6", "Links · 3"], 0)
     people_list(c, 20, 166, MW - 40, OWNER_PEOPLE, 9, mobile=True)
-    m_bottom_button(c, "+  Invite people")
+    m_bottom_button(c, "+  Create link")
     return c
 
 
@@ -818,23 +782,11 @@ def m_share_links():
     return c
 
 
-def m_add_people():
-    c = C(MW, MH, clip_r=28)
-    m_page(c, "Invite people", back=True)
-    c.text(20, 130, "Email", 12, 600, INK)
-    field(c, 20, 140, MW - 40, value="ana@acme.com", h=40)
-    c.text(20, 210, "What they can do", 12, 600, INK)
-    c.text(20, 228, "You can only give what you hold", 11, 400, MUTED)
-    perm_rows(c, 20, 240, MW - 40, ["share"], ["view", "share"])
-    m_bottom_button(c, "Invite")
-    return c
-
-
 def m_create_link():
     c = C(MW, MH, clip_r=28)
     m_page(c, "Create link", back=True)
     c.text(20, 130, "What people who open it can do", 12, 600, INK)
-    end = perm_rows(c, 20, 140, MW - 40, PERMS, ["view", "edit", "rename"])
+    end = perm_rows(c, 20, 140, MW - 40, PERMS, ["view", "edit"])
     c.text(20, end + 26, "Expires", 12, 600, INK)
     segmented(c, 20, end + 36, MW - 40, EXPIRY, 4, h=34)
     calendar_field(c, 20, end + 80, MW - 40, "Dec 24, 2026", h=40)
@@ -863,9 +815,9 @@ def m_search_screen():
     c.text(MW - 20, 81, "Cancel", 14, 600, BLUE, "end")
     c.text(20, 128, "Results for “budget”", 13, 500, MUTED)
     m_rows(c, 144, [
-        {"kind": "folder", "name": "Budgets", "sub": "Finance"},
-        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "sub": "Finance · 10/2/2026"},
-        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "Acme Inc / Design · 3/17/2026"},
+        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "sub": "Robin · 10/2/2026"},
+        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "You · 3/17/2026"},
+        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "sub": "You · 2/9/2026"},
     ])
     m_tabbar(c, "Files")
     return c
@@ -884,26 +836,14 @@ def _sparkle(x, y, r, color=WARM):
 
 def _backdrop(r=62):
     return (f'<circle r="{r}" fill="{BLUE_SOFT}"/>'
-            f'<circle cx="{-r - 10}" cy="{-r * 0.55}" r="4" fill="{FOLDER}"/>'
-            f'<circle cx="{r + 12}" cy="{r * 0.35}" r="3" fill="{FOLDER}"/>'
+            f'<circle cx="{-r - 10}" cy="{-r * 0.55}" r="4" fill="{TINT}"/>'
+            f'<circle cx="{r + 12}" cy="{r * 0.35}" r="3" fill="{TINT}"/>'
             f'<circle cx="{-r * 0.9}" cy="{r * 0.75}" r="2.5" fill="{MID}"/>'
             + _sparkle(r * 0.95, -r * 0.8, 7) + _sparkle(-r * 1.05, r * 0.15, 5, MID))
 
 
-def _folder(dx=0, dy=0, scale=1.0, front="#cfe2fb", papers=True):
-    s = scale
-    inside = (f'<rect x="-36" y="-40" width="50" height="40" rx="4" fill="#ffffff" stroke="{MID}" stroke-width="2" transform="rotate(-9)"/>'
-              f'<rect x="-6" y="-36" width="44" height="34" rx="4" fill="#ffffff" stroke="{MID}" stroke-width="2" transform="rotate(7)"/>') if papers else ""
-    return (f'<g transform="translate({dx},{dy}) scale({s})">'
-            f'<path d="M-56,-30 h34 l10,10 h66 a6,6 0 0 1 6,6 v58 a6,6 0 0 1 -6,6 h-104 a6,6 0 0 1 -6,-6 v-68 a6,6 0 0 1 6,-6 z" '
-            f'fill="{FOLDER}" stroke="{FOLDER_EDGE}" stroke-width="2"/>'
-            + inside +
-            f'<path d="M-62,-6 h124 l-7,44 a6,6 0 0 1 -6,5 h-98 a6,6 0 0 1 -6,-5 z" fill="{front}" stroke="{FOLDER_EDGE}" stroke-width="2"/>'
-            '</g>')
-
-
 def _avatar(x, y, r, initials):
-    return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="2"/>'
+    return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2"/>'
             f'<text x="{x}" y="{y + r * 0.3}" font-size="{r * 0.8:.0f}" font-weight="700" fill="{BLUE}" text-anchor="middle">{initials}</text>')
 
 
@@ -913,66 +853,60 @@ def _badge(x, y, fill, glyph):
 
 
 ILLOS = {
-    "empty-folder": lambda: (
-        _backdrop() + _folder(0, 14, 0.82, papers=False)
-        + f'<path d="M0,-6 V-50 M-12,-38 L0,-50 L12,-38" fill="none" stroke="{BLUE}" stroke-width="3.5" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>'),
+    "empty-files": lambda: (
+        _backdrop()
+        + f'<g transform="translate(0,8)"><path d="M-30,-40 h40 l20,20 v60 h-60 z" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2.5"/>'
+          f'<path d="M10,-40 v20 h20" fill="none" stroke="{TINT_EDGE}" stroke-width="2.5"/></g>'
+        + f'<path d="M0,30 V-14 M-12,-2 L0,-14 L12,-2" fill="none" stroke="{BLUE}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>'),
     "nothing-shared": lambda: (
         _backdrop()
         + f'<path d="M-30,10 Q0,-40 30,10" fill="none" stroke="{BLUE}" stroke-width="2.5" stroke-dasharray="5 6" stroke-linecap="round"/>'
-        + f'<g transform="translate(0,-26) rotate(-6)"><path d="M-12,-15 h16 l8,8 v22 h-24 z" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="2"/>'
-          f'<path d="M4,-15 v8 h8" fill="none" stroke="{FOLDER_EDGE}" stroke-width="2"/></g>'
+        + f'<g transform="translate(0,-26) rotate(-6)"><path d="M-12,-15 h16 l8,8 v22 h-24 z" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2"/>'
+          f'<path d="M4,-15 v8 h8" fill="none" stroke="{TINT_EDGE}" stroke-width="2"/></g>'
         + _avatar(-38, 22, 20, "KA") + _avatar(38, 22, 20, "AL")),
     "no-results": lambda: (
         _backdrop()
         + f'<rect x="-46" y="-34" width="44" height="56" rx="5" fill="#ffffff" stroke="{MID}" stroke-width="2" transform="rotate(-10)"/>'
         + f'<line x1="18" y1="20" x2="44" y2="46" stroke="{BLUE}" stroke-width="11" stroke-linecap="round"/>'
         + f'<circle cx="0" cy="-2" r="30" fill="#ffffff" stroke="{BLUE}" stroke-width="7"/>'
-        + f'<text x="0" y="9" font-size="30" font-weight="800" fill="{FOLDER_EDGE}" text-anchor="middle">?</text>'),
+        + f'<text x="0" y="9" font-size="30" font-weight="800" fill="{TINT_EDGE}" text-anchor="middle">?</text>'),
     "no-links": lambda: (
         _backdrop()
-        + f'<g transform="rotate(-38)"><rect x="-50" y="-15" width="58" height="30" rx="15" fill="none" stroke="{FOLDER_EDGE}" stroke-width="8"/>'
+        + f'<g transform="rotate(-38)"><rect x="-50" y="-15" width="58" height="30" rx="15" fill="none" stroke="{TINT_EDGE}" stroke-width="8"/>'
           f'<rect x="-8" y="-15" width="58" height="30" rx="15" fill="none" stroke="{BLUE}" stroke-width="8"/></g>'
         + _sparkle(34, 30, 6, BLUE)),
     "load-error": lambda: (
         _backdrop()
-        + f'<g transform="scale(0.86)"><path d="M-42,26 a22,22 0 0 1 0,-44 a30,30 0 0 1 56,-8 a24,24 0 0 1 14,52 z" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="3"/>'
+        + f'<g transform="scale(0.86)"><path d="M-42,26 a22,22 0 0 1 0,-44 a30,30 0 0 1 56,-8 a24,24 0 0 1 14,52 z" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="3"/>'
           f'<path d="M-6,-6 l-10,16 h12 l-8,16" fill="none" stroke="{WARM}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>'
         + _badge(34, 26, DANGER, "!")),
-    "not-found": lambda: _backdrop() + _folder(0, 6, 0.82, front="#e3eefd", papers=False) + _badge(40, 30, BLUE, "?"),
     "opening": lambda: (
         _backdrop()
-        + f'<g transform="rotate(-38)"><rect x="-50" y="-15" width="58" height="30" rx="15" fill="none" stroke="{FOLDER_EDGE}" stroke-width="8"/>'
+        + f'<g transform="rotate(-38)"><rect x="-50" y="-15" width="58" height="30" rx="15" fill="none" stroke="{TINT_EDGE}" stroke-width="8"/>'
           f'<rect x="-8" y="-15" width="58" height="30" rx="15" fill="none" stroke="{BLUE}" stroke-width="8"/></g>'
         + f'<circle cx="36" cy="30" r="15" fill="#ffffff" stroke="{SEL}" stroke-width="4"/>'
           f'<path d="M36,15 a15,15 0 0 1 15,15" fill="none" stroke="{BLUE}" stroke-width="4" stroke-linecap="round"/>'),
     "shared-by-me": lambda: (
         _backdrop()
         + f'<path d="M-6,-22 Q30,-40 40,-2" fill="none" stroke="{BLUE}" stroke-width="2.5" stroke-dasharray="5 6" stroke-linecap="round"/>'
-        + f'<g transform="translate(-22,6) rotate(-6)"><path d="M-22,-30 h30 l14,14 v46 h-44 z" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="2.5"/>'
-          f'<path d="M8,-30 v14 h14" fill="none" stroke="{FOLDER_EDGE}" stroke-width="2.5"/>'
+        + f'<g transform="translate(-22,6) rotate(-6)"><path d="M-22,-30 h30 l14,14 v46 h-44 z" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2.5"/>'
+          f'<path d="M8,-30 v14 h14" fill="none" stroke="{TINT_EDGE}" stroke-width="2.5"/>'
           f'<rect x="-14" y="-4" width="26" height="4" rx="2" fill="{MID}"/><rect x="-14" y="6" width="18" height="4" rx="2" fill="{MID}"/></g>'
         + _avatar(42, 18, 18, "?")),
-    "share-blocked": lambda: (
-        _backdrop()
-        + f'<path d="M-22,4 L18,-20 M-22,4 L18,28" stroke="{FOLDER_EDGE}" stroke-width="4"/>'
-        + f'<circle cx="-22" cy="4" r="14" fill="#ffffff" stroke="{BLUE}" stroke-width="5"/>'
-          f'<circle cx="20" cy="-22" r="14" fill="#ffffff" stroke="{BLUE}" stroke-width="5"/>'
-          f'<circle cx="20" cy="30" r="14" fill="#ffffff" stroke="{BLUE}" stroke-width="5"/>'
-        + _badge(40, -2, DANGER, "–")),
     "broken-link": lambda: (
         _backdrop()
-        + f'<g transform="rotate(-38)"><rect x="-58" y="-15" width="52" height="30" rx="15" fill="none" stroke="{FOLDER_EDGE}" stroke-width="8"/>'
+        + f'<g transform="rotate(-38)"><rect x="-58" y="-15" width="52" height="30" rx="15" fill="none" stroke="{TINT_EDGE}" stroke-width="8"/>'
           f'<rect x="6" y="-15" width="52" height="30" rx="15" fill="none" stroke="{BLUE}" stroke-width="8"/></g>'
         + f'<path d="M-6,-30 l-4,-10 M4,-28 l4,-10 M-8,30 l-4,10 M6,30 l4,10" stroke="{WARM}" stroke-width="3.5" stroke-linecap="round"/>'),
     "expired": lambda: (
         _backdrop()
-        + f'<path d="M-24,-40 C-24,-10 -5,-6 -5,0 C-5,6 -24,10 -24,40 H24 C24,10 5,6 5,0 C5,-6 24,-10 24,-40 Z" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="3"/>'
+        + f'<path d="M-24,-40 C-24,-10 -5,-6 -5,0 C-5,6 -24,10 -24,40 H24 C24,10 5,6 5,0 C5,-6 24,-10 24,-40 Z" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="3"/>'
         + f'<path d="M-15,-28 H15 C13,-15 4,-9 0,-5 C-4,-9 -13,-15 -15,-28 Z" fill="{WARM}"/>'
         + f'<path d="M-17,37 C-9,22 9,22 17,37 Z" fill="{WARM}"/>'
         + f'<rect x="-32" y="-48" width="64" height="9" rx="4.5" fill="{BLUE}"/><rect x="-32" y="39" width="64" height="9" rx="4.5" fill="{BLUE}"/>'),
     "no-access": lambda: (
         _backdrop()
-        + f'<path d="M-16,-6 v-14 a16,16 0 0 1 32,0 v14" fill="none" stroke="{FOLDER_EDGE}" stroke-width="8"/>'
+        + f'<path d="M-16,-6 v-14 a16,16 0 0 1 32,0 v14" fill="none" stroke="{TINT_EDGE}" stroke-width="8"/>'
         + f'<rect x="-30" y="-8" width="60" height="48" rx="9" fill="{BLUE}"/>'
         + f'<circle cx="0" cy="10" r="6" fill="#ffffff"/><rect x="-2.5" y="12" width="5" height="13" rx="2.5" fill="#ffffff"/>'),
 }
@@ -983,17 +917,17 @@ def illo(c, kind, cx, cy, s=1.0):
 
 
 def hero(c, cx, cy, s=1.0):
-    """Landing illustration: a shared folder, the people it's shared with, and a link."""
-    body = (f'<circle r="150" fill="{BLUE_SOFT}"/><circle cx="-110" cy="-96" r="7" fill="{FOLDER}"/><circle cx="146" cy="10" r="5" fill="{FOLDER}"/>'
+    """Landing illustration: a shared file, the people it's shared with, and a link."""
+    body = (f'<circle r="150" fill="{BLUE_SOFT}"/><circle cx="-110" cy="-96" r="7" fill="{TINT}"/><circle cx="146" cy="10" r="5" fill="{TINT}"/>'
             + _sparkle(120, -110, 10) + _sparkle(-136, 40, 7, MID) + _sparkle(70, 128, 6, BLUE)
             + f'<path d="M-96,-70 Q-60,-30 -40,-20 M96,-74 Q64,-34 44,-22 M100,70 Q60,50 46,34" fill="none" stroke="{BLUE}" stroke-width="2.5" stroke-dasharray="5 7" stroke-linecap="round"/>'
-            + f'<g transform="translate(0,6) rotate(-4)"><rect x="-62" y="-80" width="124" height="160" rx="10" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="2.5"/>'
+            + f'<g transform="translate(0,6) rotate(-4)"><rect x="-62" y="-80" width="124" height="160" rx="10" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2.5"/>'
               f'<rect x="-62" y="-80" width="124" height="38" rx="10" fill="{BLUE_SOFT}"/><rect x="-62" y="-52" width="124" height="10" fill="{BLUE_SOFT}"/>'
               f'<text x="-44" y="-55" font-size="15" font-weight="800" fill="{BLUE}">XLS</text>'
               + "".join(f'<rect x="-44" y="{-24 + i * 22}" width="{w}" height="9" rx="4.5" fill="{MID}"/>' for i, w in enumerate([88, 64, 80, 52]))
               + f'<rect x="-44" y="64" width="40" height="6" rx="3" fill="{SEL}"/></g>' 
             + _avatar(-104, -80, 26, "KA") + _avatar(104, -84, 26, "JO") + _avatar(108, 78, 24, "DA")
-            + f'<g transform="translate(-112,84)"><rect x="-50" y="-17" width="100" height="34" rx="17" fill="#ffffff" stroke="{FOLDER_EDGE}" stroke-width="2"/>'
+            + f'<g transform="translate(-112,84)"><rect x="-50" y="-17" width="100" height="34" rx="17" fill="#ffffff" stroke="{TINT_EDGE}" stroke-width="2"/>'
               f'<g transform="translate(-28,0) rotate(-38)"><rect x="-11" y="-5" width="13" height="10" rx="5" fill="none" stroke="{BLUE}" stroke-width="2.6"/>'
               f'<rect x="-2" y="-5" width="13" height="10" rx="5" fill="none" stroke="{BLUE}" stroke-width="2.6"/></g>'
               f'<text x="12" y="5" font-size="13" font-weight="700" fill="{INK}" text-anchor="middle">Dec 24</text></g>')
@@ -1156,12 +1090,14 @@ def s_upload():
     return c
 
 
-def s_new_folder():
+def s_rename():
     c = C()
-    files_base(c, OWNER_ROWS)
-    x, y = modal(c, 440, 232, "New folder")
-    field(c, x, y + 26, 392, "Name", "Assets", error="Something named Assets already exists here.", h=38)
-    footer(c, x, y + 108, 392, "Create")
+    rows = [dict(r) for r in OWNER_ROWS]
+    rows[3]["checked"] = True
+    files_base(c, rows)
+    x, y = modal(c, 440, 232, "Rename")
+    field(c, x, y + 26, 392, "Name", "Staff review.docx", error="A file named Staff review.docx already exists.", h=38)
+    footer(c, x, y + 108, 392, "Rename")
     return c
 
 
@@ -1170,8 +1106,8 @@ def s_confirm_delete():
     rows = [dict(r) for r in OWNER_ROWS]
     rows[0]["checked"] = rows[3]["checked"] = True
     files_base(c, rows)
-    confirm_modal(c, 440, "Delete 2 items for everyone?",
-                  ["Assets, with everything in it, and Q4 Budget.xls", "are deleted for everyone. This can't be undone."], "Delete")
+    confirm_modal(c, 440, "Delete 2 files for everyone?",
+                  ["Campaign plan.pdf and Q4 Budget.xls are deleted", "for everyone. This can't be undone."], "Delete")
     return c
 
 
@@ -1182,7 +1118,7 @@ def s_confirmations():
              ("Remove my access", "Remove “Brand guide.pdf”?", ["It leaves your list. You get it back if it's shared", "again or you open a link to it."],
               "Remove", "leave"),
              ("Remove a person", "Remove Robin?", ["Robin loses access to Q4 Budget.xls."], "Remove", "leave"),
-             ("Delete a link", "Delete this link?", ["It stops working, and 1 person loses the", "access it gave."],
+             ("Delete a link", "Delete this link?", ["It stops working, and 3 people lose the", "access it gave."],
               "Delete link", "delete")]
     w, gap = 456, 24
     for i, (label, title, lines, action, glyph) in enumerate(cards):
@@ -1208,8 +1144,7 @@ def state_grid(c, cards, cols=3):
 
 def s_empty():
     return state_grid(C(), [
-        ("empty-folder", "No files yet", ["Your files and folders show up here."], [("New folder", "secondary"), ("Upload", "primary")]),
-        ("empty-folder", "This folder is empty", ["Drop files here, or use Upload."], [("New folder", "secondary"), ("Upload", "primary")]),
+        ("empty-files", "No files yet", ["Drop files here, or use Upload."], [("Upload", "primary")]),
         ("nothing-shared", "Nothing shared with you yet", ["Files people share with you", "show up here."], []),
         ("shared-by-me", "You haven't shared anything", ["Files you share with people", "show up here."], []),
         ("no-results", "No matches for “brdget”", ["Check the spelling, or search", "with fewer letters."], []),
@@ -1218,10 +1153,8 @@ def s_empty():
 
 def s_loading():
     c = C()
-    shell(c, "Files", [], "openbox.app/files/7a1f3c9e-2b8d-4e6a-b5c1-9d0e4f2a6b83")
-    skel(c, CX, 112, 90, 14)
-    skel(c, CX + 104, 110, 120, 18)
-    c.rect(CX + CW - 214, 106, 110, 34, fill=SKEL, stroke=None, r=6)
+    shell(c, "Files", [], "openbox.app/files")
+    skel(c, CX, 110, 120, 18)
     c.rect(CX + CW - 96, 106, 96, 34, fill=SKEL, stroke=None, r=6)
     c.line(CX, 190, CX + CW, 190)
     for i, (nw, mw) in enumerate([(180, 110), (240, 90), (150, 120), (210, 100), (170, 80), (230, 110)]):
@@ -1239,38 +1172,17 @@ def s_loading():
 
 def s_errors():
     return state_grid(C(), [
-        ("load-error", "Couldn't load this folder", ["Check your connection", "and try again."], [("Try again", "primary")]),
-        ("not-found", "This folder is unavailable", ["It was deleted, or nothing", "in it is shared with you."], [("Go to Files", "secondary")]),
-        ("share-blocked", "You can't share this now", ["Your share or link", "permission was removed."], [("Close", "secondary")]),
+        ("load-error", "Couldn't load your files", ["Check your connection", "and try again."], [("Try again", "primary")]),
         ("expired", "This link has expired", ["Ask the person who sent", "it for a new one."], [("Go to Files", "secondary")]),
         ("broken-link", "This link was deleted", ["Ask the person who sent", "it for a new one."], [("Go to Files", "secondary")]),
-        ("no-access", "Your access was removed", ["Ask someone who can share", "it to invite you again."], [("Go to Files", "secondary")]),
-        ("no-results", "This link doesn't exist", ["The address is incomplete,", "or its file was deleted."], [("Go to Files", "secondary")])], cols=4)
+        ("no-access", "Your access was removed", ["Ask the owner for", "a new link."], [("Go to Files", "secondary")]),
+        ("no-results", "This link doesn't exist", ["The address is incomplete,", "or its file was deleted."], [("Go to Files", "secondary")])])
 
 
 def s_action_errors():
     c = C()
     files_base(c, [OWNER_ROWS[1], OWNER_ROWS[2], OWNER_ROWS[4]])
-    toast(c, CX + CW / 2, H - 82, "1 of 2 items deleted. Assets no longer exists.")
-    return c
-
-
-ZIPS = [("ZIP", "Assets.zip", 0.27, "120 of 450 files"),
-        ("ZIP", "Design (3 files).zip", "error", "A file was deleted while zipping."),
-        ("ZIP", "Creative briefs.zip", "error", "Over the 10 GB download limit.")]
-
-
-def s_download():
-    c = C()
-    files_base(c, OWNER_ROWS)
-    upload_panel(c, CX + 536, 376, CW - 536, ZIPS, "Preparing 1 download")
-    return c
-
-
-def m_download():
-    c = C(MW, MH, clip_r=28)
-    m_files_base(c)
-    m_progress_sheet(c, "Preparing 1 download", ZIPS)
+    toast(c, CX + CW / 2, H - 82, "1 of 2 files deleted. Campaign plan.pdf no longer exists.")
     return c
 
 
@@ -1322,11 +1234,11 @@ def m_upload():
     return c
 
 
-def m_new_folder():
+def m_rename():
     c = C(MW, MH, clip_r=28)
-    m_page(c, "New folder")
-    field(c, 20, 148, MW - 40, "Name", "Assets", error="Something named Assets already exists here.", h=44)
-    m_bottom_button(c, "Create")
+    m_page(c, "Rename")
+    field(c, 20, 148, MW - 40, "Name", "Staff review.docx", error="A file named Staff review.docx already exists.", h=44)
+    m_bottom_button(c, "Rename")
     return c
 
 
@@ -1348,9 +1260,9 @@ def m_empty():
     c = C(MW, MH, clip_r=28)
     phone(c)
     m_header(c)
-    c.o.append(f'<text x="20" y="124" font-size="14" fill="{MUTED}">Acme Inc  ›  <tspan font-weight="600" fill="{INK}">Moodboards</tspan></text>')
+    c.text(20, 124, "My files", 14, 600, INK)
     m_search(c, 140)
-    m_state(c, "empty-folder", "This folder is empty", ["Tap + to upload files or", "add a folder."], [], cy=356)
+    m_state(c, "empty-files", "No files yet", ["Tap + to upload files."], [], cy=356)
     m_tabbar(c, "Files")
     return c
 
@@ -1373,12 +1285,8 @@ def m_errors():
 
 def m_action_errors():
     c = C(MW, MH, clip_r=28)
-    m_page(c, "Invite people", back=True)
-    field(c, 20, 140, MW - 40, "Email", "pat@globex.com", error="No OpenBox account uses pat@globex.com.", h=40)
-    c.text(20, 230, "What they can do", 12, 600, INK)
-    c.text(20, 248, "You can only give what you hold", 11, 400, MUTED)
-    perm_rows(c, 20, 260, MW - 40, ["share"], ["view"])
-    m_bottom_button(c, "Invite")
+    m_files_base(c, rows=[M_OWNER_ROWS[1], M_OWNER_ROWS[2], M_OWNER_ROWS[4]])
+    toast(c, MW / 2, MH - 130, "Campaign plan.pdf no longer exists.", "OK")
     return c
 
 
@@ -1387,62 +1295,54 @@ SCREENS = {
         "Signed-out home page."),
     "screen-02-sign-in": ('Sign in', s_sign_in, m_sign_in,
         "Cognito Managed Login with OpenBox branding. Sign-up (name, email, password) and the email code are Cognito's pages too, and so are their errors, such as a wrong password."),
-    "screen-03-files-folder": ('Files: folder selected', s_files, m_files_folder,
-        "Selecting items opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the selection allows. "
-                               ""
-                               "On mobile, + opens Upload and New folder; ⋯ on a row opens the same sheet."),
+    "screen-03-files-several": ('Files: several selected', s_files, m_files_several,
+        "My files lists every file you own. Selecting files opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the selection allows. "
+        "Download needs exactly one file selected; several files can only be deleted together. On mobile, + opens Upload; ⋯ on a row opens the same sheet."),
     "screen-04-files-file": ('Files: file selected', s_files_file, m_files_file,
-        "The owner gets every action. Replace asks first, then uploads the new contents through the upload panel."),
+        "The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload panel."),
     "screen-05-upload": ('Upload', s_upload, m_upload,
         "Upload opens the file picker; files can also be dropped on the list. Each file uploads on its own: finished files join the list, "
- "rejected ones show the reason, and the rest keep going. Type and size are checked against `upload_policy` before Start upload, "
- "so each rejected file gets its own reason. On mobile, progress shows in a bottom sheet above the tab bar. A failed or expired upload shows Try again. Cancel stops an upload; its reserved name frees up when it expires. While files are dragged over the list, "
- "it shows a dashed outline and “Drop to upload to Design”."),
-    "screen-06-new-folder": ('New folder', s_new_folder, m_new_folder,
-        "Empty names, names over 255 characters and names with / are caught as you type; a taken name is caught when the server answers. "
- "Rename uses the same dialog, filled with the current name."),
-    "screen-07-download": ('Zip download', s_download, m_download,
-        "A folder, or several files as “Design (3 files).zip”, is zipped in the background; the same panel (a bottom sheet on mobile) shows progress and the download starts when the zip is ready. "
- "A zip that fails or is too big says why; a storage failure shows Try again. Cancel (× on desktop) stops waiting; the job and its zip expire on their own. A finished zip downloads and leaves the panel."),
-    "screen-08-confirm-delete": ('Confirm delete', s_confirm_delete, m_confirm_delete,
+        "rejected ones show the reason, and the rest keep going. Type and size are checked against `upload_policy` before Start upload, "
+        "so each rejected file gets its own reason. On mobile, progress shows in a bottom sheet above the tab bar. A failed or expired upload shows Try again. "
+        "Cancel stops an upload; its reserved name frees up when it expires. While files are dragged over the list, it shows a dashed outline and “Drop to upload”."),
+    "screen-06-rename": ('Rename', s_rename, m_rename,
+        "Only the owner can rename a file. Rename opens a dialog filled with the current name. Empty names, names over 255 characters and names with / are caught as you type; "
+        "a taken name is caught when the server answers."),
+    "screen-07-confirm-delete": ('Confirm delete', s_confirm_delete, m_confirm_delete,
         "Delete always asks first and names what goes. On mobile the same dialog fills the width."),
-    "screen-09-shared-can-share": ('Sharing: file you can share', s_shared_can_share, m_shared_can_share,
-        "Kate holds share on Q4 Budget.xls. Shared by me shows Members instead of Owner. A file at its owner's top level shows no Location. Clicking a Location opens that folder with only what was shared with you, and without New folder or Upload."),
-    "screen-10-shared-view-only": ('Sharing: view-only file', s_shared_view_only, m_shared_view_only,
+    "screen-08-shared-can-edit": ('Sharing: file you can edit', s_shared_can_edit, m_shared_can_edit,
+        "Kate joined Q4 Budget.xls through a Can edit link. Files shared with you never show Share: only the owner can share a file. "
+        "Shared by me shows Members instead of Owner."),
+    "screen-09-shared-view-only": ('Sharing: view-only file', s_shared_view_only, m_shared_view_only,
         "Kate can only view Brand guide.pdf."),
-    "screen-11-share-people": ('Share: people', s_share_people, m_share_people,
-        "Share shows when you hold share or link; with only link, People is read-only. People with access scroll inside a "
-                               "fixed-height list; each person's menu changes their access, its last option opens the checkboxes from "
-                               "Invite people, and × removes the access you gave them (the owner removes all of it). Options below what the member keeps from links or from other people's grants are disabled. On mobile, rows leave out who invited them. "
- "Rows for people you gave no access to, directly or through your links, show their access as text, with no menu or ×."),
-    "screen-12-add-people": ('Invite people', s_add_people, m_add_people,
-        "Kate holds view and share, so those are all she can give. Invites go to existing accounts. Cancel returns to Share: people. View can't be unticked."),
-    "screen-13-share-links": ('Share: links', s_share_links, m_share_links,
-        "Without link, the list is read-only and Create link is hidden. Delete shows only on links you created; the owner sees it on every link."),
-    "screen-14-create-link": ('Create link', s_create_link, m_create_link,
-        "Pick what the link allows and when it expires: 1 day, 7 days or 30 days from now, never, or the end of a chosen day in your time zone. Days before today can't be picked. On mobile, the date opens the app's own calendar sheet."),
-    "screen-15-link-created": ('Link created', s_link_created, m_link_created,
+    "screen-10-share-people": ('Share: people', s_share_people, m_share_people,
+        "Share shows only on files you own. People lists everyone who joined through a link, with the access they hold; "
+        "they scroll inside a fixed-height list. × removes all of a person's access, and they can't rejoin through the existing links. "
+        "On mobile, rows leave out when they joined."),
+    "screen-11-share-links": ('Share: links', s_share_links, m_share_links,
+        "Each link shows what it gives, when it expires and how many people joined through it. Delete removes the link and everyone who joined through it."),
+    "screen-12-create-link": ('Create link', s_create_link, m_create_link,
+        "Pick what the link allows and when it expires: 1 day, 7 days or 30 days from now, never, or the end of a chosen day in your time zone. "
+        "Days before today can't be picked. View can't be unticked. On mobile, the date opens the app's own calendar sheet."),
+    "screen-13-link-created": ('Link created', s_link_created, m_link_created,
         "Done (× on mobile) closes it; the link then shows in Share: links, without its URL."),
-    "screen-16-confirmations": ('Other confirmations', s_confirmations, m_confirmations,
+    "screen-14-confirmations": ('Other confirmations', s_confirmations, m_confirmations,
         "Replace and every action that removes access ask first too. On mobile each is the same dialog at full width. "
- "Delete a link names how many people still have access through it, and with none says only that it stops working. "
- "When someone other than the owner removes a person, the text reads “Robin loses the access you gave.” Changing someone's access applies at once."),
-    "screen-17-search": ('Search', s_search, m_search_screen,
+        "Delete a link names how many people still have access through it, and with none says only that it stops working."),
+    "screen-15-search": ('Search', s_search, m_search_screen,
         "Typing 2+ characters replaces the list with matching names from your files and files shared with you. "
-                         "Location shows where each result lives. Clearing the box goes back to the folder you were in."),
-    "screen-18-empty": ('Empty states', s_empty, m_empty,
-        "Every list has an empty state: your top level, a folder, Shared with me, Shared by me, search and Share: links. "
- "New folder and Upload show only in your own folders; Create link needs link."),
-    "screen-19-loading": ('Loading', s_loading, m_loading,
+        "Owner shows whose file each result is. Clearing the box goes back to the list you were in."),
+    "screen-16-empty": ('Empty states', s_empty, m_empty,
+        "Every list has an empty state: My files, Shared with me, Shared by me, search and Share: links. Upload shows only in My files."),
+    "screen-17-loading": ('Loading', s_loading, m_loading,
         "Lists show placeholder rows until the first page arrives, and the Share dialog uses the same rows. Opening a share link shows the mobile page "
- "while it's redeemed; desktop shows the same in the page centre. A button that sends a request shows a spinner and ignores clicks until it answers. "
- "Scrolling to the end adds placeholder rows under the list; if that page fails, a Try again row replaces them, and after `invalid_after` the list reloads from the top."),
-    "screen-20-errors": ('Page errors', s_errors, m_errors,
-        "A failed load offers Try again. A folder you can't see, a Share dialog you lost access to, and a link that expired, was "
- "deleted, was never valid or no longer lets you in each say why and offer a way out."),
-    "screen-21-action-errors": ('Action and input errors', s_action_errors, m_action_errors,
-        "A failed action shows a toast naming each item that failed, from its error message or, for an id, the name the app already shows; in bulk actions, the items that succeeded stay done. "
- "Input errors show under the field. After a 401 the app signs in again and returns to the same page."),
+        "while it's redeemed; desktop shows the same in the page centre. A button that sends a request shows a spinner and ignores clicks until it answers. "
+        "Scrolling to the end adds placeholder rows under the list; if that page fails, a Try again row replaces them, and after `invalid_after` the list reloads from the top."),
+    "screen-18-errors": ('Page errors', s_errors, m_errors,
+        "A failed load offers Try again. A link that expired, was deleted, was never valid or no longer lets you in says why and offers a way out."),
+    "screen-19-action-errors": ('Action and input errors', s_action_errors, m_action_errors,
+        "A failed action shows a toast naming each file that failed, from its error message or, for an id, the name the app already shows; "
+        "in bulk actions, the files that succeeded stay done. Input errors show under the field. After a 401 the app signs in again and returns to the same page."),
 }
 
 def padded(svg, w, h, pad=28):

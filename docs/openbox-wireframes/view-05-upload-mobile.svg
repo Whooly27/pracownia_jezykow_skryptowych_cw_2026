@@ -8,25 +8,21 @@
 <line x1="318" y1="70" x2="318" y2="82" stroke="#ffffff" stroke-width="2"/>
 <circle cx="356" cy="76" r="17" fill="#eef4ff" stroke="#7fb3f0"/>
 <text x="356" y="81" font-size="11" font-weight="700" fill="#0061fe" text-anchor="middle">AL</text>
-<text x="20" y="124" font-size="14" fill="#6b7489">Acme Inc  ›  <tspan font-weight="600" fill="#1e2533">Design</tspan></text>
+<text x="20" y="124" font-size="14" font-weight="600" fill="#1e2533" text-anchor="start">My files</text>
 <rect x="20" y="140" width="350" height="40" rx="18" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
 <circle cx="38" cy="159.0" r="5.5" fill="none" stroke="#6b7489" stroke-width="1.6"/>
 <line x1="42" y1="163.0" x2="46" y2="167.0" stroke="#6b7489" stroke-width="1.6"/>
 <text x="54" y="165.0" font-size="13" font-weight="400" fill="#9aa3b2" text-anchor="start">Search</text>
-<rect x="20" y="217" width="9" height="5" rx="1" fill="#a9cdf7" stroke="#7fb3f0" stroke-width="1"/>
-<rect x="20" y="220" width="22" height="15" rx="2" fill="#a9cdf7" stroke="#7fb3f0" stroke-width="1"/>
-<circle cx="28" cy="228" r="2.5" fill="#0061fe" stroke="none"/>
-<circle cx="34" cy="228" r="2.5" fill="#0061fe" stroke="none"/>
-<text x="56" y="224" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Assets</text>
-<text x="56" y="242" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">6 members</text>
+<path d="M22,215 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="31.5" y="232" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PDF</text>
+<text x="56" y="224" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Campaign plan.pdf</text>
+<text x="56" y="242" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/24/2026 · Alex · 3 members</text>
 <text x="366" y="232" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="260" x2="390" y2="260" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="20" y="281" width="9" height="5" rx="1" fill="#a9cdf7" stroke="#7fb3f0" stroke-width="1"/>
-<rect x="20" y="284" width="22" height="15" rx="2" fill="#a9cdf7" stroke="#7fb3f0" stroke-width="1"/>
-<circle cx="28" cy="292" r="2.5" fill="#0061fe" stroke="none"/>
-<circle cx="34" cy="292" r="2.5" fill="#0061fe" stroke="none"/>
-<text x="56" y="288" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Creative briefs</text>
-<text x="56" y="306" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">6 members</text>
+<path d="M22,279 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="31.5" y="296" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
+<text x="56" y="288" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
+<text x="56" y="306" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/22/2026 · Alex · 1 member</text>
 <text x="366" y="296" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="324" x2="390" y2="324" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M22,343 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
@@ -54,7 +50,7 @@
 <text x="366" y="552" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="580" x2="390" y2="580" stroke="#dbe8fd" stroke-width="1"/>
 <line x1="0" y1="736" x2="390" y2="736" stroke="#d4d9e2" stroke-width="1"/>
-<path d="M87.5,750 h7 l2,2.5 h11 v12.5 h-20 z" fill="#eef4ff" stroke="#0061fe" stroke-width="1.7" stroke-linejoin="round"/>
+<path d="M89.5,747 h10 l6,6 v14 h-16 z" fill="#eef4ff" stroke="#0061fe" stroke-width="1.7" stroke-linejoin="round"/>
 <text x="97.5" y="782" font-size="11" font-weight="600" fill="#0061fe" text-anchor="middle">Files</text>
 <path d="M288.5,758 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,752 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,763 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M291.1,756.6 L294.9,753.4 M291.1,759.4 L294.9,761.6" fill="none" stroke="#6b7489" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="292.5" y="782" font-size="11" font-weight="400" fill="#6b7489" text-anchor="middle">Sharing</text>

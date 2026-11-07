@@ -13,7 +13,7 @@ HERE = Path(__file__).resolve().parent
 SOURCE = HERE / "openbox-technical-specification.md"
 HTML_OUT = HERE / "openbox-technical-specification.html"
 PDF_OUT = HERE / "openbox-technical-specification.pdf"
-DATE = "5 November 2026"
+DATE = "7 November 2026"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 CSS = """
