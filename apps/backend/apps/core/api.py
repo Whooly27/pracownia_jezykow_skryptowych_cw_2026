@@ -15,6 +15,8 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+from apps.accounts.models import User
+
 
 class ApiError(Exception):
     def __init__(self, status: int, code: str, message: str = "") -> None:
@@ -51,6 +53,14 @@ def api_view(view: Callable[..., HttpResponse]) -> Callable[..., HttpResponse]:
             return fail(e.status, e.code, e.message)
 
     return csrf_exempt(require_POST(wrapped))
+
+
+def signed_in_user(request: HttpRequest) -> User:
+    """The request's user as a User; api_view already turned anyone else away."""
+    user = request.user
+    if not isinstance(user, User):
+        raise ApiError(401, "unauthenticated", "No valid session.")
+    return user
 
 
 def json_body(request: HttpRequest) -> dict[str, Any]:
