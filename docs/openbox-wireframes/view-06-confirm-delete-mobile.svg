@@ -13,36 +13,35 @@
 <circle cx="38" cy="159.0" r="5.5" fill="none" stroke="#6b7489" stroke-width="1.6"/>
 <line x1="42" y1="163.0" x2="46" y2="167.0" stroke="#6b7489" stroke-width="1.6"/>
 <text x="54" y="165.0" font-size="13" font-weight="400" fill="#9aa3b2" text-anchor="start">Search</text>
-<rect x="0" y="196" width="390" height="64" rx="0" fill="#dbe8fd" stroke="none"/>
 <path d="M22,215 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="232" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PDF</text>
 <text x="56" y="224" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Campaign plan.pdf</text>
-<text x="56" y="242" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/24/2026 · Alex · 3 members</text>
+<text x="56" y="242" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/24/2026 · 3 members</text>
 <text x="366" y="232" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="260" x2="390" y2="260" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="0" y="260" width="390" height="64" rx="0" fill="#dbe8fd" stroke="none"/>
 <path d="M22,279 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="296" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
 <text x="56" y="288" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
-<text x="56" y="306" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/22/2026 · Alex · 1 member</text>
+<text x="56" y="306" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/22/2026 · 1 member</text>
 <text x="366" y="296" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="324" x2="390" y2="324" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M22,343 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="360" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
 <text x="56" y="352" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
-<text x="56" y="370" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/20/2026 · Alex · 9 members</text>
+<text x="56" y="370" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/20/2026 · 9 members</text>
 <text x="366" y="360" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="388" x2="390" y2="388" stroke="#dbe8fd" stroke-width="1"/>
+<rect x="0" y="388" width="390" height="64" rx="0" fill="#dbe8fd" stroke="none"/>
 <path d="M22,407 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="424" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
 <text x="56" y="416" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
-<text x="56" y="434" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/17/2026 · Jo · 6 members</text>
+<text x="56" y="434" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/17/2026 · 6 members</text>
 <text x="366" y="424" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="452" x2="390" y2="452" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M22,471 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="488" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
 <text x="56" y="480" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
-<text x="56" y="498" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/15/2026 · Jo · 6 members</text>
+<text x="56" y="498" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">3/15/2026 · 6 members</text>
 <text x="366" y="488" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="516" x2="390" y2="516" stroke="#dbe8fd" stroke-width="1"/>
 <line x1="0" y1="736" x2="390" y2="736" stroke="#d4d9e2" stroke-width="1"/>
@@ -50,15 +49,16 @@
 <text x="97.5" y="782" font-size="11" font-weight="600" fill="#0061fe" text-anchor="middle">Files</text>
 <path d="M288.5,758 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,752 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M297.5,763 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0 M291.1,756.6 L294.9,753.4 M291.1,759.4 L294.9,761.6" fill="none" stroke="#6b7489" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="292.5" y="782" font-size="11" font-weight="400" fill="#6b7489" text-anchor="middle">Sharing</text>
-<rect x="0" y="0" width="390" height="736" rx="0" fill="#1e2533" fill-opacity="0.35" stroke="none"/>
-<rect x="0" y="562" width="390" height="174" rx="24" fill="#ffffff" stroke="none"/>
-<rect x="0" y="712" width="390" height="24" rx="0" fill="#ffffff" stroke="none"/>
-<line x1="0" y1="736" x2="390" y2="736" stroke="#d4d9e2" stroke-width="1"/>
-<rect x="175.0" y="572" width="40" height="4" rx="2" fill="#d4d9e2" stroke="none"/>
-<path d="M22,598 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="56" y="610" font-size="15" font-weight="700" fill="#1e2533" text-anchor="start">2 files</text>
-<text x="56" y="628" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Campaign plan.pdf, Logo draft.png</text>
-<line x1="0" y1="648" x2="390" y2="648" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="20" y="664" width="36" height="36" rx="10" fill="#fdecea" stroke="none"/>
-<path d="M32,678 H44 M36,678 V676 H40 V678 M33.5,678 L34.5,689 H41.5 L42.5,678 M37,681 V686 M39,681 V686" fill="none" stroke="#d92d20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="70" y="687" font-size="15" font-weight="500" fill="#d92d20" text-anchor="start">Delete</text></g><rect x="0.5" y="0.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg><rect x="28.5" y="28.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg>
+<rect x="0" y="0" width="390" height="800" rx="0" fill="#1e2533" fill-opacity="0.35" stroke="none"/>
+<rect x="9.0" y="288.5" width="372" height="231.0" rx="19.0" fill="#1e2533" fill-opacity="0.04" stroke="none"/>
+<rect x="13.0" y="290.5" width="364" height="227.0" rx="15.0" fill="#1e2533" fill-opacity="0.06" stroke="none"/>
+<rect x="16" y="288.0" width="358" height="224" rx="12" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<circle cx="60" cy="332.0" r="20" fill="#fdecea" stroke="none"/>
+<path d="M54,328.0 H66 M58,328.0 V326.0 H62 V328.0 M55.5,328.0 L56.5,339.0 H63.5 L64.5,328.0 M59,331.0 V336.0 M61,331.0 V336.0" fill="none" stroke="#d92d20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="40" y="386.0" font-size="17" font-weight="700" fill="#1e2533" text-anchor="start">Delete “Q4 Budget.xls”?</text>
+<text x="40" y="412.0" font-size="13" font-weight="400" fill="#6b7489" text-anchor="start">It's deleted for everyone.</text>
+<text x="40" y="432.0" font-size="13" font-weight="400" fill="#6b7489" text-anchor="start">This can't be undone.</text>
+<rect x="270.32" y="454.0" width="79.68" height="34" rx="4" fill="#d92d20" stroke="#d92d20" stroke-width="1"/>
+<text x="310.15999999999997" y="476.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Delete</text>
+<rect x="172.32" y="454.0" width="88" height="34" rx="4" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="216.32" y="476.0" font-size="13" font-weight="500" fill="#1e2533" text-anchor="middle">Cancel</text></g><rect x="0.5" y="0.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg><rect x="28.5" y="28.5" width="389" height="799" rx="28" fill="none" stroke="#d4d9e2"/></svg>

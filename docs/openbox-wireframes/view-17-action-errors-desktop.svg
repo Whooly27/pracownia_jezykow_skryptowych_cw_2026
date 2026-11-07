@@ -19,39 +19,38 @@
 <text x="32" y="128" font-size="20" font-weight="600" fill="#1e2533" text-anchor="start">My files</text>
 <rect x="872" y="106" width="96" height="34" rx="4" fill="#0061fe" stroke="#0061fe" stroke-width="1"/>
 <text x="920.0" y="128.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Upload</text>
-<rect x="38" y="166" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<text x="62" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
+<text x="32" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
 <text x="582" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Modified</text>
 <text x="822" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Members</text>
 <line x1="32" y1="190" x2="968" y2="190" stroke="#d4d9e2" stroke-width="1"/>
-<rect x="38" y="206" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
-<text x="96" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
-<text x="582" y="211" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/22/2026 4:40PM</text>
-<text x="582" y="226" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
+<text x="66" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
+<text x="582" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/22/2026 4:40PM</text>
 <text x="822" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">1 member</text>
 <line x1="32" y1="236" x2="968" y2="236" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="252" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
-<text x="96" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
-<text x="582" y="257" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/20/2026 3:15PM</text>
-<text x="582" y="272" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
+<text x="66" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
+<text x="582" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/20/2026 3:15PM</text>
 <text x="822" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">9 members</text>
 <line x1="32" y1="282" x2="968" y2="282" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="298" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
-<text x="96" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
-<text x="582" y="303" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/15/2026 1:28PM</text>
-<text x="582" y="318" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Jo</text>
+<path d="M34,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
+<text x="66" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
+<text x="582" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/17/2026 10:33AM</text>
 <text x="822" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
 <line x1="32" y1="328" x2="968" y2="328" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="214.03999999999996" y="578.5" width="571.9200000000001" height="53.0" rx="17.0" fill="#1e2533" fill-opacity="0.04" stroke="none"/>
-<rect x="218.03999999999996" y="580.5" width="563.9200000000001" height="49.0" rx="13.0" fill="#1e2533" fill-opacity="0.06" stroke="none"/>
-<rect x="221.03999999999996" y="578" width="557.9200000000001" height="46" rx="10" fill="#1e2533" stroke="none"/>
-<circle cx="245.03999999999996" cy="601" r="9" fill="#d92d20" stroke="none"/>
-<text x="245.03999999999996" y="605.5" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">!</text>
-<text x="265.03999999999996" y="606" font-size="13" font-weight="500" fill="#ffffff" text-anchor="start">1 of 2 files deleted. Campaign plan.pdf no longer exists.</text>
-<text x="760.96" y="606" font-size="13" font-weight="700" fill="#9ec5ff" text-anchor="end">Dismiss</text></svg><rect x="28.5" y="28.5" width="999" height="659" rx="6" fill="none" stroke="#d4d9e2"/></svg>
+<path d="M34,340 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="357" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
+<text x="66" y="356" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
+<text x="582" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/15/2026 1:28PM</text>
+<text x="822" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
+<line x1="32" y1="374" x2="968" y2="374" stroke="#dbe8fd" stroke-width="1"/>
+<rect x="221.32" y="578.5" width="557.36" height="53.0" rx="17.0" fill="#1e2533" fill-opacity="0.04" stroke="none"/>
+<rect x="225.32" y="580.5" width="549.36" height="49.0" rx="13.0" fill="#1e2533" fill-opacity="0.06" stroke="none"/>
+<rect x="228.32" y="578" width="543.36" height="46" rx="10" fill="#1e2533" stroke="none"/>
+<circle cx="252.32" cy="601" r="9" fill="#d92d20" stroke="none"/>
+<text x="252.32" y="605.5" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">!</text>
+<text x="272.32" y="606" font-size="13" font-weight="500" fill="#ffffff" text-anchor="start">Couldn't delete Campaign plan.pdf. It no longer exists.</text>
+<text x="753.6800000000001" y="606" font-size="13" font-weight="700" fill="#9ec5ff" text-anchor="end">Dismiss</text></svg><rect x="28.5" y="28.5" width="999" height="659" rx="6" fill="none" stroke="#d4d9e2"/></svg>

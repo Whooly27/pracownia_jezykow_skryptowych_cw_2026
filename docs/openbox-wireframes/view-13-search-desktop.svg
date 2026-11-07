@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1056" height="716" viewBox="0 0 1056 716" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"><rect width="1056" height="716" rx="14" fill="#ffffff"/><svg x="28" y="28" width="1000" height="660" viewBox="0 0 1000 660"><rect width="1000" height="660" fill="#ffffff"/><rect x="0" y="0" width="1000" height="30" rx="0" fill="#f6f8fb" stroke="none" stroke-width="1"/>
+<circle cx="16" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<circle cx="30" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<circle cx="44" cy="15" r="4" fill="#ffffff" stroke="#d4d9e2"/>
+<rect x="70" y="6" width="420" height="18" rx="9" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<text x="82" y="19" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">openbox.app/search?q=budget</text>
+<rect x="0" y="30" width="1000" height="56" rx="0" fill="#ffffff" stroke="none"/>
+<line x1="0" y1="86" x2="1000" y2="86" stroke="#d4d9e2" stroke-width="1"/>
+<text x="32" y="65" font-size="20" font-weight="800" fill="#0061fe" text-anchor="start">OpenBox</text>
+<text x="162" y="63" font-size="14" font-weight="600" fill="#0061fe" text-anchor="start">Files</text>
+<rect x="162" y="83" width="39.2" height="3" rx="1.5" fill="#0061fe" stroke="none"/>
+<text x="233.2" y="63" font-size="14" font-weight="500" fill="#6b7489" text-anchor="start">Sharing</text>
+<rect x="636" y="40" width="280" height="36" rx="18" fill="#ffffff" stroke="#0061fe" stroke-width="1"/>
+<circle cx="654" cy="57.0" r="5.5" fill="none" stroke="#6b7489" stroke-width="1.6"/>
+<line x1="658" y1="61.0" x2="662" y2="65.0" stroke="#6b7489" stroke-width="1.6"/>
+<text x="670" y="63.0" font-size="13" font-weight="400" fill="#1e2533" text-anchor="start">budget</text>
+<circle cx="950" cy="58" r="17" fill="#eef4ff" stroke="#7fb3f0"/>
+<text x="950" y="63" font-size="12" font-weight="700" fill="#0061fe" text-anchor="middle">AL</text>
+<text x="32" y="128" font-size="20" font-weight="600" fill="#1e2533" text-anchor="start">Search</text>
+<text x="124" y="128" font-size="16" font-weight="400" fill="#6b7489" text-anchor="start">for “budget”</text>
+<text x="32" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
+<text x="532" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Owner</text>
+<text x="818" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Modified</text>
+<line x1="32" y1="190" x2="968" y2="190" stroke="#d4d9e2" stroke-width="1"/>
+<rect x="32" y="190" width="936" height="46" rx="0" fill="#dbe8fd" stroke="none" stroke-width="1"/>
+<path d="M34,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
+<text x="66" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Budget 2027 draft.xlsx</text>
+<text x="532" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">Robin</text>
+<text x="818" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">10/2/2026 4:12PM</text>
+<line x1="32" y1="236" x2="968" y2="236" stroke="#dbe8fd" stroke-width="1"/>
+<path d="M34,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
+<text x="66" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
+<text x="532" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">You</text>
+<text x="818" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/17/2026 10:33AM</text>
+<line x1="32" y1="282" x2="968" y2="282" stroke="#dbe8fd" stroke-width="1"/>
+<path d="M34,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">CSV</text>
+<text x="66" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Travel budget.csv</text>
+<text x="532" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">You</text>
+<text x="818" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">2/9/2026 8:20AM</text>
+<line x1="32" y1="328" x2="968" y2="328" stroke="#dbe8fd" stroke-width="1"/>
+<rect x="362.75519999999995" y="584.5" width="274.48960000000005" height="49.0" rx="27.0" fill="#1e2533" fill-opacity="0.04" stroke="none"/>
+<rect x="365.25519999999995" y="585.75" width="269.48960000000005" height="46.5" rx="24.5" fill="#1e2533" fill-opacity="0.05" stroke="none"/>
+<rect x="367.75519999999995" y="584" width="264.48960000000005" height="44" rx="22" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>
+<path d="M393.75519999999995,599 V609 M389.75519999999995,605 L393.75519999999995,609 L397.75519999999995,605 M387.75519999999995,613 H399.75519999999995" fill="none" stroke="#6b7489" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="407.75519999999995" y="611" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Download</text>
+<path d="M491.91839999999996,604 m-3.2,0 a3.2,3.2 0 1,0 6.4,0 a3.2,3.2 0 1,0 -6.4,0 M486.41839999999996,613 C486.91839999999996,609 496.91839999999996,609 497.41839999999996,613 M496.91839999999996,605 H501.91839999999996" fill="none" stroke="#d92d20" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="507.91839999999996" y="611" font-size="13" font-weight="500" fill="#d92d20" text-anchor="start">Remove my access</text></svg><rect x="28.5" y="28.5" width="999" height="659" rx="6" fill="none" stroke="#d4d9e2"/></svg>

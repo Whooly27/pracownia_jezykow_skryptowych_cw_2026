@@ -60,7 +60,7 @@ DIAGRAMS = {
         ("close",),
         ("ret", 3, 0, "200 file bytes, saved as Q4 Budget.xls"),
     ]),
-    "open-a-share-link-v6": (["Owner", "Recipient", "API", "Cognito", "Postgres"], [
+    "open-a-share-link-v7": (["Owner", "Recipient", "API", "Cognito", "Postgres"], [
         ("msg", 0, 2, "POST /files/{file id}/links {permissions, expires_at}"),
         ("open", "alt", "not the file's owner"),
         ("ret", 2, 0, "403 forbidden"),
@@ -79,18 +79,22 @@ DIAGRAMS = {
         ("msg", 1, 2, "POST /links/redeem {token}"),
         ("close",),
         ("msg", 2, 4, "find the link by its token hash"),
-        ("open", "alt", "unknown, expired or deleted link, or removed by the owner"),
-        ("ret", 2, 1, "403 forbidden · 404 not_found · 410 link_expired · 410 link_deleted"),
+        ("open", "alt", "unknown, expired or deleted link"),
+        ("ret", 2, 1, "404 not_found · 410 link_expired · 410 link_deleted"),
         ("close",),
         ("msg", 2, 4, "give the recipient the link's permissions"),
         ("ret", 2, 1, "200 file → app opens Shared with me"),
     ]),
-    "delete-files-v2": (["Browser", "API", "Postgres", "Vercel Blob"], [
+    "delete-a-file-v1": (["Browser", "API", "Postgres", "Vercel Blob"], [
         ("msg", 0, 0, "user confirms: deleted for everyone"),
-        ("msg", 0, 1, "POST /files/delete {ids: [file ids]}"),
-        ("msg", 1, 2, "delete allowed files and their grants"),
-        ("msg", 1, 3, "remove their stored bytes"),
-        ("ret", 1, 0, "200 deleted ids + per-item errors"),
+        ("msg", 0, 1, "POST /files/{file id}/delete"),
+        ("msg", 1, 2, "does the user have delete?"),
+        ("open", "alt", "no delete, or file missing"),
+        ("ret", 1, 0, "403 forbidden · 404 not_found"),
+        ("close",),
+        ("msg", 1, 2, "delete the file and its grants"),
+        ("msg", 1, 3, "remove its stored bytes"),
+        ("ret", 1, 0, "204"),
     ]),
 }
 

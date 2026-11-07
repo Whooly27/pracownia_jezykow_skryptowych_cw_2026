@@ -2,9 +2,9 @@
 
 ## 1. Access model
 
-- Each file has one **owner**. Only the owner can rename a file, share it, or see who has access.
+- Each file has one **owner**. Only the owner can rename a file or share it.
 - The owner shares a file by creating a **share link**. Anyone signed in who opens the link gets the permissions the link gives, on that one file. Files can't be shared with a person directly; links are the only way to get access.
-- People who got a file through a link can't share it further: they can't create links or pass their access on.
+- People who got a file through a link can't share it further: files shared with you have no Share, and you can't create links or pass your access on.
 - Every link gives `view`.
 
 | Permission | Allows |
@@ -13,7 +13,7 @@
 | `edit` | Replace the contents |
 | `delete` | Delete permanently, for everyone |
 
-A link stops accepting new people at `expires_at`; people who already joined keep their access. Someone who joins through several links holds the permissions of all of them, and `permissions` in the API is the union. The owner can remove a person, which removes all of their access, or delete a link, which removes everyone who joined through it. People the owner removes can't rejoin through the links that existed when they were removed.
+A link stops accepting new people at `expires_at`; people who already joined keep their access. Someone who joins through several links holds the permissions of all of them, and `permissions` in the API is the union. Sharing is managed only through links: the owner deletes a link to remove everyone who joined through it. There is no list of people to manage.
 
 The app shows permission sets by name: **Can view** = `view`, **Can edit** = `view` + `edit`, **Can delete** = `view` + `delete`, **Full access** = all three.
 
@@ -41,13 +41,13 @@ Files are downloaded one at a time. The API checks that the user can see the fil
 
 Opening a link needs an account. Someone who isn't signed in goes through sign-in and lands back on the link, which then grants them access.
 
-![Open a share link](openbox-diagrams/open-a-share-link-v6.svg)
+![Open a share link](openbox-diagrams/open-a-share-link-v7.svg)
 
-### Delete files
+### Delete a file
 
 Deleting is permanent for everyone, so the app asks for confirmation first. The API removes the stored bytes in the same request.
 
-![Delete files](openbox-diagrams/delete-files-v2.svg)
+![Delete a file](openbox-diagrams/delete-a-file-v1.svg)
 
 ## 3. Screens
 
@@ -67,21 +67,13 @@ Cognito Managed Login with OpenBox branding. Sign-up (name, email, password) and
 |---|---|
 | ![Sign in, desktop](openbox-wireframes/view-02-sign-in-desktop.svg) | ![Sign in, mobile](openbox-wireframes/view-02-sign-in-mobile.svg) |
 
-### Files: several selected
-
-My files lists every file you own. Selecting files opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the selection allows. Download needs exactly one file selected; several files can only be deleted together. On mobile, + opens Upload; ⋯ on a row opens the same sheet.
-
-| Desktop | Mobile |
-|---|---|
-| ![Files: several selected, desktop](openbox-wireframes/view-03-files-several-desktop.svg) | ![Files: several selected, mobile](openbox-wireframes/view-03-files-several-mobile.svg) |
-
 ### Files: file selected
 
-The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload panel.
+My files lists every file you own. Clicking a row selects that file, and only one file can be selected at a time. The selection opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the file allows; clicking the row again clears it. On mobile, + opens Upload; ⋯ on a row opens the same sheet. The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload panel.
 
 | Desktop | Mobile |
 |---|---|
-| ![Files: file selected, desktop](openbox-wireframes/view-04-files-file-desktop.svg) | ![Files: file selected, mobile](openbox-wireframes/view-04-files-file-mobile.svg) |
+| ![Files: file selected, desktop](openbox-wireframes/view-03-files-file-desktop.svg) | ![Files: file selected, mobile](openbox-wireframes/view-03-files-file-mobile.svg) |
 
 ### Upload
 
@@ -89,7 +81,7 @@ Upload opens the file picker; files can also be dropped on the list. Each file u
 
 | Desktop | Mobile |
 |---|---|
-| ![Upload, desktop](openbox-wireframes/view-05-upload-desktop.svg) | ![Upload, mobile](openbox-wireframes/view-05-upload-mobile.svg) |
+| ![Upload, desktop](openbox-wireframes/view-04-upload-desktop.svg) | ![Upload, mobile](openbox-wireframes/view-04-upload-mobile.svg) |
 
 ### Rename
 
@@ -97,15 +89,15 @@ Only the owner can rename a file. Rename opens a dialog filled with the current 
 
 | Desktop | Mobile |
 |---|---|
-| ![Rename, desktop](openbox-wireframes/view-06-rename-desktop.svg) | ![Rename, mobile](openbox-wireframes/view-06-rename-mobile.svg) |
+| ![Rename, desktop](openbox-wireframes/view-05-rename-desktop.svg) | ![Rename, mobile](openbox-wireframes/view-05-rename-mobile.svg) |
 
 ### Confirm delete
 
-Delete always asks first and names what goes. On mobile the same dialog fills the width.
+Delete always asks first and names the file. On mobile the same dialog fills the width.
 
 | Desktop | Mobile |
 |---|---|
-| ![Confirm delete, desktop](openbox-wireframes/view-07-confirm-delete-desktop.svg) | ![Confirm delete, mobile](openbox-wireframes/view-07-confirm-delete-mobile.svg) |
+| ![Confirm delete, desktop](openbox-wireframes/view-06-confirm-delete-desktop.svg) | ![Confirm delete, mobile](openbox-wireframes/view-06-confirm-delete-mobile.svg) |
 
 ### Sharing: file you can edit
 
@@ -113,7 +105,7 @@ Kate joined Q4 Budget.xls through a Can edit link. Files shared with you never s
 
 | Desktop | Mobile |
 |---|---|
-| ![Sharing: file you can edit, desktop](openbox-wireframes/view-08-shared-can-edit-desktop.svg) | ![Sharing: file you can edit, mobile](openbox-wireframes/view-08-shared-can-edit-mobile.svg) |
+| ![Sharing: file you can edit, desktop](openbox-wireframes/view-07-shared-can-edit-desktop.svg) | ![Sharing: file you can edit, mobile](openbox-wireframes/view-07-shared-can-edit-mobile.svg) |
 
 ### Sharing: view-only file
 
@@ -121,23 +113,15 @@ Kate can only view Brand guide.pdf.
 
 | Desktop | Mobile |
 |---|---|
-| ![Sharing: view-only file, desktop](openbox-wireframes/view-09-shared-view-only-desktop.svg) | ![Sharing: view-only file, mobile](openbox-wireframes/view-09-shared-view-only-mobile.svg) |
+| ![Sharing: view-only file, desktop](openbox-wireframes/view-08-shared-view-only-desktop.svg) | ![Sharing: view-only file, mobile](openbox-wireframes/view-08-shared-view-only-mobile.svg) |
 
-### Share: people
+### Share
 
-Share shows only on files you own. People lists everyone who joined through a link, with the access they hold; they scroll inside a fixed-height list. × removes all of a person's access, and they can't rejoin through the existing links. On mobile, rows leave out when they joined.
-
-| Desktop | Mobile |
-|---|---|
-| ![Share: people, desktop](openbox-wireframes/view-10-share-people-desktop.svg) | ![Share: people, mobile](openbox-wireframes/view-10-share-people-mobile.svg) |
-
-### Share: links
-
-Each link shows what it gives, when it expires and how many people joined through it. Delete removes the link and everyone who joined through it.
+Share shows only on files you own, and lists the file's links: there is no list of people. Each link shows what it gives, when it expires and how many people joined through it. Delete removes the link and everyone who joined through it.
 
 | Desktop | Mobile |
 |---|---|
-| ![Share: links, desktop](openbox-wireframes/view-11-share-links-desktop.svg) | ![Share: links, mobile](openbox-wireframes/view-11-share-links-mobile.svg) |
+| ![Share, desktop](openbox-wireframes/view-09-share-links-desktop.svg) | ![Share, mobile](openbox-wireframes/view-09-share-links-mobile.svg) |
 
 ### Create link
 
@@ -145,39 +129,39 @@ Pick what the link allows and when it expires: 1 day, 7 days or 30 days from now
 
 | Desktop | Mobile |
 |---|---|
-| ![Create link, desktop](openbox-wireframes/view-12-create-link-desktop.svg) | ![Create link, mobile](openbox-wireframes/view-12-create-link-mobile.svg) |
+| ![Create link, desktop](openbox-wireframes/view-10-create-link-desktop.svg) | ![Create link, mobile](openbox-wireframes/view-10-create-link-mobile.svg) |
 
 ### Link created
 
-Done (× on mobile) closes it; the link then shows in Share: links, without its URL.
+Done (× on mobile) closes it; the link then shows in Share, without its URL.
 
 | Desktop | Mobile |
 |---|---|
-| ![Link created, desktop](openbox-wireframes/view-13-link-created-desktop.svg) | ![Link created, mobile](openbox-wireframes/view-13-link-created-mobile.svg) |
+| ![Link created, desktop](openbox-wireframes/view-11-link-created-desktop.svg) | ![Link created, mobile](openbox-wireframes/view-11-link-created-mobile.svg) |
 
 ### Other confirmations
 
-Replace and every action that removes access ask first too. On mobile each is the same dialog at full width. Delete a link names how many people still have access through it, and with none says only that it stops working.
+Replace, Remove my access and Delete link ask first too. On mobile each is the same dialog at full width. Delete a link names how many people still have access through it, and with none says only that it stops working.
 
 | Desktop | Mobile |
 |---|---|
-| ![Other confirmations, desktop](openbox-wireframes/view-14-confirmations-desktop.svg) | ![Other confirmations, mobile](openbox-wireframes/view-14-confirmations-mobile.svg) |
+| ![Other confirmations, desktop](openbox-wireframes/view-12-confirmations-desktop.svg) | ![Other confirmations, mobile](openbox-wireframes/view-12-confirmations-mobile.svg) |
 
 ### Search
 
-Typing 2+ characters replaces the list with matching names from your files and files shared with you. Owner shows whose file each result is. Clearing the box goes back to the list you were in.
+Typing 2+ characters replaces the list with matching names from your files and files shared with you. Owner shows whose file each result is; Budget 2027 draft.xlsx was shared with you, so it has no Share. Clearing the box goes back to the list you were in.
 
 | Desktop | Mobile |
 |---|---|
-| ![Search, desktop](openbox-wireframes/view-15-search-desktop.svg) | ![Search, mobile](openbox-wireframes/view-15-search-mobile.svg) |
+| ![Search, desktop](openbox-wireframes/view-13-search-desktop.svg) | ![Search, mobile](openbox-wireframes/view-13-search-mobile.svg) |
 
 ### Empty states
 
-Every list has an empty state: My files, Shared with me, Shared by me, search and Share: links. Upload shows only in My files.
+Every list has an empty state: My files, Shared with me, Shared by me, search and Share. Upload shows only in My files.
 
 | Desktop | Mobile |
 |---|---|
-| ![Empty states, desktop](openbox-wireframes/view-16-empty-desktop.svg) | ![Empty states, mobile](openbox-wireframes/view-16-empty-mobile.svg) |
+| ![Empty states, desktop](openbox-wireframes/view-14-empty-desktop.svg) | ![Empty states, mobile](openbox-wireframes/view-14-empty-mobile.svg) |
 
 ### Loading
 
@@ -185,23 +169,23 @@ Lists show placeholder rows until the first page arrives, and the Share dialog u
 
 | Desktop | Mobile |
 |---|---|
-| ![Loading, desktop](openbox-wireframes/view-17-loading-desktop.svg) | ![Loading, mobile](openbox-wireframes/view-17-loading-mobile.svg) |
+| ![Loading, desktop](openbox-wireframes/view-15-loading-desktop.svg) | ![Loading, mobile](openbox-wireframes/view-15-loading-mobile.svg) |
 
 ### Page errors
 
-A failed load offers Try again. A link that expired, was deleted, was never valid or no longer lets you in says why and offers a way out.
+A failed load offers Try again. A link that expired, was deleted or was never valid says why and offers a way out.
 
 | Desktop | Mobile |
 |---|---|
-| ![Page errors, desktop](openbox-wireframes/view-18-errors-desktop.svg) | ![Page errors, mobile](openbox-wireframes/view-18-errors-mobile.svg) |
+| ![Page errors, desktop](openbox-wireframes/view-16-errors-desktop.svg) | ![Page errors, mobile](openbox-wireframes/view-16-errors-mobile.svg) |
 
 ### Action and input errors
 
-A failed action shows a toast naming each file that failed, from its error message or, for an id, the name the app already shows; in bulk actions, the files that succeeded stay done. Input errors show under the field. After a 401 the app signs in again and returns to the same page.
+A failed action shows a toast naming the file, from its error message or the name the app already shows. Input errors show under the field. After a 401 the app signs in again and returns to the same page.
 
 | Desktop | Mobile |
 |---|---|
-| ![Action and input errors, desktop](openbox-wireframes/view-19-action-errors-desktop.svg) | ![Action and input errors, mobile](openbox-wireframes/view-19-action-errors-mobile.svg) |
+| ![Action and input errors, desktop](openbox-wireframes/view-17-action-errors-desktop.svg) | ![Action and input errors, mobile](openbox-wireframes/view-17-action-errors-mobile.svg) |
 
 ## 4. API
 
@@ -249,7 +233,6 @@ HTTP/1.1 200 OK
         "permissions": ["view", "edit"],        // what you may do
         "member_count": 6,                      // owner included
         "modified_at": "2026-03-17T09:33:00Z",
-        "modified_by": { "id": "c81d4f2e-6a3b-4d9c-8e1f-2b7a5c0d9e46", "display_name": "Jo" },
         "grants": [                             // [] unless it is shared with you
           {
             "link_id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",   // the link you joined through
@@ -265,7 +248,7 @@ HTTP/1.1 200 OK
 }
 ```
 
-A file's `permissions` are all three on files you own, and what your links gave you on shared files. Rename and Share show only on files you own; Remove my access shows when `access` is `"granted"`; Download shows when exactly one file is selected.
+A file's `permissions` are all three on files you own, and what your links gave you on shared files. Rename and Share show only on files you own; Remove my access shows when `access` is `"granted"`.
 
 When listing your own files, `upload_policy` is:
 
@@ -287,7 +270,7 @@ When listing your own files, `upload_policy` is:
 
 #### Rename — `POST /files/{id}/rename`
 
-Renames a file and updates its `modified_at` and `modified_by`. Only the owner can rename.
+Renames a file and updates its `modified_at`. Only the owner can rename.
 
 ```http
 POST /api/v1/files/f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68/rename
@@ -310,7 +293,6 @@ HTTP/1.1 200 OK
     "permissions": ["view", "edit", "delete"],
     "member_count": 6,
     "modified_at": "2026-11-05T09:41:00Z",
-    "modified_by": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
     "grants": []
   },
   "errors": []
@@ -326,64 +308,46 @@ HTTP/1.1 200 OK
 | `415` | `unsupported_file_type` | The new extension isn't allowed or doesn't match the file's type |
 | `422` | `validation_failed` | Empty name, over 255 characters, or contains `/` |
 
-#### Delete — `POST /files/delete`
+#### Delete — `POST /files/{id}/delete`
 
-Deletes files permanently, for everyone. Needs `delete` on each file. Each error's `message` names the file; for one that doesn't exist or you can't see, it gives the id you sent.
+Deletes a file permanently, for everyone, and removes its stored bytes. Needs `delete`.
 
 ```http
-POST /api/v1/files/delete
+POST /api/v1/files/f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68/delete
 Idempotency-Key: 7f4e1b9c-0a3d-4e6b-8d2f-5c9a1e7b3f60
-
-{ "ids": ["f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68", "c4e9a2d7-6f3b-4a18-8c5e-1b7d0f9a3e26"] }
 ```
 
 ```http
-HTTP/1.1 200 OK
-
-{
-  "data": ["f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68"],
-  "errors": [
-    {
-      "code": "not_found",
-      "message": "File c4e9a2d7-6f3b-4a18-8c5e-1b7d0f9a3e26 no longer exists."
-    }
-  ]
-}
+HTTP/1.1 204 No Content
 ```
 
 | Status | `code` | When |
 |---|---|---|
 | `401` | `unauthenticated` | No valid session |
-| `422` | `validation_failed` | `ids` is empty or has more than 100 entries |
-| per item | `forbidden` | You don't have `delete` |
-| per item | `not_found` | The file doesn't exist or you can't see it |
+| `403` | `forbidden` | You don't have `delete` |
+| `404` | `not_found` | The file doesn't exist or you can't see it |
 
-#### Remove my access — `POST /files/remove-access`
+#### Remove my access — `POST /files/{id}/remove-access`
 
-Removes files shared with you from your list by deleting all your grants on them, so you leave Share: people and `member_count`. The owner and everyone else keep their access. Each error's `message` gives the id you sent.
+Removes a file shared with you from your list by deleting all your grants on it, so you leave `member_count`. The owner and everyone else keep their access.
 
 ```http
-POST /api/v1/files/remove-access
+POST /api/v1/files/8e3b1f6d-2a9c-4d7e-b5f0-6c1a9d4e2b78/remove-access
 Idempotency-Key: 2a8d5f3c-7b1e-4c9a-a6d0-3e5f8b2c7a14
-
-{ "ids": ["8e3b1f6d-2a9c-4d7e-b5f0-6c1a9d4e2b78"] }
 ```
 
 ```http
-HTTP/1.1 200 OK
-
-{ "data": ["8e3b1f6d-2a9c-4d7e-b5f0-6c1a9d4e2b78"], "errors": [] }
+HTTP/1.1 204 No Content
 ```
 
 | Status | `code` | When |
 |---|---|---|
 | `401` | `unauthenticated` | No valid session |
-| `422` | `validation_failed` | `ids` is empty or has more than 100 entries |
-| per item | `not_found` | The file isn't shared with you |
+| `404` | `not_found` | The file isn't shared with you |
 
 #### Download — `POST /files/{id}/download`
 
-Returns a signed storage URL, valid for 60 seconds, that saves the file under its real name. Needs `view`. Files are downloaded one at a time.
+Returns a signed storage URL, valid for 60 seconds, that saves the file under its real name. Needs `view`.
 
 ```http
 POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/download
@@ -526,7 +490,6 @@ HTTP/1.1 200 OK
     "permissions": ["view", "edit", "delete"],
     "member_count": 1,
     "modified_at": "2026-11-05T10:02:00Z",
-    "modified_by": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
     "grants": []
   },
   "errors": []
@@ -541,159 +504,16 @@ HTTP/1.1 200 OK
 | `409` | `upload_incomplete` | The bytes haven't arrived yet |
 | `410` | `upload_expired` | The upload wasn't finished within 15 minutes; start again |
 
-### 4.3 Sharing
+### 4.3 Links
 
-Only a file's owner can use these endpoints.
+Only a file's owner can list, create and delete its links. Anyone signed in can redeem one.
 
-#### File access — `GET /files/{id}/permissions`
+#### List links — `GET /files/{id}/links`
 
-Who has access to a file and the links that gave it.
-
-```http
-GET /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/permissions
-```
+The file's links, newest first.
 
 ```http
-HTTP/1.1 200 OK
-
-{
-  "data": {
-    "file": { "id": "b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40", "name": "Q4 Budget.xls" },
-    "members": [
-      {                                   // Member
-        "user": {
-          "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
-          "display_name": "Alex",
-          "email": "alex@acme.com"
-        },
-        "access": "owner",
-        "permissions": ["view", "edit", "delete"],   // what they hold
-        "grants": []                      // one per link they joined through; [] for the owner
-      },
-      {
-        "user": {
-          "id": "a91d4e07-2c3b-4f58-8e6a-0b7c9d1e2f34",
-          "display_name": "Kate",
-          "email": "kate@acme.com"
-        },
-        "access": "granted",
-        "permissions": ["view", "edit"],
-        "grants": [
-          {
-            "link_id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
-            "permissions": ["view", "edit"],
-            "granted_at": "2026-03-03T10:00:00Z"
-          }
-        ]
-      },
-      {
-        "user": {
-          "id": "c81d4f2e-6a3b-4d9c-8e1f-2b7a5c0d9e46",
-          "display_name": "Jo",
-          "email": "jo@acme.com"
-        },
-        "access": "granted",
-        "permissions": ["view", "edit"],
-        "grants": [
-          {
-            "link_id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
-            "permissions": ["view", "edit"],
-            "granted_at": "2026-03-03T11:20:00Z"
-          }
-        ]
-      },
-      {
-        "user": {
-          "id": "5c2e8f1a-7b4d-4a90-a3e1-6d8f0c2b9e57",
-          "display_name": "Robin",
-          "email": "robin@acme.com"
-        },
-        "access": "granted",
-        "permissions": ["view"],
-        "grants": [
-          {
-            "link_id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-            "permissions": ["view"],
-            "granted_at": "2026-03-04T09:15:00Z"
-          }
-        ]
-      },
-      {
-        "user": {
-          "id": "47b2e9c1-5d8a-4f3e-9b6c-1a0e7d4f2c85",
-          "display_name": "Dana",
-          "email": "dana@acme.com"
-        },
-        "access": "granted",
-        "permissions": ["view"],
-        "grants": [
-          {
-            "link_id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-            "permissions": ["view"],
-            "granted_at": "2026-03-05T11:30:00Z"
-          }
-        ]
-      },
-      {
-        "user": {
-          "id": "e9a4c7d2-3b1f-4e6a-8c5d-7f0b2a9e6d14",
-          "display_name": "Sam",
-          "email": "sam@acme.com"
-        },
-        "access": "granted",
-        "permissions": ["view"],
-        "grants": [
-          {
-            "link_id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-            "permissions": ["view"],
-            "granted_at": "2026-03-09T12:05:00Z"
-          }
-        ]
-      }
-    ],
-    "links": [
-      {                                   // Link
-        "id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-        "permissions": ["view"],                // what the link gives
-        "expires_at": "2026-12-05T22:59:59Z",   // null = never
-        "redemption_count": 3,
-        "created_at": "2026-03-02T09:00:00Z"
-      },
-      {
-        "id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
-        "permissions": ["view", "edit"],
-        "expires_at": null,
-        "redemption_count": 2,
-        "created_at": "2026-03-02T14:20:00Z"
-      },
-      {
-        "id": "4f9c1a7e-6d2b-4e8a-9c3f-2b5d8e0a6c47",
-        "permissions": ["view"],
-        "expires_at": "2026-11-12T22:59:59Z",
-        "redemption_count": 0,
-        "created_at": "2026-11-04T08:10:00Z"
-      }
-    ]
-  },
-  "errors": []
-}
-```
-
-| Status | `code` | When |
-|---|---|---|
-| `401` | `unauthenticated` | No valid session |
-| `403` | `forbidden` | You don't own the file |
-| `404` | `not_found` | The file doesn't exist or you can't see it |
-
-#### Remove people — `POST /files/{id}/members/remove`
-
-Removes everything each person got through this file's links. They can't rejoin through the links that exist now, only through a link created later. Failed entries are listed in `errors`, each `message` naming the `user_id` you sent; the rest are removed. Returns the members left.
-
-```http
-POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/members/remove
-Idempotency-Key: 5f9a2c7e-3b6d-4e1a-8f4c-7d2e0b5a9c38
-
-{ "user_ids": ["5c2e8f1a-7b4d-4a90-a3e1-6d8f0c2b9e57"] }
+GET /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/links
 ```
 
 ```http
@@ -701,79 +521,26 @@ HTTP/1.1 200 OK
 
 {
   "data": [
-    {
-      "user": {
-        "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
-        "display_name": "Alex",
-        "email": "alex@acme.com"
-      },
-      "access": "owner",
-      "permissions": ["view", "edit", "delete"],
-      "grants": []
+    {                                     // Link — the same object everywhere below
+      "id": "4f9c1a7e-6d2b-4e8a-9c3f-2b5d8e0a6c47",
+      "permissions": ["view"],                // what the link gives
+      "expires_at": "2026-11-12T22:59:59Z",   // null = never
+      "redemption_count": 0,                  // people who joined through it
+      "created_at": "2026-11-04T08:10:00Z"
     },
     {
-      "user": {
-        "id": "a91d4e07-2c3b-4f58-8e6a-0b7c9d1e2f34",
-        "display_name": "Kate",
-        "email": "kate@acme.com"
-      },
-      "access": "granted",
+      "id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
       "permissions": ["view", "edit"],
-      "grants": [
-        {
-          "link_id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
-          "permissions": ["view", "edit"],
-          "granted_at": "2026-03-03T10:00:00Z"
-        }
-      ]
+      "expires_at": null,
+      "redemption_count": 2,
+      "created_at": "2026-03-02T14:20:00Z"
     },
     {
-      "user": {
-        "id": "c81d4f2e-6a3b-4d9c-8e1f-2b7a5c0d9e46",
-        "display_name": "Jo",
-        "email": "jo@acme.com"
-      },
-      "access": "granted",
-      "permissions": ["view", "edit"],
-      "grants": [
-        {
-          "link_id": "7b2e4d9a-1c8f-4a3e-b6d5-0f9c2a7e4b61",
-          "permissions": ["view", "edit"],
-          "granted_at": "2026-03-03T11:20:00Z"
-        }
-      ]
-    },
-    {
-      "user": {
-        "id": "47b2e9c1-5d8a-4f3e-9b6c-1a0e7d4f2c85",
-        "display_name": "Dana",
-        "email": "dana@acme.com"
-      },
-      "access": "granted",
+      "id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
       "permissions": ["view"],
-      "grants": [
-        {
-          "link_id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-          "permissions": ["view"],
-          "granted_at": "2026-03-05T11:30:00Z"
-        }
-      ]
-    },
-    {
-      "user": {
-        "id": "e9a4c7d2-3b1f-4e6a-8c5d-7f0b2a9e6d14",
-        "display_name": "Sam",
-        "email": "sam@acme.com"
-      },
-      "access": "granted",
-      "permissions": ["view"],
-      "grants": [
-        {
-          "link_id": "d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31",
-          "permissions": ["view"],
-          "granted_at": "2026-03-09T12:05:00Z"
-        }
-      ]
+      "expires_at": "2026-12-05T22:59:59Z",
+      "redemption_count": 3,
+      "created_at": "2026-03-02T09:00:00Z"
     }
   ],
   "errors": []
@@ -785,15 +552,10 @@ HTTP/1.1 200 OK
 | `401` | `unauthenticated` | No valid session |
 | `403` | `forbidden` | You don't own the file |
 | `404` | `not_found` | The file doesn't exist or you can't see it |
-| `422` | `validation_failed` | `user_ids` is empty or has more than 100 entries |
-| per entry | `not_found` | `user_id` has no access to this file |
-| per entry | `forbidden` | `user_id` is you |
-
-### 4.4 Links
 
 #### Create link — `POST /files/{id}/links`
 
-Creates a share link. Anyone who opens it and signs in gets its permissions. Only the owner can create links. For a chosen day the app sends the end of that day in the user's time zone; dates are shown in local time.
+Creates a share link. Anyone who opens it and signs in gets its permissions. For a chosen day the app sends the end of that day in the user's time zone; dates are shown in local time.
 
 ```http
 POST /api/v1/files/b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40/links
@@ -830,7 +592,7 @@ HTTP/1.1 201 Created
 
 #### Delete link — `POST /links/{id}/delete`
 
-The URL stops working and everyone who joined through it loses that access. Only the file's owner can delete a link.
+The URL stops working and everyone who joined through it loses that access.
 
 ```http
 POST /api/v1/links/d3a6f8b2-4c9e-4e1a-9b7d-6f2c0e8a5b31/delete
@@ -872,7 +634,6 @@ HTTP/1.1 200 OK
     "permissions": ["view", "edit"],
     "member_count": 7,
     "modified_at": "2026-11-05T10:06:00Z",
-    "modified_by": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
     "grants": [
       {
         "link_id": "e5c1a8d3-7b2f-4e9a-8d6c-1f3b5a7e9c20",
@@ -888,7 +649,6 @@ HTTP/1.1 200 OK
 | Status | `code` | When |
 |---|---|---|
 | `401` | `unauthenticated` | Not signed in; go to `/auth/login?return_to=/links/7Fq9xKpL2mZr`, which comes back here |
-| `403` | `forbidden` | The owner removed you after this link was created |
 | `404` | `not_found` | The token doesn't match any link, or the link's file was deleted |
 | `410` | `link_expired` | The link is past its `expires_at` |
 | `410` | `link_deleted` | The link was deleted |

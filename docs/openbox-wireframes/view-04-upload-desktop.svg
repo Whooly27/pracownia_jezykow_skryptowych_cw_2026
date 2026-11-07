@@ -19,57 +19,44 @@
 <text x="32" y="128" font-size="20" font-weight="600" fill="#1e2533" text-anchor="start">My files</text>
 <rect x="872" y="106" width="96" height="34" rx="4" fill="#0061fe" stroke="#0061fe" stroke-width="1"/>
 <text x="920.0" y="128.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Upload</text>
-<rect x="38" y="166" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<text x="62" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
+<text x="32" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
 <text x="582" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Modified</text>
 <text x="822" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Members</text>
 <line x1="32" y1="190" x2="968" y2="190" stroke="#d4d9e2" stroke-width="1"/>
-<rect x="38" y="206" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PDF</text>
-<text x="96" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Campaign plan.pdf</text>
-<text x="582" y="211" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/24/2026 9:12AM</text>
-<text x="582" y="226" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PDF</text>
+<text x="66" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Campaign plan.pdf</text>
+<text x="582" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/24/2026 9:12AM</text>
 <text x="822" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3 members</text>
 <line x1="32" y1="236" x2="968" y2="236" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="252" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
-<text x="96" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
-<text x="582" y="257" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/22/2026 4:40PM</text>
-<text x="582" y="272" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
+<text x="66" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
+<text x="582" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/22/2026 4:40PM</text>
 <text x="822" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">1 member</text>
 <line x1="32" y1="282" x2="968" y2="282" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="298" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
-<text x="96" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
-<text x="582" y="303" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/20/2026 3:15PM</text>
-<text x="582" y="318" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
+<text x="66" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
+<text x="582" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/20/2026 3:15PM</text>
 <text x="822" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">9 members</text>
 <line x1="32" y1="328" x2="968" y2="328" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="344" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,340 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="357" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
-<text x="96" y="356" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q1 Budget.xlsx</text>
-<text x="582" y="349" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">11/5/2026 11:02AM</text>
-<text x="582" y="364" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Alex</text>
+<path d="M34,340 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="357" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
+<text x="66" y="356" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q1 Budget.xlsx</text>
+<text x="582" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">11/5/2026 11:02AM</text>
 <text x="822" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">1 member</text>
 <line x1="32" y1="374" x2="968" y2="374" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="390" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,386 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="403" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
-<text x="96" y="402" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
-<text x="582" y="395" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/17/2026 10:33AM</text>
-<text x="582" y="410" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Jo</text>
+<path d="M34,386 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="403" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
+<text x="66" y="402" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
+<text x="582" y="402" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/17/2026 10:33AM</text>
 <text x="822" y="402" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
 <line x1="32" y1="420" x2="968" y2="420" stroke="#dbe8fd" stroke-width="1"/>
-<rect x="38" y="436" width="14" height="14" rx="3" fill="#ffffff" stroke="#b7bfcc" stroke-width="1"/>
-<path d="M64,432 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
-<text x="73.5" y="449" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
-<text x="96" y="448" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
-<text x="582" y="441" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/15/2026 1:28PM</text>
-<text x="582" y="456" font-size="11" font-weight="400" fill="#6b7489" text-anchor="start">by Jo</text>
+<path d="M34,432 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
+<text x="43.5" y="449" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
+<text x="66" y="448" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
+<text x="582" y="448" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/15/2026 1:28PM</text>
 <text x="822" y="448" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
 <line x1="32" y1="466" x2="968" y2="466" stroke="#dbe8fd" stroke-width="1"/>
 <rect x="561.0" y="376.5" width="414" height="257.0" rx="19.0" fill="#1e2533" fill-opacity="0.04" stroke="none"/>
