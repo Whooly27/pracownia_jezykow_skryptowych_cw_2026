@@ -91,10 +91,10 @@ def complete_upload(request: HttpRequest, upload_id: UUID) -> HttpResponse:
     upload = Upload.objects.select_related("file").filter(id=upload_id, owner=user).first()
     if upload is None:
         raise ApiError(404, "not_found", "No such upload.")
-    if upload.is_done and upload.file is not None:
-        return ok(file_to_json(upload.file, user))
     if upload.is_replace:
         _require_edit(user, upload.file)
+    if upload.is_done and upload.file is not None:
+        return ok(file_to_json(upload.file, user))
     if upload.is_expired:
         raise ApiError(410, "upload_expired", "The upload wasn't finished within 15 minutes.")
 

@@ -82,7 +82,8 @@ USE_TZ = True
 
 # File bytes. The default is the local stand-in for Vercel Blob (see apps/uploads/storage.py).
 STORAGE_BACKEND = env("STORAGE_BACKEND", default="apps.uploads.storage.LocalBlobStorage")
-BLOB_ROOT = env("BLOB_ROOT", default=str(BASE_DIR / "blobdata"))
+# A relative BLOB_ROOT is taken from the backend directory, not from where the server was started.
+BLOB_ROOT = str(BASE_DIR / env("BLOB_ROOT", default="blobdata"))
 # Origin put into signed blob URLs; empty means relative, which works behind the frontend proxy.
 BLOB_BASE_URL = env("BLOB_BASE_URL", default="")
 

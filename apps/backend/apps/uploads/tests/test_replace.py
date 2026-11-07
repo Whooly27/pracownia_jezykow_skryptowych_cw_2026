@@ -181,3 +181,21 @@ def test_complete_after_file_deleted_is_404(client: Client) -> None:
 
     assert response.status_code == 404
     assert response.json()["errors"][0]["code"] == "not_found"
+
+
+@pytest.mark.django_db
+def test_repeated_complete_after_losing_access_is_404(client: Client) -> None:
+    user = make_user()
+    kate = make_user("test_kate")
+    file = make_file(user, "notes.txt")
+    make_grant(file, kate, make_link(file, user, permissions=("view", "edit")))
+    client.force_login(kate)
+    upload = replace(client, file).json()["data"]
+    client.put(upload["put_url"], data=NEW_BYTES, content_type="text/plain")
+    assert complete(client, upload["id"]).status_code == 200
+    Grant.objects.filter(user=kate).delete()
+
+    response = complete(client, upload["id"])
+
+    assert response.status_code == 404
+    assert response.json()["errors"][0]["code"] == "not_found"

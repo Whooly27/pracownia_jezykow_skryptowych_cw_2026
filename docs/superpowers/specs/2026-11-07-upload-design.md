@@ -87,8 +87,9 @@ właściciel bez grantu, wygasanie linku.
 ### `apps/uploads/models.py`: `Upload`
 
 Pola: `id` (UUID), `owner` (FK), `name`, `mime_type`, `size_bytes`, `storage_key`
-(`uploads/{id}`), `replaces` (FK na `File`, null; ustawione dla replace), `expires_at`
-(`created_at` + 15 min), `completed_at` (null do czasu complete), `created_at`.
+(property `uploads/{id}`), `file` (FK na `File`, null: dla replace ustawione od początku, dla nowego
+pliku po complete) z flagą `is_replace`, `expires_at` (`created_at` + 15 min), `completed_at`
+(null do czasu complete), `created_at`.
 
 Stan wynika z pól: pending = `completed_at is null and expires_at > now`, expired =
 `completed_at is null and expires_at <= now`, done = `completed_at is not null`.
@@ -108,7 +109,8 @@ pending upload tej nazwy i jego bajty z storage.
 Walidacja jednego pliku, w tej kolejności (pierwszy błąd wygrywa, kod ze spec):
 
 1. `validation_failed`: nazwa pusta, ponad 255 znaków, zawiera `/`; `size_bytes` nie jest
-   dodatnią liczbą całkowitą; `mime_type` puste.
+   dodatnią liczbą całkowitą. Puste `mime_type` to `unsupported_file_type` (nie zgadza się z
+   rozszerzeniem), tak zachowuje się kod.
 2. `unsupported_file_type`: rozszerzenie (ostatni segment po kropce, małe litery) spoza listy albo
    `mime_type` nie zgadza się z rozszerzeniem według tabeli. Mapowanie jest 1:1 (np. `jpg` i
    `jpeg` oba na `image/jpeg`; `md` na `text/markdown`; `csv` na `text/csv`).
