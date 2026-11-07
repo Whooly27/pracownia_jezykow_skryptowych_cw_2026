@@ -102,3 +102,21 @@ def test_extension_not_matching_type_is_415(client: Client) -> None:
 
     assert response.status_code == 415  # type: ignore[attr-defined]
     assert response.json()["errors"][0]["code"] == "unsupported_file_type"  # type: ignore[attr-defined]
+
+
+@pytest.mark.django_db
+def test_name_reserved_by_a_pending_upload_is_409(client: Client) -> None:
+    user = make_user()
+    file = make_file(user, "notes.txt")
+    client.force_login(user)
+    started = post_json(
+        client,
+        "/api/v1/uploads",
+        {"name": "pending.txt", "size_bytes": 5, "mime_type": "text/plain"},
+    )
+    assert started.status_code == 201
+
+    response = rename(client, file, "pending.txt")
+
+    assert response.status_code == 409  # type: ignore[attr-defined]
+    assert response.json()["errors"][0]["code"] == "name_conflict"  # type: ignore[attr-defined]

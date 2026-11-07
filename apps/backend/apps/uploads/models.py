@@ -11,6 +11,7 @@ from typing import Any
 
 from django.conf import settings
 from django.db import models
+from django.db.models import QuerySet
 from django.utils import timezone
 
 from apps.accounts.models import User
@@ -52,6 +53,13 @@ class Upload(models.Model):
             file=file,
             is_replace=file is not None,
             expires_at=timezone.now() + UPLOAD_TTL,
+        )
+
+    @classmethod
+    def pending(cls, owner: User) -> "QuerySet[Upload]":
+        """New-file uploads of owner that still reserve their name."""
+        return cls.objects.filter(
+            owner=owner, is_replace=False, completed_at=None, expires_at__gt=timezone.now()
         )
 
     @property

@@ -21,6 +21,7 @@ from apps.core.api import (
 )
 from apps.sharing.access import access_for
 from apps.sharing.models import Grant
+from apps.uploads.models import Upload
 from apps.uploads.policy import check_type, name_problems, raise_for, upload_policy
 from apps.uploads.storage import get_storage
 
@@ -63,6 +64,8 @@ def rename_file(request: HttpRequest, file_id: uuid.UUID) -> HttpResponse:
     file.name = name
     file.modified_at = timezone.now()
     conflict = ApiError(409, "name_conflict", f"{name}: you already have a file with that name.")
+    if Upload.pending(user).filter(name=name).exists():
+        raise conflict
     try:
         file.full_clean()
     except ValidationError as error:

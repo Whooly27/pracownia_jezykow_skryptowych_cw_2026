@@ -63,7 +63,7 @@ def parse_query(params: QueryDict) -> ListQuery:
     limit = DEFAULT_LIMIT
     raw_limit = params.get("limit")
     if raw_limit is not None:
-        if raw_limit.isdigit() and 1 <= int(raw_limit) <= MAX_LIMIT:
+        if raw_limit.isdecimal() and 1 <= int(raw_limit) <= MAX_LIMIT:
             limit = int(raw_limit)
         else:
             problems.append("limit must be between 1 and 200.")

@@ -165,3 +165,11 @@ def test_sort_by_modified_at_desc(client: Client) -> None:
 @pytest.mark.django_db
 def test_anonymous_is_401(client: Client) -> None:
     assert client.get("/api/v1/files").status_code == 401
+
+
+@pytest.mark.django_db
+def test_unicode_digit_limit_is_422(client: Client) -> None:
+    response = list_files(client, make_user(), limit="²")
+
+    assert response.status_code == 422
+    assert response.json()["errors"][0]["code"] == "validation_failed"
