@@ -21,38 +21,60 @@
 <text x="920.0" y="128.0" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Upload</text>
 <text x="32" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Name ▾</text>
 <text x="582" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Modified</text>
-<text x="822" y="178" font-size="12" font-weight="600" fill="#6b7489" text-anchor="start">Members</text>
 <line x1="32" y1="190" x2="968" y2="190" stroke="#d4d9e2" stroke-width="1"/>
 <path d="M34,202 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="43.5" y="219" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PDF</text>
 <text x="66" y="218" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Campaign plan.pdf</text>
+<rect x="177.4832" y="205" width="66" height="18" rx="9" fill="#eef4ff" stroke="none"/>
+<circle cx="187.4832" cy="214" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="193.4832" cy="210" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="193.4832" cy="218" r="2" fill="#0061fe" stroke="none"/>
+<line x1="187.4832" y1="214" x2="193.4832" y2="210" stroke="#0061fe" stroke-width="1.2"/>
+<line x1="187.4832" y1="214" x2="193.4832" y2="218" stroke="#0061fe" stroke-width="1.2"/>
+<text x="201.4832" y="218" font-size="11" font-weight="600" fill="#0061fe" text-anchor="start">Shared</text>
 <text x="582" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/24/2026 9:12AM</text>
-<text x="822" y="218" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3 members</text>
 <line x1="32" y1="236" x2="968" y2="236" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M34,248 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="43.5" y="265" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PNG</text>
 <text x="66" y="264" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Logo draft.png</text>
 <text x="582" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/22/2026 4:40PM</text>
-<text x="822" y="264" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">1 member</text>
 <line x1="32" y1="282" x2="968" y2="282" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M34,294 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="43.5" y="311" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">PPT</text>
 <text x="66" y="310" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Design all hands 3-22.pptx</text>
+<rect x="231.20960000000002" y="297" width="66" height="18" rx="9" fill="#eef4ff" stroke="none"/>
+<circle cx="241.20960000000002" cy="306" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="247.20960000000002" cy="302" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="247.20960000000002" cy="310" r="2" fill="#0061fe" stroke="none"/>
+<line x1="241.20960000000002" y1="306" x2="247.20960000000002" y2="302" stroke="#0061fe" stroke-width="1.2"/>
+<line x1="241.20960000000002" y1="306" x2="247.20960000000002" y2="310" stroke="#0061fe" stroke-width="1.2"/>
+<text x="255.20960000000002" y="310" font-size="11" font-weight="600" fill="#0061fe" text-anchor="start">Shared</text>
 <text x="582" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/20/2026 3:15PM</text>
-<text x="822" y="310" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">9 members</text>
 <line x1="32" y1="328" x2="968" y2="328" stroke="#dbe8fd" stroke-width="1"/>
 <rect x="32" y="328" width="936" height="46" rx="0" fill="#dbe8fd" stroke="none" stroke-width="1"/>
 <path d="M34,340 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="43.5" y="357" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
 <text x="66" y="356" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
+<rect x="153.6048" y="343" width="66" height="18" rx="9" fill="#eef4ff" stroke="none"/>
+<circle cx="163.6048" cy="352" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="169.6048" cy="348" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="169.6048" cy="356" r="2" fill="#0061fe" stroke="none"/>
+<line x1="163.6048" y1="352" x2="169.6048" y2="348" stroke="#0061fe" stroke-width="1.2"/>
+<line x1="163.6048" y1="352" x2="169.6048" y2="356" stroke="#0061fe" stroke-width="1.2"/>
+<text x="177.6048" y="356" font-size="11" font-weight="600" fill="#0061fe" text-anchor="start">Shared</text>
 <text x="582" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/17/2026 10:33AM</text>
-<text x="822" y="356" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
 <line x1="32" y1="374" x2="968" y2="374" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M34,386 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="43.5" y="403" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">DOC</text>
 <text x="66" y="402" font-size="13" font-weight="500" fill="#1e2533" text-anchor="start">Staff review.docx</text>
+<rect x="177.4832" y="389" width="66" height="18" rx="9" fill="#eef4ff" stroke="none"/>
+<circle cx="187.4832" cy="398" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="193.4832" cy="394" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="193.4832" cy="402" r="2" fill="#0061fe" stroke="none"/>
+<line x1="187.4832" y1="398" x2="193.4832" y2="394" stroke="#0061fe" stroke-width="1.2"/>
+<line x1="187.4832" y1="398" x2="193.4832" y2="402" stroke="#0061fe" stroke-width="1.2"/>
+<text x="201.4832" y="402" font-size="11" font-weight="600" fill="#0061fe" text-anchor="start">Shared</text>
 <text x="582" y="402" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">3/15/2026 1:28PM</text>
-<text x="822" y="402" font-size="12" font-weight="400" fill="#1e2533" text-anchor="start">6 members</text>
 <line x1="32" y1="420" x2="968" y2="420" stroke="#dbe8fd" stroke-width="1"/>
 <rect x="0" y="30" width="1000" height="630" rx="0" fill="#1e2533" fill-opacity="0.35" stroke="none" stroke-width="1"/>
 <rect x="240.0" y="215.0" width="520" height="250" rx="10" fill="#ffffff" stroke="#d4d9e2" stroke-width="1"/>

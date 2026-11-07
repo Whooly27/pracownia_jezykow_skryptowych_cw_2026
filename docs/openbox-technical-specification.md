@@ -27,9 +27,9 @@ The app asks for the first 50 files, then the next 50 each time the user scrolls
 
 ### Upload a file
 
-The browser sends the bytes straight to storage. The API hands out a signed upload URL that accepts at most the declared size and only the declared type, then marks the file ready.
+Files are uploaded one at a time. The user picks a file in the Upload dialog, which checks it against `upload_policy` first. The browser sends the bytes straight to storage. The API hands out a signed upload URL that accepts at most the declared size and only the declared type, then marks the file ready.
 
-![Upload a file](openbox-diagrams/upload-a-file-v4.svg)
+![Upload a file](openbox-diagrams/upload-a-file-v5.svg)
 
 ### Download a file
 
@@ -69,7 +69,7 @@ Cognito Managed Login with OpenBox branding. Sign-up (name, email, password) and
 
 ### Files: file selected
 
-My files lists every file you own. Clicking a row selects that file, and only one file can be selected at a time. The selection opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the file allows; clicking the row again clears it. On mobile, + opens Upload; ⋯ on a row opens the same sheet. The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload panel.
+My files lists every file you own; a Shared badge marks the ones someone else has access to (`is_shared`). Clicking a row selects that file, and only one file can be selected at a time. The selection opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the file allows; clicking the row again clears it. On mobile, + opens Upload; ⋯ on a row opens the same sheet. The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload dialog.
 
 | Desktop | Mobile |
 |---|---|
@@ -77,11 +77,19 @@ My files lists every file you own. Clicking a row selects that file, and only on
 
 ### Upload
 
-Upload opens the file picker; files can also be dropped on the list. Each file uploads on its own: finished files join the list, rejected ones show the reason, and the rest keep going. Type and size are checked against `upload_policy` before Start upload, so each rejected file gets its own reason. On mobile, progress shows in a bottom sheet above the tab bar. A failed or expired upload shows Try again. Cancel stops an upload; its reserved name frees up when it expires. While files are dragged over the list, it shows a dashed outline and “Drop to upload”.
+Upload opens this dialog (a full page on mobile) for one file at a time. The file is dropped on it or picked with browse (Choose a file on mobile); picking another replaces it, and × clears it. It is checked against `upload_policy` as soon as it's chosen, so a wrong type or a file over 25 MB shows the reason under it and Upload stays disabled. Dragging a file over the list shows a dashed outline and “Drop to upload”, and dropping it opens this dialog; dropping several files shows “Upload one file at a time.”
 
 | Desktop | Mobile |
 |---|---|
 | ![Upload, desktop](openbox-wireframes/view-04-upload-desktop.svg) | ![Upload, mobile](openbox-wireframes/view-04-upload-mobile.svg) |
+
+### Upload states
+
+The file field changes as the upload goes, and the dialog's buttons change with it. Ready: the chosen file with × to clear it, and Upload. Uploading: progress, percentage and bytes sent, while the button shows a spinner and ignores clicks; Cancel (× on mobile) stops the upload, and its reserved name frees up when it expires. Error: the field turns red and says why, such as a failed or expired upload or a file the server rejects, with Try again; a wrong type or a file over 25 MB shows here before uploading, with Upload disabled. Uploaded: a check, and the file has joined the list; Done closes the dialog. On mobile the buttons sit in the bar at the bottom of the page.
+
+| Desktop | Mobile |
+|---|---|
+| ![Upload states, desktop](openbox-wireframes/view-05-upload-states-desktop.svg) | ![Upload states, mobile](openbox-wireframes/view-05-upload-states-mobile.svg) |
 
 ### Rename
 
@@ -89,7 +97,7 @@ Only the owner can rename a file. Rename opens a dialog filled with the current 
 
 | Desktop | Mobile |
 |---|---|
-| ![Rename, desktop](openbox-wireframes/view-05-rename-desktop.svg) | ![Rename, mobile](openbox-wireframes/view-05-rename-mobile.svg) |
+| ![Rename, desktop](openbox-wireframes/view-06-rename-desktop.svg) | ![Rename, mobile](openbox-wireframes/view-06-rename-mobile.svg) |
 
 ### Confirm delete
 
@@ -97,15 +105,15 @@ Delete always asks first and names the file. On mobile the same dialog fills the
 
 | Desktop | Mobile |
 |---|---|
-| ![Confirm delete, desktop](openbox-wireframes/view-06-confirm-delete-desktop.svg) | ![Confirm delete, mobile](openbox-wireframes/view-06-confirm-delete-mobile.svg) |
+| ![Confirm delete, desktop](openbox-wireframes/view-07-confirm-delete-desktop.svg) | ![Confirm delete, mobile](openbox-wireframes/view-07-confirm-delete-mobile.svg) |
 
 ### Sharing: file you can edit
 
-Kate joined Q4 Budget.xls through a Can edit link. Files shared with you never show Share: only the owner can share a file. Shared by me shows Members instead of Owner.
+Kate joined Q4 Budget.xls through a Can edit link. Files shared with you never show Share: only the owner can share a file. Both lists show the access you hold. Owners aren't named anywhere in the app.
 
 | Desktop | Mobile |
 |---|---|
-| ![Sharing: file you can edit, desktop](openbox-wireframes/view-07-shared-can-edit-desktop.svg) | ![Sharing: file you can edit, mobile](openbox-wireframes/view-07-shared-can-edit-mobile.svg) |
+| ![Sharing: file you can edit, desktop](openbox-wireframes/view-08-shared-can-edit-desktop.svg) | ![Sharing: file you can edit, mobile](openbox-wireframes/view-08-shared-can-edit-mobile.svg) |
 
 ### Sharing: view-only file
 
@@ -113,7 +121,7 @@ Kate can only view Brand guide.pdf.
 
 | Desktop | Mobile |
 |---|---|
-| ![Sharing: view-only file, desktop](openbox-wireframes/view-08-shared-view-only-desktop.svg) | ![Sharing: view-only file, mobile](openbox-wireframes/view-08-shared-view-only-mobile.svg) |
+| ![Sharing: view-only file, desktop](openbox-wireframes/view-09-shared-view-only-desktop.svg) | ![Sharing: view-only file, mobile](openbox-wireframes/view-09-shared-view-only-mobile.svg) |
 
 ### Share
 
@@ -121,7 +129,7 @@ Share shows only on files you own, and lists the file's links: there is no list 
 
 | Desktop | Mobile |
 |---|---|
-| ![Share, desktop](openbox-wireframes/view-09-share-links-desktop.svg) | ![Share, mobile](openbox-wireframes/view-09-share-links-mobile.svg) |
+| ![Share, desktop](openbox-wireframes/view-10-share-links-desktop.svg) | ![Share, mobile](openbox-wireframes/view-10-share-links-mobile.svg) |
 
 ### Create link
 
@@ -129,7 +137,7 @@ Pick what the link allows and when it expires: 1 day, 7 days or 30 days from now
 
 | Desktop | Mobile |
 |---|---|
-| ![Create link, desktop](openbox-wireframes/view-10-create-link-desktop.svg) | ![Create link, mobile](openbox-wireframes/view-10-create-link-mobile.svg) |
+| ![Create link, desktop](openbox-wireframes/view-11-create-link-desktop.svg) | ![Create link, mobile](openbox-wireframes/view-11-create-link-mobile.svg) |
 
 ### Link created
 
@@ -137,7 +145,7 @@ Done (× on mobile) closes it; the link then shows in Share, without its URL.
 
 | Desktop | Mobile |
 |---|---|
-| ![Link created, desktop](openbox-wireframes/view-11-link-created-desktop.svg) | ![Link created, mobile](openbox-wireframes/view-11-link-created-mobile.svg) |
+| ![Link created, desktop](openbox-wireframes/view-12-link-created-desktop.svg) | ![Link created, mobile](openbox-wireframes/view-12-link-created-mobile.svg) |
 
 ### Other confirmations
 
@@ -145,15 +153,15 @@ Replace, Remove my access and Delete link ask first too. On mobile each is the s
 
 | Desktop | Mobile |
 |---|---|
-| ![Other confirmations, desktop](openbox-wireframes/view-12-confirmations-desktop.svg) | ![Other confirmations, mobile](openbox-wireframes/view-12-confirmations-mobile.svg) |
+| ![Other confirmations, desktop](openbox-wireframes/view-13-confirmations-desktop.svg) | ![Other confirmations, mobile](openbox-wireframes/view-13-confirmations-mobile.svg) |
 
 ### Search
 
-Typing 2+ characters replaces the list with matching names from your files and files shared with you. Owner shows whose file each result is; Budget 2027 draft.xlsx was shared with you, so it has no Share. Clearing the box goes back to the list you were in.
+Typing 2+ characters replaces the list with matching names from your files and files shared with you. Your access shows what you can do with each result: Full access on your own files. Budget 2027 draft.xlsx was shared with you, so it has no Share. Clearing the box goes back to the list you were in.
 
 | Desktop | Mobile |
 |---|---|
-| ![Search, desktop](openbox-wireframes/view-13-search-desktop.svg) | ![Search, mobile](openbox-wireframes/view-13-search-mobile.svg) |
+| ![Search, desktop](openbox-wireframes/view-14-search-desktop.svg) | ![Search, mobile](openbox-wireframes/view-14-search-mobile.svg) |
 
 ### Empty states
 
@@ -161,7 +169,7 @@ Every list has an empty state: My files, Shared with me, Shared by me, search an
 
 | Desktop | Mobile |
 |---|---|
-| ![Empty states, desktop](openbox-wireframes/view-14-empty-desktop.svg) | ![Empty states, mobile](openbox-wireframes/view-14-empty-mobile.svg) |
+| ![Empty states, desktop](openbox-wireframes/view-15-empty-desktop.svg) | ![Empty states, mobile](openbox-wireframes/view-15-empty-mobile.svg) |
 
 ### Loading
 
@@ -169,7 +177,7 @@ Lists show placeholder rows until the first page arrives, and the Share dialog u
 
 | Desktop | Mobile |
 |---|---|
-| ![Loading, desktop](openbox-wireframes/view-15-loading-desktop.svg) | ![Loading, mobile](openbox-wireframes/view-15-loading-mobile.svg) |
+| ![Loading, desktop](openbox-wireframes/view-16-loading-desktop.svg) | ![Loading, mobile](openbox-wireframes/view-16-loading-mobile.svg) |
 
 ### Page errors
 
@@ -177,7 +185,7 @@ A failed load offers Try again. A link that expired, was deleted or was never va
 
 | Desktop | Mobile |
 |---|---|
-| ![Page errors, desktop](openbox-wireframes/view-16-errors-desktop.svg) | ![Page errors, mobile](openbox-wireframes/view-16-errors-mobile.svg) |
+| ![Page errors, desktop](openbox-wireframes/view-17-errors-desktop.svg) | ![Page errors, mobile](openbox-wireframes/view-17-errors-mobile.svg) |
 
 ### Action and input errors
 
@@ -185,11 +193,36 @@ A failed action shows a toast naming the file, from its error message or the nam
 
 | Desktop | Mobile |
 |---|---|
-| ![Action and input errors, desktop](openbox-wireframes/view-17-action-errors-desktop.svg) | ![Action and input errors, mobile](openbox-wireframes/view-17-action-errors-mobile.svg) |
+| ![Action and input errors, desktop](openbox-wireframes/view-18-action-errors-desktop.svg) | ![Action and input errors, mobile](openbox-wireframes/view-18-action-errors-mobile.svg) |
 
 ## 4. API
 
 Base URL `https://<domain>/api/v1`. A single API instance serves every request, and there are no background jobs: all work happens inside the request that asks for it. Every request carries the session cookie set by sign-in.
+
+Every response with a body is the same JSON envelope. `204 No Content` responses have no body.
+
+```json
+{
+  "data": {},                             // the result; null when the request failed
+  "errors": []                            // Error objects; [] on success
+}
+```
+
+When a request fails, `data` is `null` and `errors` holds the error. `code` is the value listed in each endpoint's error table, for the app to branch on; `message` is a sentence the app can show as it is. A `422 validation_failed` lists one error per problem.
+
+```http
+HTTP/1.1 404 Not Found
+
+{
+  "data": null,
+  "errors": [
+    {                                     // Error
+      "code": "not_found",
+      "message": "File b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40 doesn't exist or you can't see it."
+    }
+  ]
+}
+```
 
 ### 4.1 Files
 
@@ -216,22 +249,17 @@ HTTP/1.1 200 OK
 
 {
   "data": {
-    "viewer": {
-      "id": "a91d4e07-2c3b-4f58-8e6a-0b7c9d1e2f34",
-      "display_name": "Kate",
-      "email": "kate@acme.com"
-    },
     "upload_policy": null,                // set only when listing your own files
     "items": [
       {                                         // File — the same object everywhere below
         "id": "b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40",
         "name": "Q4 Budget.xls",
-        "owner": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
+        "owner_id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
         "mime_type": "application/vnd.ms-excel",
         "size_bytes": 183223,
         "access": "granted",                    // "owner" | "granted"
         "permissions": ["view", "edit"],        // what you may do
-        "member_count": 6,                      // owner included
+        "is_shared": true,                      // someone besides the owner has access
         "modified_at": "2026-03-17T09:33:00Z",
         "grants": [                             // [] unless it is shared with you
           {
@@ -248,7 +276,7 @@ HTTP/1.1 200 OK
 }
 ```
 
-A file's `permissions` are all three on files you own, and what your links gave you on shared files. Rename and Share show only on files you own; Remove my access shows when `access` is `"granted"`.
+A file's `permissions` are all three on files you own, and what your links gave you on shared files. Rename and Share show only on files you own; Remove my access shows when `access` is `"granted"`. The Shared badge shows on files you own whose `is_shared` is true.
 
 When listing your own files, `upload_policy` is:
 
@@ -285,12 +313,12 @@ HTTP/1.1 200 OK
   "data": {
     "id": "f7a2c9e4-1b6d-4f83-a0e5-7c4b2d9f1a68",
     "name": "Staff review 2026.docx",
-    "owner": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
+    "owner_id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
     "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "size_bytes": 48211,
     "access": "owner",
     "permissions": ["view", "edit", "delete"],
-    "member_count": 6,
+    "is_shared": true,
     "modified_at": "2026-11-05T09:41:00Z",
     "grants": []
   },
@@ -327,7 +355,7 @@ HTTP/1.1 204 No Content
 
 #### Remove my access — `POST /files/{id}/remove-access`
 
-Removes a file shared with you from your list by deleting all your grants on it, so you leave `member_count`. The owner and everyone else keep their access.
+Removes a file shared with you from your list by deleting all your grants on it, The owner and everyone else keep their access.
 
 ```http
 POST /api/v1/files/8e3b1f6d-2a9c-4d7e-b5f0-6c1a9d4e2b78/remove-access
@@ -371,24 +399,15 @@ HTTP/1.1 200 OK
 
 #### Start upload — `POST /uploads`
 
-Reserves new files among your own files and returns where to send each one's bytes. Each name stays reserved until the upload finishes or expires; starting the same name again replaces your own pending upload. Rejected files are listed in `errors`, each `message` naming the file; the rest can be uploaded, and if all are rejected the response is still `201` with `data: []`.
+Reserves a new file among your own files and returns where to send its bytes. Files are uploaded one at a time. The name stays reserved until the upload finishes or expires; starting the same name again replaces your own pending upload.
 
 ```http
 POST /api/v1/uploads
 
 {
-  "files": [
-    {
-      "name": "Q1 Budget.xlsx",
-      "size_bytes": 201734,
-      "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    },
-    {
-      "name": "Brand brief v2.pdf",
-      "size_bytes": 1992294,
-      "mime_type": "application/pdf"
-    }
-  ]
+  "name": "Q1 Budget.xlsx",
+  "size_bytes": 201734,
+  "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 }
 ```
 
@@ -396,24 +415,15 @@ POST /api/v1/uploads
 HTTP/1.1 201 Created
 
 {
-  "data": [
-    {                                     // Upload — the same object everywhere below
-      "id": "4c7b2e9f-8a3d-4b1c-a6e4-9f0d2c5b8e73",
-      "name": "Q1 Budget.xlsx",
-      "put_url": "https://store.blob.vercel-storage.com/uploads/4c7b2e9f-8a3d-4b1c-a6e4-9f0d2c5b8e73?token=8f2c1a9e5d3b",
-      "put_headers": {
-        "content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      },
-      "expires_at": "2026-11-05T10:15:00Z"
+  "data": {                               // Upload — the same object everywhere below
+    "id": "4c7b2e9f-8a3d-4b1c-a6e4-9f0d2c5b8e73",
+    "name": "Q1 Budget.xlsx",
+    "put_url": "https://store.blob.vercel-storage.com/uploads/4c7b2e9f-8a3d-4b1c-a6e4-9f0d2c5b8e73?token=8f2c1a9e5d3b",
+    "put_headers": {
+      "content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     },
-    {
-      "id": "6d1f8a3c-2e7b-4c9d-b5a0-3f8e1c6d9b42",
-      "name": "Brand brief v2.pdf",
-      "put_url": "https://store.blob.vercel-storage.com/uploads/6d1f8a3c-2e7b-4c9d-b5a0-3f8e1c6d9b42?token=c41e7b2a9d05",
-      "put_headers": { "content-type": "application/pdf" },
-      "expires_at": "2026-11-05T10:15:00Z"
-    }
-  ],
+    "expires_at": "2026-11-05T10:15:00Z"
+  },
   "errors": []
 }
 ```
@@ -421,11 +431,10 @@ HTTP/1.1 201 Created
 | Status | `code` | When |
 |---|---|---|
 | `401` | `unauthenticated` | No valid session |
-| `422` | `validation_failed` | `files` is empty or has more than 100 entries, or a malformed body |
-| per file | `unsupported_file_type` | The extension isn't allowed or doesn't match `mime_type` |
-| per file | `file_too_large` | Over 25 MB |
-| per file | `name_conflict` | You already have a file with that name |
-| per file | `validation_failed` | Empty name, over 255 characters, or contains `/` |
+| `409` | `name_conflict` | You already have a file with that name |
+| `413` | `file_too_large` | Over 25 MB |
+| `415` | `unsupported_file_type` | The extension isn't allowed or doesn't match `mime_type` |
+| `422` | `validation_failed` | Empty name, over 255 characters, contains `/`, or a malformed body |
 
 #### Replace contents — `POST /files/{id}/replace`
 
@@ -476,12 +485,12 @@ HTTP/1.1 200 OK
   "data": {
     "id": "91f0c6b3-5d2e-4a7f-b4c9-8e3a1d6f2b05",
     "name": "Q1 Budget.xlsx",
-    "owner": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
+    "owner_id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
     "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "size_bytes": 201734,
     "access": "owner",
     "permissions": ["view", "edit", "delete"],
-    "member_count": 1,
+    "is_shared": false,
     "modified_at": "2026-11-05T10:02:00Z",
     "grants": []
   },
@@ -617,12 +626,12 @@ HTTP/1.1 200 OK
   "data": {
     "id": "b5d8e3a1-0f7c-4c29-9e6b-3a2d8f1c7e40",
     "name": "Q4 Budget.xls",
-    "owner": { "id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8", "display_name": "Alex" },
+    "owner_id": "3f6b1c2e-8d4a-4e71-9b2c-5a0f7d9e41c8",
     "mime_type": "application/vnd.ms-excel",
     "size_bytes": 190112,
     "access": "granted",
     "permissions": ["view", "edit"],
-    "member_count": 7,
+    "is_shared": true,
     "modified_at": "2026-11-05T10:06:00Z",
     "grants": [
       {

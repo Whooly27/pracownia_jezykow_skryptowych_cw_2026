@@ -28,11 +28,14 @@ DIAGRAMS = {
         ("close",),
         ("ret", 1, 0, "200 next 50 files, has_more"),
     ]),
-    "upload-a-file-v4": (["Browser", "API", "Postgres", "Vercel Blob"], [
-        ("msg", 0, 1, "POST /uploads {files}"),
+    "upload-a-file-v5": (["Browser", "API", "Postgres", "Vercel Blob"], [
+        ("msg", 0, 1, "POST /uploads {name, size_bytes, mime_type}"),
         ("msg", 1, 2, "type allowed? size allowed? name free?"),
-        ("msg", 1, 2, "save allowed files as pending"),
-        ("ret", 1, 0, "201 uploads + errors for rejected files"),
+        ("open", "alt", "file rejected"),
+        ("ret", 1, 0, "409 name_conflict · 413 file_too_large · 415 unsupported_file_type"),
+        ("close",),
+        ("msg", 1, 2, "save the file as pending"),
+        ("ret", 1, 0, "201 upload {put_url, put_headers}"),
         ("msg", 0, 3, "PUT the file's bytes to put_url"),
         ("open", "alt", "size or type differs from what was declared"),
         ("ret", 3, 0, "storage rejects the PUT"),

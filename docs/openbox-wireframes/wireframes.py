@@ -108,6 +108,17 @@ def icon_file(c, x, y, tag=""):
         c.text(x + 9.5, y + 17, tag, 7, 700, MUTED, "middle")
 
 
+def shared_badge(c, x, y):
+    """Small pill after a file's name: someone else has access to it (is_shared)."""
+    w = 66
+    c.rect(x, y - 13, w, 18, fill=BLUE_SOFT, stroke=None, r=9)
+    for cx, cy in ((x + 10, y - 4), (x + 16, y - 8), (x + 16, y)):
+        c.circle(cx, cy, 2, fill=BLUE, stroke="none")
+    c.line(x + 10, y - 4, x + 16, y - 8, BLUE, 1.2)
+    c.line(x + 10, y - 4, x + 16, y, BLUE, 1.2)
+    c.text(x + 24, y, "Shared", 11, 600, BLUE)
+
+
 def placeholder(c, x, y, w, h, label="illustration"):
     c.rect(x, y, w, h, fill=FILL, stroke=LINE, r=6, dash="6 4")
     c.line(x, y, x + w, y + h, LINE, 1, "6 4")
@@ -164,7 +175,7 @@ def search_box(c, value=None, x=700, y=62, w=216, h=36):
     c.text(x + 34, y + h / 2 + 5, value or "Search", 13, 400, INK if value else "#9aa3b2")
 
 
-COLS = [("", 0), ("Name ▾", 550), ("Modified", 240), ("Members", 146)]
+COLS = [("", 0), ("Name ▾", 550), ("Modified", 386)]
 
 
 def table(c, x, y, rows, cols=COLS):
@@ -181,6 +192,8 @@ def table(c, x, y, rows, cols=COLS):
         nx = x + cols[0][1]
         icon_file(c, nx + 2, ry + 12, r.get("tag", ""))
         c.text(nx + 34, ry + 28, r["name"], 13, 500, INK)
+        if r.get("shared"):
+            shared_badge(c, nx + 34 + tw(r["name"], 13) * 0.82 + 10, ry + 28)
         cx = nx + cols[1][1]
         for (label, w), cell in zip(cols[2:], r["cells"]):
             if isinstance(cell, tuple):
@@ -229,11 +242,11 @@ def modal(c, w, h, title):
 
 
 OWNER_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "cells": ["3/24/2026 9:12AM", "3 members"]},
-    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "cells": ["3/22/2026 4:40PM", "1 member"]},
-    {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "cells": ["3/20/2026 3:15PM", "9 members"]},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["3/17/2026 10:33AM", "6 members"]},
-    {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "cells": ["3/15/2026 1:28PM", "6 members"]},
+    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "shared": True, "cells": ["3/24/2026 9:12AM"]},
+    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "cells": ["3/22/2026 4:40PM"]},
+    {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "shared": True, "cells": ["3/20/2026 3:15PM"]},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "shared": True, "cells": ["3/17/2026 10:33AM"]},
+    {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "shared": True, "cells": ["3/15/2026 1:28PM"]},
 ]
 
 
@@ -288,11 +301,11 @@ def s_files_file():
     return c
 
 
-SHARED_COLS = [("", 0), ("Name ▾", 500), ("Owner", 200), ("Modified", 236)]
+SHARED_COLS = [("", 0), ("Name ▾", 500), ("Your access", 200), ("Modified", 236)]
 SHARED_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "cells": ["Robin", "10/28/2026 2:10PM"]},
-    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "cells": ["Robin", "10/12/2026 11:05AM"]},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["Alex", "3/17/2026 10:33AM"]},
+    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "cells": ["Can view", "10/28/2026 2:10PM"]},
+    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "cells": ["Can view", "10/12/2026 11:05AM"]},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["Can edit", "3/17/2026 10:33AM"]},
 ]
 
 
@@ -462,7 +475,7 @@ def s_link_created():
     return c
 
 
-SEARCH_COLS = [("", 0), ("Name ▾", 500), ("Owner", 286), ("Modified", 150)]
+SEARCH_COLS = [("", 0), ("Name ▾", 500), ("Your access", 286), ("Modified", 150)]
 
 
 def s_search():
@@ -470,9 +483,9 @@ def s_search():
     shell(c, "Files", ["Search"], "openbox.app/search?q=budget", search="budget")
     c.text(CX + 92, 128, "for “budget”", 16, 400, MUTED)
     rows = [
-        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "cells": ["Robin", "10/2/2026 4:12PM"], "selected": True},
-        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "cells": ["You", "3/17/2026 10:33AM"]},
-        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "cells": ["You", "2/9/2026 8:20AM"]},
+        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "cells": ["Can view", "10/2/2026 4:12PM"], "selected": True},
+        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "shared": True, "cells": ["Full access", "3/17/2026 10:33AM"]},
+        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "cells": ["Full access", "2/9/2026 8:20AM"]},
     ]
     table(c, CX, 160, rows, SEARCH_COLS)
     action_bar(c, ["Download", "Remove my access"])
@@ -529,6 +542,8 @@ def m_rows(c, y, rows, selected=None):
             c.rect(0, ry, MW, 64, fill=SEL, stroke=None, r=0)
         icon_file(c, 22, ry + 19, r.get("tag", ""))
         c.text(56, ry + 28, r["name"], 14, 500, INK)
+        if r.get("shared"):
+            shared_badge(c, 56 + tw(r["name"], 14) * 0.82 + 10, ry + 28)
         c.text(56, ry + 46, r["sub"], 12, 400, MUTED)
         c.text(MW - 24, ry + 36, "⋯", 18, 700, MUTED, "middle")
         c.line(56, ry + 64, MW, ry + 64, SEL)
@@ -590,16 +605,16 @@ def m_sheet(c, item, sub, actions, tag=""):
 
 
 M_OWNER_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "sub": "3/24/2026 · 3 members"},
-    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "sub": "3/22/2026 · 1 member"},
-    {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "sub": "3/20/2026 · 9 members"},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "3/17/2026 · 6 members"},
-    {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "sub": "3/15/2026 · 6 members"},
+    {"kind": "file", "tag": "PDF", "name": "Campaign plan.pdf", "shared": True, "sub": "3/24/2026"},
+    {"kind": "file", "tag": "PNG", "name": "Logo draft.png", "sub": "3/22/2026"},
+    {"kind": "file", "tag": "PPT", "name": "Design all hands 3-22.pptx", "shared": True, "sub": "3/20/2026"},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "shared": True, "sub": "3/17/2026"},
+    {"kind": "file", "tag": "DOC", "name": "Staff review.docx", "shared": True, "sub": "3/15/2026"},
 ]
 M_SHARED_ROWS = [
-    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "sub": "Robin · 10/28/2026"},
-    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "sub": "Robin · 10/12/2026"},
-    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "Alex · 3/17/2026"},
+    {"kind": "file", "tag": "PDF", "name": "Brand guide.pdf", "sub": "Can view · 10/28/2026"},
+    {"kind": "file", "tag": "PNG", "name": "Logo final.png", "sub": "Can view · 10/12/2026"},
+    {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "Can edit · 3/17/2026"},
 ]
 
 
@@ -650,21 +665,21 @@ def m_sign_in():
 def m_files_file():
     c = C(MW, MH, clip_r=28)
     m_files_base(c, 2)
-    m_sheet(c, "Design all hands 3-22.pptx", "PPTX · 4.8 MB · 9 members", ["Share", "Download", "Replace", "Rename", "Delete"], tag="PPT")
+    m_sheet(c, "Design all hands 3-22.pptx", "PPTX · 4.8 MB", ["Share", "Download", "Replace", "Rename", "Delete"], tag="PPT")
     return c
 
 
 def m_shared_can_edit():
     c = C(MW, MH, clip_r=28)
     m_shared_base(c, 2)
-    m_sheet(c, "Q4 Budget.xls", "Owner Alex · Can edit", ["Download", "Replace", "Remove my access"], tag="XLS")
+    m_sheet(c, "Q4 Budget.xls", "XLS · Can edit", ["Download", "Replace", "Remove my access"], tag="XLS")
     return c
 
 
 def m_shared_view_only():
     c = C(MW, MH, clip_r=28)
     m_shared_base(c, 0)
-    m_sheet(c, "Brand guide.pdf", "Owner Robin · Can view", ["Download", "Remove my access"], tag="PDF")
+    m_sheet(c, "Brand guide.pdf", "PDF · Can view", ["Download", "Remove my access"], tag="PDF")
     return c
 
 
@@ -729,12 +744,12 @@ def m_search_screen():
     c.text(MW - 20, 81, "Cancel", 14, 600, BLUE, "end")
     c.text(20, 128, "Results for “budget”", 13, 500, MUTED)
     m_rows(c, 144, [
-        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "sub": "Robin · 10/2/2026"},
-        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "sub": "You · 3/17/2026"},
-        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "sub": "You · 2/9/2026"},
+        {"kind": "file", "tag": "XLS", "name": "Budget 2027 draft.xlsx", "sub": "Can view · 10/2/2026"},
+        {"kind": "file", "tag": "XLS", "name": "Q4 Budget.xls", "shared": True, "sub": "Full access · 3/17/2026"},
+        {"kind": "file", "tag": "CSV", "name": "Travel budget.csv", "sub": "Full access · 2/9/2026"},
     ], selected=0)
     m_tabbar(c, "Files")
-    m_sheet(c, "Budget 2027 draft.xlsx", "Owner Robin · Can view", ["Download", "Remove my access"], tag="XLS")
+    m_sheet(c, "Budget 2027 draft.xlsx", "XLSX · Can view", ["Download", "Remove my access"], tag="XLS")
     return c
 
 
@@ -865,46 +880,77 @@ def alert_badge(c, cx, cy, r=9):
     c.text(cx, cy + 4.5, "!", 13, 800, "#ffffff", "middle")
 
 
-UPLOADS = [("XLSX", "Q1 Budget.xlsx", "done", "197 KB"),
-           ("PDF", "Brand brief v2.pdf", 0.64, "1.2 of 1.9 MB"),
-           ("EXE", "setup.exe", "error", "Files of type .exe can't be uploaded.")]
+ALLOWED = "PDF, images, Office documents and text files, up to 25 MB"
 
 
-def panel_row_h(state):
-    return 74 if isinstance(state, float) else 58
+def drop_zone(c, x, y, w, h, mobile=False):
+    c.rect(x, y, w, h, fill=BLUE_SOFT, stroke=BLUE, r=10, dash="6 5")
+    cx = x + w / 2
+    c.o.append(f'<path d="M{cx},{y + 46} V{y + 20} M{cx - 9},{y + 29} L{cx},{y + 20} L{cx + 9},{y + 29}" fill="none" stroke="{BLUE}" '
+               'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>')
+    if mobile:
+        button(c, cx - 70, y + 60, 140, "Choose a file", "primary", 38)
+    else:
+        c.o.append(f'<text x="{cx}" y="{y + 74}" font-size="14" font-weight="500" fill="{INK}" text-anchor="middle">'
+                   f'Drop a file here, or <tspan font-weight="700" fill="{BLUE}">browse</tspan></text>')
 
 
-def panel_h(rows):
-    return 56 + sum(panel_row_h(st) for _, _, st, _ in rows) + 4
+def upload_field(c, x, y, w, state="ready", tag="XLSX", name="Q1 Budget.xlsx"):
+    """The dialog's one file field. state: ready, uploading, error or uploaded. Returns its height."""
+    h = 76 if state == "uploading" else 60
+    c.rect(x, y, w, h, fill="#fff8f7" if state == "error" else "#ffffff",
+           stroke=DANGER if state == "error" else LINE, sw=1.5 if state == "error" else 1, r=8)
+    icon_file(c, x + 14, y + (18 if state == "uploading" else 19), tag[:3])
+    c.text(x + 48, y + 26, fit(name, w - 120, 13), 13, 500, INK)
+    if state == "ready":
+        c.text(x + 48, y + 44, "197 KB", 12, 400, MUTED)
+        x_icon(c, x + w - 20, y + 30, MUTED, 4)
+    elif state == "uploading":
+        c.text(x + w - 16, y + 26, "64%", 12, 600, BLUE, "end")
+        bw = w - 48 - 16
+        c.rect(x + 48, y + 38, bw, 6, fill=SEL, stroke=None, r=3)
+        c.rect(x + 48, y + 38, bw * 0.64, 6, fill=BLUE, stroke=None, r=3)
+        c.text(x + 48, y + 62, "126 of 197 KB", 11, 400, MUTED)
+    elif state == "error":
+        c.text(x + 48, y + 44, fit("Upload failed. Check your connection.", w - 90, 12), 12, 500, DANGER)
+        alert_badge(c, x + w - 22, y + 30)
+    else:
+        c.text(x + 48, y + 44, "Uploaded · 197 KB", 12, 400, MUTED)
+        check_badge(c, x + w - 22, y + 30)
+    return h
 
 
-def upload_panel(c, x, y, w, rows=UPLOADS, title="Uploading 1 file"):
-    h = panel_h(rows)
-    shadow(c, x, y, w, h, 12)
-    c.rect(x, y, w, h, fill="#ffffff", stroke=LINE, r=12)
-    c.text(x + 18, y + 31, title, 14, 700, INK)
-    c.o.append(f'<path d="M{x+w-58},{y+22} l5,5 l5,-5" fill="none" stroke="{MUTED}" stroke-width="1.6" stroke-linecap="round"/>')
-    x_icon(c, x + w - 24, y + 26, MUTED, 4.5)
-    c.line(x, y + 48, x + w, y + 48, SEL)
-    ry = y + 56
-    for tag, name, state, detail in rows:
-        icon_file(c, x + 18, ry + 10, tag[:3])
-        c.text(x + 52, ry + 22, fit(name, w - 120, 13), 13, 500, INK)
-        if state == "done":
-            c.text(x + 52, ry + 40, detail, 12, 400, MUTED)
-            check_badge(c, x + w - 28, ry + 24)
-        elif state == "error":
-            c.text(x + 52, ry + 40, fit(detail, w - 100, 12), 12, 500, DANGER)
-            alert_badge(c, x + w - 28, ry + 24)
-        else:
-            bw = w - 52 - 60
-            c.rect(x + 52, ry + 32, bw, 6, fill=SEL, stroke=None, r=3)
-            c.rect(x + 52, ry + 32, bw * state, 6, fill=BLUE, stroke=None, r=3)
-            c.text(x + 52 + bw, ry + 22, f"{state:.0%}", 12, 600, BLUE, "end")
-            c.text(x + 52, ry + 54, detail, 11, 400, MUTED)
-            x_icon(c, x + w - 28, ry + 26, MUTED, 4)
-        ry += panel_row_h(state)
-    return y + h
+def busy_button(c, x, y, w, label, h=34):
+    """A primary button waiting for its request: lighter, with a spinner, ignoring clicks."""
+    c.rect(x, y, w, h, fill="#9ec5ff", stroke="#9ec5ff")
+    tx = x + w / 2 - tw(label, 13) * 0.45 + 10
+    cx, cy = tx - 16, y + h / 2
+    c.o.append(f'<circle cx="{cx}" cy="{cy}" r="6" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2"/>'
+               f'<path d="M{cx},{cy - 6} a6,6 0 0,1 6,6" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>')
+    c.text(tx, y + h / 2 + 5, label, 13, 600, "#ffffff")
+
+
+def s_upload_dialog():
+    c = C()
+    files_base(c, OWNER_ROWS)
+    x, y = modal(c, 520, 336, "Upload a file")
+    w = 472
+    drop_zone(c, x, y - 6, w, 100)
+    c.text(x, y + 116, ALLOWED, 12, 400, MUTED)
+    upload_field(c, x, y + 130, w)
+    button(c, x + w - 96 - 10 - 88, y + 210, 88, "Cancel")
+    button(c, x + w - 96, y + 210, 96, "Upload", "primary")
+    return c
+
+
+def m_upload_dialog():
+    c = C(MW, MH, clip_r=28)
+    m_page(c, "Upload a file")
+    drop_zone(c, 20, 116, MW - 40, 116, mobile=True)
+    c.text(20, 256, "PDF, images, Office and text files, up to 25 MB", 12, 400, MUTED)
+    upload_field(c, 20, 272, MW - 40)
+    m_bottom_button(c, "Upload")
+    return c
 
 
 def confirm_h(lines):
@@ -992,11 +1038,31 @@ def toast(c, cx, y, message, action="Dismiss"):
 
 # ---------- state screens ----------
 
-def s_upload():
+UPLOAD_STATES = [("Ready", "ready", [("Cancel", "secondary"), ("Upload", "primary")]),
+                 ("Uploading", "uploading", [("Cancel", "secondary"), ("Uploading…", "busy")]),
+                 ("Error", "error", [("Cancel", "secondary"), ("Try again", "primary")]),
+                 ("Uploaded", "uploaded", [("Done", "primary")])]
+
+
+def s_upload_states():
     c = C()
-    rows = OWNER_ROWS[:3] + [{"kind": "file", "tag": "XLS", "name": "Q1 Budget.xlsx", "cells": ["11/5/2026 11:02AM", "1 member"]}] + OWNER_ROWS[3:]
-    files_base(c, rows)
-    upload_panel(c, CX + 536, 376, CW - 536)
+    c.rect(0, 0, W, H, fill=FILL, stroke=None, r=0)
+    w, gap, ch = 456, 24, 222
+    for i, (label, state, actions) in enumerate(UPLOAD_STATES):
+        x, y = CX + (i % 2) * (w + gap), 72 + (i // 2) * (ch + 56)
+        sheet_label(c, x, y - 16, label)
+        c.rect(x, y, w, ch, fill="#ffffff", stroke=LINE, r=12)
+        c.text(x + 24, y + 38, "Upload a file", 17, 700, INK)
+        upload_field(c, x + 24, y + 60, w - 48, state)
+        bx = x + w - 24
+        for text, kind in reversed(actions):
+            bw = tw(text, 13) + (52 if kind == "busy" else 36)
+            bx -= bw
+            if kind == "busy":
+                busy_button(c, bx, y + ch - 58, bw, text)
+            else:
+                button(c, bx, y + ch - 58, bw, text, kind)
+            bx -= 10
     return c
 
 
@@ -1070,9 +1136,8 @@ def s_loading():
         c.rect(CX, ry + 12, 22, 22, fill=SKEL, stroke=None, r=4)
         skel(c, CX + 34, ry + 18, nw)
         skel(c, CX + 550, ry + 18, mw)
-        skel(c, CX + 790, ry + 18, 70)
         c.line(CX, ry + 46, CX + CW, ry + 46, SEL)
-    for label, x in [("Name", CX), ("Modified", CX + 550), ("Members", CX + 790)]:
+    for label, x in [("Name", CX), ("Modified", CX + 550)]:
         c.text(x, 178, label, 12, 600, MUTED)
     return c
 
@@ -1101,42 +1166,15 @@ def m_state(c, kind, title, lines, actions, cy=360):
         state_buttons(c, MW / 2, cy + 136 + len(lines) * 20 + 14, actions, h=42)
 
 
-def m_progress_sheet(c, title, rows):
-    """Phone version of the progress panel: a bottom sheet with large rows, above the tab bar."""
-    c.rect(0, 0, MW, MH - 64, fill=INK, stroke=None, r=0, opacity=0.35)
-    rh = 72
-    y = 196 + 3 * 64          # top edge on a row divider
-    h = MH - 64 - y
-    c.rect(0, y, MW, h, fill="#ffffff", stroke=None, r=24)
-    c.rect(0, y + h - 24, MW, 24, fill="#ffffff", stroke=None, r=0)
-    c.line(0, MH - 64, MW, MH - 64, LINE)
-    c.rect(MW / 2 - 20, y + 10, 40, 4, fill=LINE, stroke=None, r=2)
-    c.text(20, y + 50, title, 17, 700, INK)
-    c.text(MW - 20, y + 50, "Hide", 15, 600, BLUE, "end")
-    ry = y + 76
-    for tag, name, state, detail in rows:
-        c.line(20, ry, MW, ry, SEL)
-        icon_file(c, 22, ry + 20, tag[:3])
-        c.text(58, ry + 30, fit(name, MW - 140, 15), 15, 500, INK)
-        if state == "done":
-            c.text(58, ry + 52, detail, 13, 400, MUTED)
-            check_badge(c, MW - 32, ry + 36, 11)
-        elif state == "error":
-            c.text(58, ry + 52, fit(detail, MW - 110, 13), 13, 500, DANGER)
-            alert_badge(c, MW - 32, ry + 36, 11)
-        else:
-            bw = MW - 58 - 92
-            c.rect(58, ry + 42, bw, 6, fill=SEL, stroke=None, r=3)
-            c.rect(58, ry + 42, bw * state, 6, fill=BLUE, stroke=None, r=3)
-            c.text(58, ry + 64, f"{detail} · {state:.0%}", 12, 400, MUTED)
-            c.text(MW - 20, ry + 41, "Cancel", 14, 600, BLUE, "end")
-        ry += rh
-
-
-def m_upload():
+def m_upload_states():
     c = C(MW, MH, clip_r=28)
-    m_files_base(c, rows=M_OWNER_ROWS[:3] + [{"kind": "file", "tag": "XLS", "name": "Q1 Budget.xlsx", "sub": "11/5/2026 · 1 member"}] + M_OWNER_ROWS[3:])
-    m_progress_sheet(c, "Uploading 1 file", UPLOADS)
+    m_page(c, "Upload a file")
+    y = 132
+    for label, state, actions in UPLOAD_STATES:
+        sheet_label(c, 20, y, label)
+        h = upload_field(c, 20, y + 12, MW - 40, state)
+        c.text(MW - 20, y, " · ".join(a for a, _ in actions), 11, 600, MUTED, "end")
+        y += h + 52
     return c
 
 
@@ -1202,46 +1240,52 @@ SCREENS = {
     "screen-02-sign-in": ('Sign in', s_sign_in, m_sign_in,
         "Cognito Managed Login with OpenBox branding. Sign-up (name, email, password) and the email code are Cognito's pages too, and so are their errors, such as a wrong password."),
     "screen-03-files-file": ('Files: file selected', s_files_file, m_files_file,
-        "My files lists every file you own. Clicking a row selects that file, and only one file can be selected at a time. "
+        "My files lists every file you own; a Shared badge marks the ones someone else has access to (`is_shared`). Clicking a row selects that file, and only one file can be selected at a time. "
         "The selection opens a toolbar at the bottom (desktop) or an action sheet (mobile) with only the actions the file allows; "
-        "clicking the row again clears it. On mobile, + opens Upload; ⋯ on a row opens the same sheet. The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload panel."),
-    "screen-04-upload": ('Upload', s_upload, m_upload,
-        "Upload opens the file picker; files can also be dropped on the list. Each file uploads on its own: finished files join the list, "
-        "rejected ones show the reason, and the rest keep going. Type and size are checked against `upload_policy` before Start upload, "
-        "so each rejected file gets its own reason. On mobile, progress shows in a bottom sheet above the tab bar. A failed or expired upload shows Try again. "
-        "Cancel stops an upload; its reserved name frees up when it expires. While files are dragged over the list, it shows a dashed outline and “Drop to upload”."),
-    "screen-05-rename": ('Rename', s_rename, m_rename,
+        "clicking the row again clears it. On mobile, + opens Upload; ⋯ on a row opens the same sheet. The owner gets every action, and only the owner sees Share. Replace asks first, then uploads the new contents through the upload dialog."),
+    "screen-04-upload": ('Upload', s_upload_dialog, m_upload_dialog,
+        "Upload opens this dialog (a full page on mobile) for one file at a time. The file is dropped on it or picked with browse (Choose a file on mobile); "
+        "picking another replaces it, and × clears it. It is checked against `upload_policy` as soon as it's chosen, so a wrong type or a file over 25 MB "
+        "shows the reason under it and Upload stays disabled. Dragging a file over the list shows a dashed outline and “Drop to upload”, and dropping it "
+        "opens this dialog; dropping several files shows “Upload one file at a time.”"),
+    "screen-05-upload-states": ('Upload states', s_upload_states, m_upload_states,
+        "The file field changes as the upload goes, and the dialog's buttons change with it. Ready: the chosen file with × to clear it, and Upload. "
+        "Uploading: progress, percentage and bytes sent, while the button shows a spinner and ignores clicks; Cancel (× on mobile) stops the upload, "
+        "and its reserved name frees up when it expires. Error: the field turns red and says why, such as a failed or expired upload or a file the server "
+        "rejects, with Try again; a wrong type or a file over 25 MB shows here before uploading, with Upload disabled. Uploaded: a check, and the file has "
+        "joined the list; Done closes the dialog. On mobile the buttons sit in the bar at the bottom of the page."),
+    "screen-06-rename": ('Rename', s_rename, m_rename,
         "Only the owner can rename a file. Rename opens a dialog filled with the current name. Empty names, names over 255 characters and names with / are caught as you type; "
         "a taken name is caught when the server answers."),
-    "screen-06-confirm-delete": ('Confirm delete', s_confirm_delete, m_confirm_delete,
+    "screen-07-confirm-delete": ('Confirm delete', s_confirm_delete, m_confirm_delete,
         "Delete always asks first and names the file. On mobile the same dialog fills the width."),
-    "screen-07-shared-can-edit": ('Sharing: file you can edit', s_shared_can_edit, m_shared_can_edit,
+    "screen-08-shared-can-edit": ('Sharing: file you can edit', s_shared_can_edit, m_shared_can_edit,
         "Kate joined Q4 Budget.xls through a Can edit link. Files shared with you never show Share: only the owner can share a file. "
-        "Shared by me shows Members instead of Owner."),
-    "screen-08-shared-view-only": ('Sharing: view-only file', s_shared_view_only, m_shared_view_only,
+        "Both lists show the access you hold. Owners aren't named anywhere in the app."),
+    "screen-09-shared-view-only": ('Sharing: view-only file', s_shared_view_only, m_shared_view_only,
         "Kate can only view Brand guide.pdf."),
-    "screen-09-share-links": ('Share', s_share_links, m_share_links,
+    "screen-10-share-links": ('Share', s_share_links, m_share_links,
         "Share shows only on files you own, and lists the file's links: there is no list of people. Each link shows what it gives, when it expires and how many people joined through it. Delete removes the link and everyone who joined through it."),
-    "screen-10-create-link": ('Create link', s_create_link, m_create_link,
+    "screen-11-create-link": ('Create link', s_create_link, m_create_link,
         "Pick what the link allows and when it expires: 1 day, 7 days or 30 days from now, never, or the end of a chosen day in your time zone. "
         "Days before today can't be picked. View can't be unticked. On mobile, the date opens the app's own calendar sheet."),
-    "screen-11-link-created": ('Link created', s_link_created, m_link_created,
+    "screen-12-link-created": ('Link created', s_link_created, m_link_created,
         "Done (× on mobile) closes it; the link then shows in Share, without its URL."),
-    "screen-12-confirmations": ('Other confirmations', s_confirmations, m_confirmations,
+    "screen-13-confirmations": ('Other confirmations', s_confirmations, m_confirmations,
         "Replace, Remove my access and Delete link ask first too. On mobile each is the same dialog at full width. "
         "Delete a link names how many people still have access through it, and with none says only that it stops working."),
-    "screen-13-search": ('Search', s_search, m_search_screen,
+    "screen-14-search": ('Search', s_search, m_search_screen,
         "Typing 2+ characters replaces the list with matching names from your files and files shared with you. "
-        "Owner shows whose file each result is; Budget 2027 draft.xlsx was shared with you, so it has no Share. Clearing the box goes back to the list you were in."),
-    "screen-14-empty": ('Empty states', s_empty, m_empty,
+        "Your access shows what you can do with each result: Full access on your own files. Budget 2027 draft.xlsx was shared with you, so it has no Share. Clearing the box goes back to the list you were in."),
+    "screen-15-empty": ('Empty states', s_empty, m_empty,
         "Every list has an empty state: My files, Shared with me, Shared by me, search and Share. Upload shows only in My files."),
-    "screen-15-loading": ('Loading', s_loading, m_loading,
+    "screen-16-loading": ('Loading', s_loading, m_loading,
         "Lists show placeholder rows until the first page arrives, and the Share dialog uses the same rows. Opening a share link shows the mobile page "
         "while it's redeemed; desktop shows the same in the page centre. A button that sends a request shows a spinner and ignores clicks until it answers. "
         "Scrolling to the end adds placeholder rows under the list; if that page fails, a Try again row replaces them, and after `invalid_after` the list reloads from the top."),
-    "screen-16-errors": ('Page errors', s_errors, m_errors,
+    "screen-17-errors": ('Page errors', s_errors, m_errors,
         "A failed load offers Try again. A link that expired, was deleted or was never valid says why and offers a way out."),
-    "screen-17-action-errors": ('Action and input errors', s_action_errors, m_action_errors,
+    "screen-18-action-errors": ('Action and input errors', s_action_errors, m_action_errors,
         "A failed action shows a toast naming the file, from its error message or the name the app already shows. Input errors show under the field. After a 401 the app signs in again and returns to the same page."),
 }
 

@@ -12,19 +12,26 @@
 <path d="M22,163 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="180" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
 <text x="56" y="172" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Budget 2027 draft.xlsx</text>
-<text x="56" y="190" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Robin · 10/2/2026</text>
+<text x="56" y="190" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Can view · 10/2/2026</text>
 <text x="366" y="180" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="208" x2="390" y2="208" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M22,227 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="244" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
 <text x="56" y="236" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Q4 Budget.xls</text>
-<text x="56" y="254" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">You · 3/17/2026</text>
+<rect x="149.57440000000003" y="223" width="66" height="18" rx="9" fill="#eef4ff" stroke="none"/>
+<circle cx="159.57440000000003" cy="232" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="165.57440000000003" cy="228" r="2" fill="#0061fe" stroke="none"/>
+<circle cx="165.57440000000003" cy="236" r="2" fill="#0061fe" stroke="none"/>
+<line x1="159.57440000000003" y1="232" x2="165.57440000000003" y2="228" stroke="#0061fe" stroke-width="1.2"/>
+<line x1="159.57440000000003" y1="232" x2="165.57440000000003" y2="236" stroke="#0061fe" stroke-width="1.2"/>
+<text x="173.57440000000003" y="236" font-size="11" font-weight="600" fill="#0061fe" text-anchor="start">Shared</text>
+<text x="56" y="254" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Full access · 3/17/2026</text>
 <text x="366" y="244" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="272" x2="390" y2="272" stroke="#dbe8fd" stroke-width="1"/>
 <path d="M22,291 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="308" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">CSV</text>
 <text x="56" y="300" font-size="14" font-weight="500" fill="#1e2533" text-anchor="start">Travel budget.csv</text>
-<text x="56" y="318" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">You · 2/9/2026</text>
+<text x="56" y="318" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Full access · 2/9/2026</text>
 <text x="366" y="308" font-size="18" font-weight="700" fill="#6b7489" text-anchor="middle">⋯</text>
 <line x1="56" y1="336" x2="390" y2="336" stroke="#dbe8fd" stroke-width="1"/>
 <line x1="0" y1="736" x2="390" y2="736" stroke="#d4d9e2" stroke-width="1"/>
@@ -40,7 +47,7 @@
 <path d="M22,530 h13 l6,6 v16 h-19 z" fill="#ffffff" stroke="#d4d9e2"/>
 <text x="31.5" y="547" font-size="7" font-weight="700" fill="#6b7489" text-anchor="middle">XLS</text>
 <text x="56" y="542" font-size="15" font-weight="700" fill="#1e2533" text-anchor="start">Budget 2027 draft.xlsx</text>
-<text x="56" y="560" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">Owner Robin · Can view</text>
+<text x="56" y="560" font-size="12" font-weight="400" fill="#6b7489" text-anchor="start">XLSX · Can view</text>
 <line x1="0" y1="580" x2="390" y2="580" stroke="#dbe8fd" stroke-width="1"/>
 <rect x="20" y="596" width="36" height="36" rx="10" fill="#eef4ff" stroke="none"/>
 <path d="M38,607 V617 M34,613 L38,617 L42,613 M32,621 H44" fill="none" stroke="#0061fe" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
