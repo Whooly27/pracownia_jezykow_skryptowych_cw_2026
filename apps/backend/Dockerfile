@@ -2,7 +2,7 @@
 
 FROM ghcr.io/astral-sh/uv:0.12 AS uv
 
-FROM python:3.13-slim AS build
+FROM python:3.15-slim AS build
 COPY --from=uv /uv /bin/uv
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
@@ -17,7 +17,7 @@ COPY . .
 RUN DJANGO_SECRET_KEY=collectstatic DJANGO_ALLOWED_HOSTS=localhost DATABASE_URL=sqlite:// \
     .venv/bin/python manage.py collectstatic --noinput --settings=config.settings.production
 
-FROM python:3.13-slim AS runtime
+FROM python:3.15-slim AS runtime
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
